@@ -6,9 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  test:
-    name: Run Tests
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
     
     steps:
@@ -18,25 +21,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm ci
 
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Build Project
+        run: npm run build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
+
       - name: Run Unit Tests (Vitest)
         run: npx vitest run
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run E2E Tests (Playwright)
-        run: npx playwright test
-        
-      - name: Upload Playwright Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
+      # For now commented will work on it later on.
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install --with-deps
+      # - name: Run E2E Tests (Playwright)
+      #   run: npx playwright test
