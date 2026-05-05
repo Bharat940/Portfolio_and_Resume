@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTerminal } from '@/context/TerminalContext';
 import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport, type UIMessage } from 'ai';
+import { DefaultChatTransport } from 'ai';
 
 import { MatrixRain } from './MatrixRain';
 import { MascotGames } from '../easter-eggs/MascotGames';
@@ -62,6 +62,20 @@ export function TerminalOverlay() {
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
+    onFinish: ({ message }) => {
+      const content = message.parts
+        .filter(p => p.type === 'text')
+        .map(p => {
+          if ('text' in p) return p.text;
+          return '';
+        })
+        .join('')
+        .trim();
+
+      if (content) {
+        setHistory(prev => [...prev, { type: 'ai', content }]);
+      }
+    }
   });
 
   const isLoading = status === "submitted" || status === "streaming";
@@ -92,19 +106,23 @@ export function TerminalOverlay() {
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
 
+    interface FileSystemNode {
+      [key: string]: string | FileSystemNode;
+    }
+
     // Helper to get relative path contents
-    const getDirContents = (dirPath: string) => {
-      if (!dirPath) return MOCK_FILESYSTEM;
-      const parts = dirPath.split('/');
-      let current: any = MOCK_FILESYSTEM;
-      for (const p of parts) {
-        if (current[p] && typeof current[p] === 'object') {
+    const getDirContents = (dirPath: string): FileSystemNode | null => {
+      if (!dirPath) return MOCK_FILESYSTEM as FileSystemNode;
+      const pathParts = dirPath.split('/');
+      let current: string | FileSystemNode = MOCK_FILESYSTEM as FileSystemNode;
+      for (const p of pathParts) {
+        if (typeof current === 'object' && current !== null && p in current) {
           current = current[p];
         } else {
           return null;
         }
       }
-      return current;
+      return typeof current === 'object' ? current : null;
     };
 
     const currentContents = getDirContents(currentDir);
@@ -144,8 +162,8 @@ export function TerminalOverlay() {
         }
 
         if (targetContents && typeof targetContents === 'object') {
-          const contents = Object.keys(targetContents).map(k =>
-            typeof targetContents[k] === 'object' ? `${k}/` : k
+          const contents = Object.keys(targetContents as object).map(k =>
+            typeof (targetContents as FileSystemNode)[k] === 'object' ? `${k}/` : k
           ).join('  ');
           setHistory(prev => [...prev, { type: 'output', content: contents }]);
         } else {
@@ -177,7 +195,7 @@ export function TerminalOverlay() {
       case 'cat':
         const fileName = args[0]?.toLowerCase();
         if (!fileName) {
-          const available = Object.keys(currentContents).join(', ');
+          const available = Object.keys(currentContents as object).join(', ');
           setHistory(prev => [...prev, { type: 'error', content: `Usage: cat [file]\nAvailable: ${available}` }]);
         } else {
           const targetPath = fileName.includes('/') ? fileName : (currentDir ? `${currentDir}/${fileName}` : fileName);
@@ -248,7 +266,7 @@ export function TerminalOverlay() {
           try {
             const art = await generateAscii(text);
             setHistory(prev => [...prev, { type: 'output', content: art }]);
-          } catch (e) {
+          } catch {
             setHistory(prev => [...prev, { type: 'error', content: 'Error generating ASCII art' }]);
           }
         }
@@ -303,26 +321,12 @@ export function TerminalOverlay() {
     }
   };
 
-  // Sync AI messages back to history
+  // Auto-scroll to bottom
   useEffect(() => {
-    if (lastAiMessage && !isLoading) {
-      const content = lastAiMessage.parts
-        .filter(p => p.type === 'text')
-        .map(p => p.type === 'text' ? p.text : '')
-        .join('')
-        .trim();
-
-      if (!content) return;
-
-      setHistory(prev => {
-        // Find if we already have an AI entry for this message ID or content at the end
-        const lastEntry = prev[prev.length - 1];
-        if (lastEntry?.type === 'ai' && lastEntry.content === content) return prev;
-
-        return [...prev, { type: 'ai', content }];
-      });
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [isLoading, lastAiMessage]);
+  }, [history, lastAiMessage, isLoading]);
 
   return (
     <AnimatePresence>

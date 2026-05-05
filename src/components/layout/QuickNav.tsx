@@ -188,13 +188,12 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
   // Close on outside tap — delayed so the opening tap doesn't immediately close
   useEffect(() => {
     if (!isOpen) return;
-    let timer: ReturnType<typeof setTimeout>;
     const handler = (e: TouchEvent) => {
       const nav = document.getElementById('mobile-arc-nav');
       if (nav?.contains(e.target as Node)) return;
       setIsOpen(false);
     };
-    timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       document.addEventListener('touchstart', handler, { passive: true });
     }, 300);
     return () => {

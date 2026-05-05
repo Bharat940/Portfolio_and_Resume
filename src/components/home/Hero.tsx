@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, Variants, useMotionValue, useTransform, useSpring } from "motion/react";
+import { motion, Variants, useMotionValue, useSpring } from "motion/react";
 import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
 
 const containerVariants: Variants = {
@@ -38,28 +38,7 @@ const wordVariants: Variants = {
   })
 };
 
-// Magnetic button hook
-function useMagnet(strength = 0.35) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 20 });
-  const springY = useSpring(y, { stiffness: 200, damping: 20 });
 
-  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    x.set((e.clientX - cx) * strength);
-    y.set((e.clientY - cy) * strength);
-  };
-
-  const onLeave = () => { x.set(0); y.set(0); };
-
-  return { ref, springX, springY, onMove, onLeave };
-}
 
 const tagline = "Full Stack Developer & Software Architect crafting high-performance distributed solutions.";
 const words = tagline.split(" ");
@@ -70,7 +49,24 @@ export function Hero() {
   const scrollTo = (id: string) =>
     document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
 
-  const magnet = useMagnet(0.3);
+  // Magnetic button logic directly in component to satisfy strict React 19 linting
+  const magnetRef = useRef<HTMLAnchorElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 200, damping: 20 });
+  const springY = useSpring(y, { stiffness: 200, damping: 20 });
+
+  const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const el = magnetRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    x.set((e.clientX - cx) * 0.3);
+    y.set((e.clientY - cy) * 0.3);
+  };
+
+  const onLeave = () => { x.set(0); y.set(0); };
 
   return (
     <section
@@ -271,11 +267,11 @@ export function Hero() {
             className="flex flex-wrap items-center gap-3"
           >
             <motion.a
-              ref={magnet.ref}
+              ref={magnetRef}
               href="#projects"
-              style={{ x: magnet.springX, y: magnet.springY }}
-              onMouseMove={magnet.onMove}
-              onMouseLeave={magnet.onLeave}
+              style={{ x: springX, y: springY }}
+              onMouseMove={onMove}
+              onMouseLeave={onLeave}
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
                 scrollTo('#projects');

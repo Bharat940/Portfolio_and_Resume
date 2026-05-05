@@ -139,6 +139,7 @@ export function ProjectsContent() {
       </section>
 
       <ProjectPreviewModal
+        key={selectedProject?.id || 'none'}
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
       />

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 export const getSkillAbbreviation = (skill: string) => {
   const abbreviations: Record<string, string> = {
     "React": "Re",
@@ -72,13 +73,15 @@ export const completedPixelLogos = [
 export const SkillIcon = ({ skill }: { skill: string }) => {
   if (completedPixelLogos.includes(skill)) {
     const filename = logoFilenameMap[skill] || skill;
-
     return (
-      <img
+      <Image
         src={`/logos/${filename}_Pixel_Logo.png`}
         alt={`${skill} Logo`}
+        width={96}
+        height={96}
         className="w-16 h-16 md:w-24 md:h-24 object-contain opacity-80 group-hover/skill:-translate-y-2 group-hover/skill:opacity-100 group-hover/skill:scale-110 transition-all duration-300 drop-shadow-[4px_4px_0_rgba(0,0,0,0.5)] dark:drop-shadow-[4px_4px_0_rgba(0,0,0,0.8)]"
         style={{ imageRendering: 'pixelated' }}
+        unoptimized
       />
     );
   }
@@ -109,4 +112,4 @@ export const SkillIcon = ({ skill }: { skill: string }) => {
 };
 
 // Exporting empty object so old imports don't crash
-export const SkillIcons: Record<string, any> = {};
+export const SkillIcons: Record<string, never> = {};

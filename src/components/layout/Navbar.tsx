@@ -181,7 +181,7 @@ export function Navbar() {
                         className="mt-10 flex flex-col gap-5"
                       >
                         <p className="text-xs text-primary font-heading font-semibold uppercase tracking-wider">
-                          Let's Connect
+                          Let&apos;s Connect
                         </p>
                         <div className="flex flex-wrap gap-4">
                           <button 

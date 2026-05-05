@@ -14,7 +14,10 @@ export async function POST(req: Request) {
   // Extract text from the last message parts (v6 standard)
   const lastMessageText = lastMessage.parts
     .filter(part => part.type === 'text')
-    .map(part => (part as any).text)
+    .map(part => {
+      if ('text' in part) return part.text;
+      return '';
+    })
     .join(' ');
 
   // 1. Generate embedding for the user's query

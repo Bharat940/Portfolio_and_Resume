@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'motion/react';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 interface ContributionDay {
   date: string;
@@ -18,13 +18,22 @@ interface PixelCalendarProps {
 }
 
 export function PixelCalendar({ data, colorType, label, icon, profileUrl }: PixelCalendarProps) {
-  const days = useMemo(() => {
-    if (!data) return Array.from({ length: 371 }).map((_, i) => ({
-      date: new Date(Date.now() - (370 - i) * 24 * 60 * 60 * 1000).toISOString(),
-      count: 0,
-      level: 0
-    }));
-    return data;
+  const [days, setDays] = useState<ContributionDay[]>([]);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      if (data) {
+        setDays(data);
+      } else {
+        const now = Date.now();
+        const generated = Array.from({ length: 371 }).map((_, i) => ({
+          date: new Date(now - (370 - i) * 24 * 60 * 60 * 1000).toISOString(),
+          count: 0,
+          level: 0
+        }));
+        setDays(generated);
+      }
+    });
   }, [data]);
 
   const weeks = useMemo(() => {

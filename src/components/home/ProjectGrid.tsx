@@ -62,6 +62,7 @@ export function ProjectGrid() {
         </div>
 
         <ProjectPreviewModal 
+          key={selectedProject?.id || 'none'}
           project={selectedProject} 
           onClose={() => setSelectedProject(null)} 
         />

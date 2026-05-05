@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '../app/api/contact/route'
-import nodemailer from 'nodemailer'
 
 // Mock Nodemailer
 vi.mock('nodemailer', () => ({

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -110,18 +111,19 @@ export function ProjectReadme({ url, className }: ProjectReadmeProps) {
 
   // Define components using the modern ReactMarkdown v10 approach
   const components: Components = useMemo(() => ({
-    img: ({ node, ...props }) => (
-      <img
-        {...props}
+    img: ({ alt, src }) => (
+      <Image
+        src={(src as string) || ""}
+        alt={alt || ""}
+        width={100}
+        height={100}
         className="rounded-xl border border-border/30 my-8 shadow-lg max-w-full h-auto mx-auto"
-        onError={(e) => {
-          (e.target as HTMLImageElement).style.display = 'none';
-        }}
+        unoptimized
       />
     ),
 
     // Modern approach: 'pre' handles block-level code blocks
-    pre: ({ node, children, ...props }) => {
+    pre: ({ children, ...props }) => {
       // Extract the code element from children to get language and content
       const codeEl = (children as ReactElement<CodeElementProps>)?.props;
       const className = codeEl?.className || "";
@@ -161,7 +163,7 @@ export function ProjectReadme({ url, className }: ProjectReadmeProps) {
     },
 
     // 'code' now only handles inline code (wrapped in single backticks)
-    code: ({ node, className, children, ...props }) => (
+    code: ({ className, children, ...props }) => (
       <code
         className={cn(
           "bg-ctp-surface0 px-1.5 py-0.5 rounded text-ctp-mauve border border-border/20 font-mono text-xs",

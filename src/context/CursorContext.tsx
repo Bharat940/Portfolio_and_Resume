@@ -37,16 +37,16 @@ function getRouteCursor(pathname: string): CursorType {
 
 export function CursorProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [pageCursorType, setPageCursorType] = useState<CursorType>('default');
+  const pageCursorType = getRouteCursor(pathname);
   const [cursorType, setCursorType] = useState<CursorType>('default');
   const [isHovering, setIsHovering] = useState(false);
 
-  // Update page-level cursor on route change
+  // Sync cursorType with page default when route changes
   useEffect(() => {
-    const base = getRouteCursor(pathname);
-    setPageCursorType(base);
-    setCursorType(base);
-  }, [pathname]);
+    queueMicrotask(() => {
+      setCursorType(pageCursorType);
+    });
+  }, [pageCursorType]);
 
   const onEnterLink = useCallback(() => {
     setIsHovering(true);

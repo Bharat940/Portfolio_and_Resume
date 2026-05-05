@@ -163,8 +163,15 @@ export function CustomCursor() {
   const dotY = useSpring(mouseY, { stiffness: 600, damping: 32 });
 
   useEffect(() => {
-    const hasTouch = window.matchMedia('(pointer: coarse)').matches;
-    if (hasTouch) { setIsMobile(true); return; }
+    const checkMobile = () => {
+      const hasTouch = window.matchMedia('(pointer: coarse)').matches;
+      if (hasTouch) {
+        queueMicrotask(() => setIsMobile(true));
+      }
+    };
+    checkMobile();
+
+    if (window.matchMedia('(pointer: coarse)').matches) return;
 
     document.documentElement.style.setProperty('cursor', 'none', 'important');
 

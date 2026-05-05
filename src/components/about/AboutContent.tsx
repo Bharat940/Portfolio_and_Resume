@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { motion, Variants } from 'motion/react';
+import { motion } from 'motion/react';
 import { PixelTerminal } from '@/components/icons/PixelTerminal';
 import { PixelGitHub } from '@/components/icons/PixelGitHub';
 import { PixelLinkedIn } from '@/components/icons/PixelLinkedIn';

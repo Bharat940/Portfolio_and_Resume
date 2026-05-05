@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { PixelGamepad } from "@/components/icons/PixelGamepad";
-import { PixelBird } from "@/components/icons/PixelBird";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,9 +8,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
-import { motion } from "motion/react";
 
 export function MascotGames({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   return (
@@ -24,14 +20,14 @@ export function MascotGames({ open, onOpenChange }: { open: boolean, onOpenChang
             Arcade Center
           </SheetTitle>
           <SheetDescription>
-            Take a break and play some classic retro games!
+            Take a break and play some classic retro games! It&apos;s a work in progress!
           </SheetDescription>
         </SheetHeader>
         
         <div className="mt-8 flex flex-col gap-6">
           <div className="p-6 border border-border rounded-xl bg-card hover:border-primary/50 transition-colors cursor-pointer group">
             <h3 className="text-xl font-bold font-mono group-hover:text-primary">Retro Snake</h3>
-            <p className="text-sm text-muted-foreground mt-2">The classic flip-phone experience. Eat the pixels, don't crash!</p>
+            <p className="text-sm text-muted-foreground mt-2">The classic flip-phone experience. Eat the pixels, don&apos;t crash!</p>
             <Button className="mt-4 w-full" variant="secondary">Launch Snake</Button>
           </div>
           

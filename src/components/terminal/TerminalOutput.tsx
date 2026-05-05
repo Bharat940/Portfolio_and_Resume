@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { UIMessage } from 'ai';
-import { GREETING_ART_DESKTOP, GREETING_ART_MOBILE, GENGAR_ART } from '@/lib/terminal/commands';
+import { GREETING_ART_DESKTOP, GREETING_ART_MOBILE } from '@/lib/terminal/commands';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';

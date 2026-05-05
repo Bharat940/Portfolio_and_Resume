@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, Variants } from "motion/react";
+import { motion } from "motion/react";
 import { experiences, education, clubs } from "@/data/portfolio";
 import { PixelCalendarIcon } from "@/components/icons/PixelCalendarIcon";
 import { Briefcase, GraduationCap, Users } from "lucide-react";

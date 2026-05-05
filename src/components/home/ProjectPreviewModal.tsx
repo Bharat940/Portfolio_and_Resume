@@ -4,7 +4,7 @@ import { PixelClose } from "@/components/icons/PixelClose";
 import { PixelGitHub } from "@/components/icons/PixelGitHub";
 import { SkillIcon } from "@/components/icons/SkillIcons";
 import { ExternalLink, Loader2, ChevronLeft, ChevronRight, Monitor, Image as ImageIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import { ProjectReadme } from "./ProjectReadme";
 import { cn } from "@/lib/utils";
 
@@ -19,15 +19,6 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
   const [isIframeLoading, setIsIframeLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('snapshot');
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
-
-  useEffect(() => {
-    if (project) {
-      // Default to snapshot for stability and immediate visual impact
-      setViewMode('snapshot');
-      setCurrentImgIdx(0);
-      setIsIframeLoading(true);
-    }
-  }, [project]);
 
   if (!project) return null;
 
@@ -139,9 +130,9 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
               ) : hasScreenshots ? (
                 <div className="w-full h-full relative group/carousel bg-ctp-crust">
                   <AnimatePresence mode="wait">
-                    <motion.img 
+                    <motion.img
                       key={currentImgIdx}
-                      src={project.screenshots![currentImgIdx]} 
+                      src={project.screenshots![currentImgIdx]}
                       alt={`${project.title} Screenshot ${currentImgIdx + 1}`}
                       initial={{ opacity: 0, scale: 1.05 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -154,13 +145,13 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                   {/* Carousel Controls */}
                   {project.screenshots!.length > 1 && (
                     <>
-                      <button 
+                      <button
                         onClick={prevImg}
                         className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-ctp-base/80 border border-border/30 rounded-full text-foreground hover:bg-ctp-mauve hover:text-background transition-all opacity-0 group-hover/carousel:opacity-100 z-20 cursor-pointer"
                       >
                         <ChevronLeft className="w-6 h-6" />
                       </button>
-                      <button 
+                      <button
                         onClick={nextImg}
                         className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-ctp-base/80 border border-border/30 rounded-full text-foreground hover:bg-ctp-mauve hover:text-background transition-all opacity-0 group-hover/carousel:opacity-100 z-20 cursor-pointer"
                       >
@@ -169,8 +160,8 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                       {/* Indicators */}
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
                         {project.screenshots!.map((_, i) => (
-                          <div 
-                            key={i} 
+                          <div
+                            key={i}
                             className={cn(
                               "w-1.5 h-1.5 rounded-full transition-all",
                               i === currentImgIdx ? "bg-ctp-mauve w-4" : "bg-ctp-surface2"
@@ -214,7 +205,7 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                   </div>
                 )}
               </div>
-              
+
               <div className="space-y-6">
                 <div className="space-y-3">
                   <h4 className="font-mono text-xs font-bold text-muted-foreground uppercase tracking-widest border-l-2 border-ctp-blue pl-2">
