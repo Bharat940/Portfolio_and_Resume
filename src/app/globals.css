@@ -1,26 +1,290 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-source-code-pro);
+  --font-heading: var(--font-pixelify-sans);
+
+  /* Catppuccin Mocha Extended Colors */
+  --color-ctp-rosewater: #f5e0dc;
+  --color-ctp-flamingo: #f2cdcd;
+  --color-ctp-pink: #f5c2e7;
+  --color-ctp-mauve: #cba6f7;
+  --color-ctp-red: #f38ba8;
+  --color-ctp-maroon: #eba0ac;
+  --color-ctp-peach: #fab387;
+  --color-ctp-yellow: #f9e2af;
+  --color-ctp-green: #a6e3a1;
+  --color-ctp-teal: #94e2d5;
+  --color-ctp-sky: #89dceb;
+  --color-ctp-sapphire: #74c7ec;
+  --color-ctp-blue: #89b4fa;
+  --color-ctp-lavender: #b4befe;
+
+  /* Catppuccin Mocha Surfaces */
+  --color-ctp-base: #1e1e2e;
+  --color-ctp-mantle: #181825;
+  --color-ctp-crust: #11111b;
+  --color-ctp-surface0: #313244;
+  --color-ctp-surface1: #45475a;
+  --color-ctp-surface2: #585b70;
+
+  /* Catppuccin Mocha Text */
+  --color-ctp-text: #cdd6f4;
+  --color-ctp-subtext1: #bac2de;
+  --color-ctp-subtext0: #a6adc8;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  /* Catppuccin Mocha Palette */
+  --background: #1e1e2e;
+  --foreground: #cdd6f4;
+  --card: #181825;
+  --card-foreground: #cdd6f4;
+  --popover: #11111b;
+  --popover-foreground: #cdd6f4;
+  --primary: #cba6f7;
+  --primary-foreground: #1e1e2e;
+  --secondary: #313244;
+  --secondary-foreground: #cdd6f4;
+  --muted: #45475a;
+  --muted-foreground: #a6adc8;
+  --accent: #cba6f7;
+  --accent-foreground: #1e1e2e;
+  --destructive: #f38ba8;
+  --border: #313244;
+  --input: #313244;
+  --ring: #cba6f7;
+  --chart-1: #f38ba8;
+  --chart-2: #fab387;
+  --chart-3: #f9e2af;
+  --chart-4: #a6e3a1;
+  --chart-5: #89b4fa;
+  --sidebar: #181825;
+  --sidebar-foreground: #cdd6f4;
+  --sidebar-primary: #cba6f7;
+  --sidebar-primary-foreground: #1e1e2e;
+  --sidebar-accent: #313244;
+  --sidebar-accent-foreground: #cdd6f4;
+  --sidebar-border: #313244;
+  --sidebar-ring: #cba6f7;
+
+  /* Section alternating backgrounds */
+  --section-1: #1e1e2e;   /* ctp-base — default */
+  --section-2: #181825;   /* ctp-mantle — slightly darker */
+  --section-3: #1a1826;   /* between base/mantle — subtle purple tint */
+  --section-4: #1c1b2e;   /* slight blue tint */
+  --section-5: #1e1d2e;   /* near-base */
+  --section-6: #181a25;   /* cool tint */
+}
+
+@utility bg-mesh {
+  background-color: var(--background);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─────────────────────────────────────────────────────────
+   Native Cursor Suppression — Highest Specificity
+   Outside any layer to override browser UA styles on buttons/links
+────────────────────────────────────────────────────────── */
+@media (pointer: fine) {
+  html,
+  html *,
+  html *::before,
+  html *::after {
+    cursor: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   Custom Scrollbar — Cross-browser
+   
+   1. Modern standard (Firefox 64+, Chrome 121+, Edge 121+):
+      scrollbar-width + scrollbar-color
+   2. Legacy WebKit (Chrome < 121, Safari, older Edge):
+      ::-webkit-scrollbar pseudo-elements
+────────────────────────────────────────────────────────── */
+
+/* Global scrollbar — applied to everything */
+* {
+  /* Firefox & modern Chrome/Edge */
+  scrollbar-width: thin;
+  scrollbar-color: #45475a #1e1e2e;
+}
+
+/* WebKit (Chrome, Safari, Edge legacy) — main scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e2e; /* Catppuccin base */
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #45475a; /* Catppuccin surface1 */
+  border-radius: 999px;
+  border: 2px solid #1e1e2e; /* creates padding around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #cba6f7; /* Catppuccin mauve on hover */
+}
+
+::-webkit-scrollbar-corner {
+  background: #1e1e2e;
+}
+
+/* Custom README Typography Utility for Tailwind v4 */
+@utility readme-prose {
+  & h1 { @apply text-4xl font-black font-heading uppercase tracking-tight text-foreground mb-8 border-b border-border pb-4; }
+  & h2 { @apply text-2xl font-black font-heading uppercase tracking-tight text-ctp-mauve mt-12 mb-4 border-b border-border/50 pb-2; }
+  & h3 { @apply text-xl font-bold font-heading uppercase text-ctp-sky mt-8 mb-3; }
+  & p { @apply text-muted-foreground leading-relaxed mb-4 last:mb-0; }
+  & ul { @apply list-disc list-outside mb-4 ml-6 space-y-2 text-muted-foreground; }
+  & ol { @apply list-decimal list-outside mb-4 ml-6 space-y-2 text-muted-foreground; }
+  & li { @apply pl-2; }
+  & li > p { @apply inline; }
+  & code { @apply text-ctp-mauve bg-ctp-surface0 px-1.5 py-0.5 rounded font-mono text-sm border border-border/30; }
+  & pre { @apply bg-ctp-mantle p-4 rounded-xl border border-border/50 overflow-x-auto my-6; }
+  & pre code { @apply bg-transparent border-none p-0 text-ctp-text; }
+  & blockquote { @apply border-l-4 border-ctp-mauve pl-4 italic text-muted-foreground my-6; }
+  & a { @apply text-ctp-sky no-underline hover:underline decoration-ctp-sky/30 underline-offset-4; }
+  & img { @apply rounded-2xl border border-border/50 my-8 shadow-2xl; }
+  & strong { @apply text-foreground font-bold; }
+  & hr { @apply border-border/50 my-12; }
+  & table { @apply w-full text-left border-collapse my-6; }
+  & th { @apply border-b-2 border-border/50 p-3 font-bold font-mono text-xs uppercase tracking-wider text-ctp-mauve; }
+  & td { @apply border-b border-border/30 p-3 text-sm text-muted-foreground; }
+}
+
+/* Utility: terminal-prose for AI responses in the CLI */
+@utility terminal-prose {
+  & h1 { @apply text-base font-black font-heading uppercase tracking-wider text-ctp-green mb-2 mt-0; }
+  & h2 { @apply text-sm font-black font-heading uppercase tracking-wide text-ctp-green/90 mt-4 mb-1; }
+  & h3 { @apply text-[13px] font-bold font-heading uppercase text-ctp-green/80 mt-3 mb-1; }
+  & p { @apply text-ctp-green/90 leading-relaxed mb-2 mt-0 last:mb-0; }
+  & ul { @apply list-disc list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0; }
+  & ol { @apply list-decimal list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0; }
+  & li { @apply pl-1; }
+  & li > p { @apply inline mb-0; }
+  & code { @apply text-ctp-mauve bg-ctp-crust/80 px-1 py-0.5 rounded font-mono text-[11px] border border-ctp-green/20; }
+  & pre { @apply bg-ctp-crust/50 p-3 rounded-lg border border-ctp-green/10 overflow-x-auto my-2; }
+  & pre code { @apply bg-transparent border-none p-0 text-ctp-green/90; }
+  & blockquote { @apply border-l-2 border-ctp-green/30 pl-3 italic text-ctp-green/70 my-2; }
+  & a { @apply text-ctp-sky underline decoration-ctp-sky/30 underline-offset-4 hover:text-ctp-sky/80; }
+  & strong { @apply text-ctp-green font-bold; }
+  & hr { @apply border-ctp-green/10 my-2; }
+
+  /* Table — the main offender in terminal outputs */
+  & table { @apply w-full text-left border-collapse mt-1 mb-2; }
+  & th { @apply border-b border-ctp-green/20 py-1 px-1.5 font-bold font-mono text-[10px] uppercase tracking-wider text-ctp-green; }
+  & td { @apply border-b border-ctp-green/10 py-1 px-1.5 text-[11px] text-ctp-green/80 align-top; }
+  & tr:last-child td { @apply border-b-0; }
+
+  /* Nuclear option: kill any rogue top margins from browser UA stylesheet */
+  & * { @apply mt-0; }
+  & h2, & h3 { @apply mt-4; }
+}
+
+/* Utility: hide scrollbar but keep scrolling (used on contribution graph) */
+.scrollbar-none {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE / Edge legacy */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;               /* WebKit */
 }
