@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { m, AnimatePresence, Variants } from 'motion/react';
-import { SkillIcon } from '@/components/icons/SkillIcons';
+import { useState, useRef, useEffect } from "react";
+import { m, AnimatePresence, Variants } from "motion/react";
+import { SkillIcon } from "@/components/icons/SkillIcons";
 
 interface Category {
   title: string;
@@ -10,14 +10,23 @@ interface Category {
 }
 
 const skillCategories: Category[] = [
-  { title: 'Languages', skills: ['JavaScript', 'TypeScript', 'C++', 'Python'] },
-  { title: 'Frontend', skills: ['React', 'Next.js', 'Tailwind CSS', 'shadcn/ui', 'HTML', 'CSS'] },
-  { title: 'Backend', skills: ['Node.js', 'Express.js', 'tRPC'] },
-  { title: 'Databases', skills: ['PostgreSQL', 'MongoDB', 'Redis'] },
-  { title: 'DevOps & Tools', skills: ['Git', 'Docker', 'Prisma', 'Inngest'] },
-  { title: 'Auth & APIs', skills: ['REST APIs', 'JWT', 'BetterAuth', 'Pydantic'] },
-  { title: 'AI', skills: ['RAG', 'MCP', 'LangChain', 'LangGraph'] },
-  { title: 'Core Concepts', skills: ['DSA', 'Algorithms', 'OOP', 'System Design', 'OS', 'DBMS'] },
+  { title: "Languages", skills: ["JavaScript", "TypeScript", "C++", "Python"] },
+  {
+    title: "Frontend",
+    skills: ["React", "Next.js", "Tailwind CSS", "shadcn/ui", "HTML", "CSS"],
+  },
+  { title: "Backend", skills: ["Node.js", "Express.js", "tRPC"] },
+  { title: "Databases", skills: ["PostgreSQL", "MongoDB", "Redis"] },
+  { title: "DevOps & Tools", skills: ["Git", "Docker", "Prisma", "Inngest"] },
+  {
+    title: "Auth & APIs",
+    skills: ["REST APIs", "JWT", "BetterAuth", "Pydantic"],
+  },
+  { title: "AI", skills: ["RAG", "MCP", "LangChain", "LangGraph"] },
+  {
+    title: "Core Concepts",
+    skills: ["DSA", "Algorithms", "OOP", "System Design", "OS", "DBMS"],
+  },
 ];
 
 export function SkillsSection() {
@@ -25,7 +34,10 @@ export function SkillsSection() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
-    <section id="skills" className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <section
+      id="skills"
+      className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-start mb-16 space-y-4">
           <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading text-left tracking-tight">
@@ -70,7 +82,10 @@ function CategoryRow({
       const isMobile = window.innerWidth < 768;
       if (isMobile) {
         const timer = setTimeout(() => {
-          rowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          rowRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }, 150);
         return () => clearTimeout(timer);
       }
@@ -78,13 +93,10 @@ function CategoryRow({
   }, [isActive]);
 
   return (
-    <div ref={rowRef} className="relative border-b border-border/20 last:border-0">
-
-      {/* ─────────────────────────────────────────
-          DESKTOP (md+): original revolving-door
-          Fixed: removed fixed height, used min-h
-          so wrapping skills never overflow.
-      ───────────────────────────────────────── */}
+    <div
+      ref={rowRef}
+      className="relative border-b border-border/20 last:border-0"
+    >
       <div
         className="hidden md:block relative overflow-hidden"
         onMouseEnter={() => setActiveIndex(index)}
@@ -106,13 +118,23 @@ function CategoryRow({
                     const letterVariants: Variants = {
                       hidden: { y: -120, opacity: 0 },
                       visible: (i: number) => ({
-                        y: 0, opacity: 1,
-                        transition: { duration: 0.4, delay: i * 0.03, ease: "easeOut" }
+                        y: 0,
+                        opacity: 1,
+                        transition: {
+                          duration: 0.4,
+                          delay: i * 0.03,
+                          ease: "easeOut",
+                        },
                       }),
                       exit: (i: number) => ({
-                        y: -120, opacity: 0,
-                        transition: { duration: 0.4, delay: i * 0.03, ease: "easeOut" }
-                      })
+                        y: -120,
+                        opacity: 0,
+                        transition: {
+                          duration: 0.4,
+                          delay: i * 0.03,
+                          ease: "easeOut",
+                        },
+                      }),
                     };
 
                     return (
@@ -144,13 +166,23 @@ function CategoryRow({
                   const skillVariants: Variants = {
                     hidden: { y: 120, opacity: 0 },
                     visible: (i: number) => ({
-                      y: 0, opacity: 1,
-                      transition: { duration: 0.4, delay: i * 0.05, ease: "easeOut" }
+                      y: 0,
+                      opacity: 1,
+                      transition: {
+                        duration: 0.4,
+                        delay: i * 0.05,
+                        ease: "easeOut",
+                      },
                     }),
                     exit: (i: number) => ({
-                      y: 120, opacity: 0,
-                      transition: { duration: 0.4, delay: i * 0.05, ease: "easeOut" }
-                    })
+                      y: 120,
+                      opacity: 0,
+                      transition: {
+                        duration: 0.4,
+                        delay: i * 0.05,
+                        ease: "easeOut",
+                      },
+                    }),
                   };
 
                   return (
@@ -181,12 +213,6 @@ function CategoryRow({
         />
       </div>
 
-      {/* ─────────────────────────────────────────
-          MOBILE (<md): accordion
-          Title row is always visible.
-          Skills unfold below when tapped.
-          Only one open at a time via hoisted state.
-      ───────────────────────────────────────── */}
       <div className="md:hidden">
         {/* Tappable header */}
         <button
@@ -211,7 +237,7 @@ function CategoryRow({
             <m.div
               key="mobile-skills"
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
+              animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
               className="overflow-hidden"
@@ -224,7 +250,7 @@ function CategoryRow({
                     animate={{
                       opacity: 1,
                       y: 0,
-                      transition: { delay: i * 0.04, duration: 0.28 }
+                      transition: { delay: i * 0.04, duration: 0.28 },
                     }}
                     className="flex flex-col items-center gap-2"
                   >
@@ -239,7 +265,6 @@ function CategoryRow({
           )}
         </AnimatePresence>
       </div>
-
     </div>
   );
 }

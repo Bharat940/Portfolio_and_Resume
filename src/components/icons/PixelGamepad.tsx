@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
 
-export const PixelGamepad = ({ className = "w-8 h-8", ...props }: React.SVGProps<SVGSVGElement>) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 32 32" 
+export const PixelGamepad = ({
+  className = "w-8 h-8",
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
     className={className}
     fill="currentColor"
     {...props}
@@ -16,11 +19,11 @@ export const PixelGamepad = ({ className = "w-8 h-8", ...props }: React.SVGProps
       <path d="M28.19 10.67h1.52v10.67h-1.52Z" />
       <path d="M5.33 7.62h21.34v1.52H5.33Z" />
       <path d="M5.33 22.86h21.34v1.52H5.33Z" />
-      
+
       {/* Buttons */}
       <path d="M21.34 12.19h3.05v3.05h-3.05Z" fill="var(--background)" />
       <path d="M18.29 15.24h3.05v3.05h-3.05Z" fill="var(--background)" />
-      
+
       {/* D-Pad */}
       <path d="M7.62 13.72h3.05v3.05H7.62Z" fill="var(--background)" />
       <path d="M6.1 12.19h1.52v3.05H6.1Z" fill="var(--background)" />

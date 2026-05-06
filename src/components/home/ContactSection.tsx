@@ -1,7 +1,15 @@
 "use client";
 
 import { m } from "motion/react";
-import { Mail, Send, Copy, Check, MessageSquare, Loader2, AlertCircle } from "lucide-react";
+import {
+  Mail,
+  Send,
+  Copy,
+  Check,
+  MessageSquare,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -10,17 +18,25 @@ import { PixelFileText } from "@/components/icons/PixelFileText";
 import { PixelBird } from "@/components/icons/PixelBird";
 
 const contactSchema = z.object({
-  name: z.string().pipe(z.string().min(2, { message: "Identity is too short (min 2 chars)" })),
+  name: z
+    .string()
+    .pipe(
+      z.string().min(2, { message: "Identity is too short (min 2 chars)" }),
+    ),
   email: z.email({ message: "Invalid frequency (email) format" }),
-  message: z.string().pipe(z.string().min(10, { message: "Payload too small (min 10 chars)" })),
+  message: z
+    .string()
+    .pipe(z.string().min(10, { message: "Payload too small (min 10 chars)" })),
 });
 
 export function ContactSection() {
   const [copied, setCopied] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'succeeded' | 'error'>('idle');
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "succeeded" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  
+
   const email = "bdangi450@gmail.com";
 
   const copyEmail = () => {
@@ -31,7 +47,7 @@ export function ContactSection() {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('submitting');
+    setStatus("submitting");
     setErrorMessage("");
     setErrors({});
 
@@ -48,14 +64,14 @@ export function ContactSection() {
         }
       });
       setErrors(fieldErrors);
-      setStatus('idle');
+      setStatus("idle");
       return;
     }
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -65,17 +81,22 @@ export function ContactSection() {
         throw new Error(result.error || "Transmission failed");
       }
 
-      setStatus('succeeded');
+      setStatus("succeeded");
     } catch (err: unknown) {
-      setStatus('error');
-      setErrorMessage(err instanceof Error ? err.message : "An unexpected error occurred");
+      setStatus("error");
+      setErrorMessage(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     }
   };
 
-  if (status === 'succeeded') {
+  if (status === "succeeded") {
     return (
-      <section id="contact" className="w-full py-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
-        <m.div 
+      <section
+        id="contact"
+        className="w-full py-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto"
+      >
+        <m.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="bg-card border-2 border-ctp-green p-12 rounded-[2rem] shadow-2xl flex flex-col items-center text-center space-y-6"
@@ -88,12 +109,13 @@ export function ContactSection() {
               Transmission Received
             </h2>
             <p className="text-muted-foreground font-mono text-sm max-w-md">
-              Your signal has been successfully processed. Expect a response on the same frequency soon.
+              Your signal has been successfully processed. Expect a response on
+              the same frequency soon.
             </p>
           </div>
-          <Button 
-            onClick={() => setStatus('idle')} 
-            variant="outline" 
+          <Button
+            onClick={() => setStatus("idle")}
+            variant="outline"
             className="rounded-xl font-mono text-xs font-bold uppercase tracking-widest border-ctp-green/50 hover:bg-ctp-green/10"
           >
             New Transmission
@@ -104,7 +126,10 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
+    <section
+      id="contact"
+      className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           {/* Left Side: Text & Info */}
@@ -115,10 +140,11 @@ export function ContactSection() {
               </h2>
               <div className="h-1.5 w-32 bg-ctp-lavender/30 rounded-full" />
             </div>
-            
+
             <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-              Have a project in mind or just want to talk shop? My signal is always open. 
-              Drop a message or reach out through the frequency of your choice.
+              Have a project in mind or just want to talk shop? My signal is
+              always open. Drop a message or reach out through the frequency of
+              your choice.
             </p>
 
             <div className="flex flex-col gap-4">
@@ -127,14 +153,20 @@ export function ContactSection() {
                   <Mail className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">Email Frequency</p>
+                  <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                    Email Frequency
+                  </p>
                   <p className="text-sm font-bold truncate">{email}</p>
                 </div>
-                <button 
+                <button
                   onClick={copyEmail}
                   className="p-2 hover:bg-ctp-surface1 rounded-lg transition-colors text-muted-foreground hover:text-foreground cursor-pointer"
                 >
-                  {copied ? <Check className="w-5 h-5 text-ctp-green" /> : <Copy className="w-5 h-5" />}
+                  {copied ? (
+                    <Check className="w-5 h-5 text-ctp-green" />
+                  ) : (
+                    <Copy className="w-5 h-5" />
+                  )}
                 </button>
               </div>
 
@@ -143,15 +175,19 @@ export function ContactSection() {
                   <MessageSquare className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">Availability</p>
-                  <p className="text-sm font-bold truncate text-ctp-green">OPEN FOR NEW MISSIONS</p>
+                  <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
+                    Availability
+                  </p>
+                  <p className="text-sm font-bold truncate text-ctp-green">
+                    OPEN FOR NEW MISSIONS
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Side: The Form */}
-          <m.div 
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -162,66 +198,93 @@ export function ContactSection() {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 pl-1">
                     <PixelTerminal className="w-4 h-4 text-ctp-lavender" />
-                    <label htmlFor="name" className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest">Identity</label>
+                    <label
+                      htmlFor="name"
+                      className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest"
+                    >
+                      Identity
+                    </label>
                   </div>
-                  <input 
+                  <input
                     id="name"
-                    type="text" 
+                    type="text"
                     name="name"
                     required
                     placeholder="Your Name"
-                    className={`w-full bg-ctp-surface0 border ${errors.name ? 'border-ctp-red' : 'border-border/50'} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
+                    className={`w-full bg-ctp-surface0 border ${errors.name ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
                   />
-                  {errors.name && <p className="text-[10px] text-ctp-red font-mono pl-1">{errors.name}</p>}
+                  {errors.name && (
+                    <p className="text-[10px] text-ctp-red font-mono pl-1">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 pl-1">
                     <Mail className="w-4 h-4 text-ctp-lavender" />
-                    <label htmlFor="email" className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest">Signal (Email)</label>
+                    <label
+                      htmlFor="email"
+                      className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest"
+                    >
+                      Signal (Email)
+                    </label>
                   </div>
-                  <input 
+                  <input
                     id="email"
-                    type="email" 
+                    type="email"
                     name="email"
                     required
                     placeholder="name@company.com"
-                    className={`w-full bg-ctp-surface0 border ${errors.email ? 'border-ctp-red' : 'border-border/50'} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
+                    className={`w-full bg-ctp-surface0 border ${errors.email ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
                   />
-                  {errors.email && <p className="text-[10px] text-ctp-red font-mono pl-1">{errors.email}</p>}
+                  {errors.email && (
+                    <p className="text-[10px] text-ctp-red font-mono pl-1">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center gap-2 pl-1">
                   <PixelFileText className="w-4 h-4 text-ctp-lavender" />
-                  <label htmlFor="message" className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest">Message Payload</label>
+                  <label
+                    htmlFor="message"
+                    className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-widest"
+                  >
+                    Message Payload
+                  </label>
                 </div>
-                <textarea 
+                <textarea
                   id="message"
                   rows={5}
                   name="message"
                   required
                   placeholder="Transmission details..."
-                  className={`w-full bg-ctp-surface0 border ${errors.message ? 'border-ctp-red' : 'border-border/50'} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all resize-none`}
+                  className={`w-full bg-ctp-surface0 border ${errors.message ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all resize-none`}
                 />
-                {errors.message && <p className="text-[10px] text-ctp-red font-mono pl-1">{errors.message}</p>}
+                {errors.message && (
+                  <p className="text-[10px] text-ctp-red font-mono pl-1">
+                    {errors.message}
+                  </p>
+                )}
               </div>
 
-              {status === 'error' && (
+              {status === "error" && (
                 <div className="flex items-center gap-2 text-ctp-red bg-ctp-red/10 p-3 rounded-lg border border-ctp-red/20">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <p className="text-xs font-mono">{errorMessage}</p>
                 </div>
               )}
 
-              <Button 
+              <Button
                 type="submit"
-                disabled={status === 'submitting'}
+                disabled={status === "submitting"}
                 className="w-full py-6 rounded-xl font-black font-heading text-lg group overflow-hidden relative disabled:opacity-50 disabled:cursor-not-allowed"
                 variant="default"
               >
                 <span className="relative z-10 flex items-center justify-center gap-3">
-                  {status === 'submitting' ? (
+                  {status === "submitting" ? (
                     <>
                       Encrypting...
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -233,7 +296,7 @@ export function ContactSection() {
                     </>
                   )}
                 </span>
-                {status !== 'submitting' && (
+                {status !== "submitting" && (
                   <div className="absolute inset-0 bg-linear-to-r from-ctp-lavender to-ctp-sky opacity-0 group-hover:opacity-100 transition-opacity" />
                 )}
               </Button>

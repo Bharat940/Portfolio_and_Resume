@@ -2,14 +2,14 @@ import { Variants } from "motion/react";
 
 export const slideInFromRight: Variants = {
   initial: { x: 100, opacity: 0 },
-  hover: { 
-    x: 0, 
+  hover: {
+    x: 0,
     opacity: 1,
-    transition: { 
-      type: "spring" as const, 
-      stiffness: 100, 
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
       damping: 20,
-      delay: 0.1 
+      delay: 0.1
     }
   }
 };

@@ -10,7 +10,7 @@ export async function GET() {
   for (const url of apis) {
     try {
       console.log(`[LeetCode Proxy] Attempting fetch from: ${url}`);
-      const response = await fetch(url, { 
+      const response = await fetch(url, {
         next: { revalidate: 3600 }, // Cache for 1 hour
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -19,18 +19,18 @@ export async function GET() {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Normalize the data format
         let normalizedData = [];
-        
+
         if (url.includes('alfa-leetcode-api')) {
           // Alfa API format: { submissionCalendar: { "timestamp": count } }
           // Actually Alfa might return it differently, let's check its format
           // Based on common knowledge: { submissionCalendar: string (JSON string of {ts: count}) }
-          const calendar = typeof data.submissionCalendar === 'string' 
-            ? JSON.parse(data.submissionCalendar) 
+          const calendar = typeof data.submissionCalendar === 'string'
+            ? JSON.parse(data.submissionCalendar)
             : data.submissionCalendar;
-            
+
           normalizedData = Object.entries(calendar).map(([ts, count]) => ({
             date: new Date(parseInt(ts) * 1000).toISOString(),
             count: count,

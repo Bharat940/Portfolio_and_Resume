@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React from "react";
 
 export function BlogContent() {
   return (
@@ -10,18 +10,22 @@ export function BlogContent() {
           Technical <span className="text-ctp-peach italic">Journal</span>
         </h1>
         <p className="text-muted-foreground text-lg max-w-2xl">
-          Deep dives into system architecture, distributed systems, and low-level engineering.
+          Deep dives into system architecture, distributed systems, and
+          low-level engineering.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-12">
         <div className="p-8 border border-border/30 bg-card/50 rounded-2xl backdrop-blur-sm group hover:border-ctp-peach/50 transition-colors">
-          <span className="text-xs font-mono text-ctp-peach uppercase tracking-widest">May 04, 2026 • 12 min read</span>
+          <span className="text-xs font-mono text-ctp-peach uppercase tracking-widest">
+            May 04, 2026 • 12 min read
+          </span>
           <h2 className="text-2xl font-bold mt-2 mb-4 group-hover:text-ctp-peach transition-colors cursor-none">
             Building a Distributed Job Processor with Next.js and Inngest
           </h2>
           <p className="text-muted-foreground mb-6">
-            An exploration of fault-tolerant background processing, retries, and real-time state synchronization in a serverless environment...
+            An exploration of fault-tolerant background processing, retries, and
+            real-time state synchronization in a serverless environment...
           </p>
           <button className="text-sm font-black uppercase tracking-widest border-b-2 border-ctp-peach pb-1 hover:text-ctp-peach transition-colors">
             Read Analysis

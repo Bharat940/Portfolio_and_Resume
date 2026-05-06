@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
   const lastMessage = messages[messages.length - 1];
 
-  // Extract text from the last message parts (v6 standard)
+  // Extract text from the last message parts
   const lastMessageText = lastMessage.parts
     .filter(part => part.type === 'text')
     .map(part => {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
   const context = relevantChunks.map(c => c.content).join('\n\n');
 
-  // 3. Define the System Prompt
+  // 3. System Prompt
   const systemPrompt = `
 You are the AI Assistant for Bharat Dangi's developer portfolio. 
 Your goal is to answer questions about Bharat's projects, skills, education, and experience using the provided context.

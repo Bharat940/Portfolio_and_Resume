@@ -1,7 +1,7 @@
 "use client";
 
-import { m } from 'motion/react';
-import { useMemo, useState, useEffect } from 'react';
+import { m } from "motion/react";
+import { useMemo, useState, useEffect } from "react";
 
 interface ContributionDay {
   date: string;
@@ -11,13 +11,19 @@ interface ContributionDay {
 
 interface PixelCalendarProps {
   data: ContributionDay[] | null;
-  colorType: 'mauve' | 'yellow' | 'green';
+  colorType: "mauve" | "yellow" | "green";
   label: string;
   icon: React.ReactNode;
   profileUrl?: string;
 }
 
-export function PixelCalendar({ data, colorType, label, icon, profileUrl }: PixelCalendarProps) {
+export function PixelCalendar({
+  data,
+  colorType,
+  label,
+  icon,
+  profileUrl,
+}: PixelCalendarProps) {
   const [days, setDays] = useState<ContributionDay[]>([]);
 
   useEffect(() => {
@@ -29,7 +35,7 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
         const generated = Array.from({ length: 371 }).map((_, i) => ({
           date: new Date(now - (370 - i) * 24 * 60 * 60 * 1000).toISOString(),
           count: 0,
-          level: 0
+          level: 0,
         }));
         setDays(generated);
       }
@@ -45,8 +51,21 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
   }, [days]);
 
   const monthIndicators = useMemo(() => {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const indicators: { month: string, index: number }[] = [];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const indicators: { month: string; index: number }[] = [];
     let lastMonth = -1;
 
     weeks.forEach((week, i) => {
@@ -62,9 +81,27 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
   }, [weeks]);
 
   const colorMap = {
-    mauve: ['bg-muted/10', 'bg-ctp-mauve/20', 'bg-ctp-mauve/50', 'bg-ctp-mauve/80', 'bg-ctp-mauve'],
-    yellow: ['bg-muted/10', 'bg-ctp-yellow/20', 'bg-ctp-yellow/50', 'bg-ctp-yellow/80', 'bg-ctp-yellow'],
-    green: ['bg-muted/10', 'bg-ctp-green/20', 'bg-ctp-green/50', 'bg-ctp-green/80', 'bg-ctp-green'],
+    mauve: [
+      "bg-muted/10",
+      "bg-ctp-mauve/20",
+      "bg-ctp-mauve/50",
+      "bg-ctp-mauve/80",
+      "bg-ctp-mauve",
+    ],
+    yellow: [
+      "bg-muted/10",
+      "bg-ctp-yellow/20",
+      "bg-ctp-yellow/50",
+      "bg-ctp-yellow/80",
+      "bg-ctp-yellow",
+    ],
+    green: [
+      "bg-muted/10",
+      "bg-ctp-green/20",
+      "bg-ctp-green/50",
+      "bg-ctp-green/80",
+      "bg-ctp-green",
+    ],
   };
 
   const colors = colorMap[colorType];
@@ -83,20 +120,28 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
             {icon}
           </div>
           <div className="flex flex-col">
-            <h3 className="text-2xl font-black font-heading tracking-tight">{label}</h3>
-            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em]">Live Activity Tracker</span>
+            <h3 className="text-2xl font-black font-heading tracking-tight">
+              {label}
+            </h3>
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-[0.3em]">
+              Live Activity Tracker
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-6 text-[10px] font-mono text-muted-foreground uppercase tracking-widest bg-background/30 px-4 py-3 rounded-2xl border border-border/20">
           <div className="flex flex-col">
             <span className="opacity-50">Total</span>
-            <span className="text-foreground font-black text-base">{days.reduce((acc, curr) => acc + curr.count, 0)}</span>
+            <span className="text-foreground font-black text-base">
+              {days.reduce((acc, curr) => acc + curr.count, 0)}
+            </span>
           </div>
           <div className="w-px h-8 bg-border/50" />
           <div className="flex flex-col">
             <span className="opacity-50">Year</span>
-            <span className="text-primary font-black text-base">{new Date().getFullYear()}</span>
+            <span className="text-primary font-black text-base">
+              {new Date().getFullYear()}
+            </span>
           </div>
         </div>
       </div>
@@ -113,10 +158,13 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
             {/* Month label row */}
             <div className="flex gap-1.25">
               {weeks.map((week, i) => {
-                const indicator = monthIndicators.find(m => m.index === i);
+                const indicator = monthIndicators.find((m) => m.index === i);
                 return (
-                  <div key={i} className="w-3 md:w-3.75 text-[8px] md:text-[9px] font-bold font-mono text-muted-foreground/60 uppercase overflow-visible whitespace-nowrap">
-                    {indicator ? indicator.month : ''}
+                  <div
+                    key={i}
+                    className="w-3 md:w-3.75 text-[8px] md:text-[9px] font-bold font-mono text-muted-foreground/60 uppercase overflow-visible whitespace-nowrap"
+                  >
+                    {indicator ? indicator.month : ""}
                   </div>
                 );
               })}
@@ -146,13 +194,22 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
             rel="noopener noreferrer"
             className="flex items-center gap-3 text-xs font-bold font-mono text-muted-foreground bg-primary/5 hover:bg-primary/10 px-5 py-2.5 rounded-xl border border-primary/20 transition-all hover:-translate-y-1"
           >
-            <span className="text-primary uppercase tracking-widest">View Profile</span>
+            <span className="text-primary uppercase tracking-widest">
+              View Profile
+            </span>
           </a>
 
           <div className="flex items-center gap-3 bg-background/20 p-2.5 rounded-xl border border-border/10">
-            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest opacity-60">Intensity</span>
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest opacity-60">
+              Intensity
+            </span>
             <div className="flex gap-1.5">
-              {colors.map(c => <div key={c} className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-[3px] ${c} border border-white/5`} />)}
+              {colors.map((c) => (
+                <div
+                  key={c}
+                  className={`w-3.5 h-3.5 md:w-4 md:h-4 rounded-[3px] ${c} border border-white/5`}
+                />
+              ))}
             </div>
           </div>
         </div>

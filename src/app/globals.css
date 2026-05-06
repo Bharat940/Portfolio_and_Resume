@@ -148,12 +148,18 @@
   --sidebar-ring: #cba6f7;
 
   /* Section alternating backgrounds */
-  --section-1: #1e1e2e;   /* ctp-base — default */
-  --section-2: #181825;   /* ctp-mantle — slightly darker */
-  --section-3: #1a1826;   /* between base/mantle — subtle purple tint */
-  --section-4: #1c1b2e;   /* slight blue tint */
-  --section-5: #1e1d2e;   /* near-base */
-  --section-6: #181a25;   /* cool tint */
+  --section-1: #1e1e2e;
+  /* ctp-base — default */
+  --section-2: #181825;
+  /* ctp-mantle — slightly darker */
+  --section-3: #1a1826;
+  /* between base/mantle — subtle purple tint */
+  --section-4: #1c1b2e;
+  /* slight blue tint */
+  --section-5: #1e1d2e;
+  /* near-base */
+  --section-6: #181a25;
+  /* cool tint */
 }
 
 @utility bg-mesh {
@@ -174,10 +180,10 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────
+/* 
    Native Cursor Suppression — Highest Specificity
    Outside any layer to override browser UA styles on buttons/links
-────────────────────────────────────────────────────────── */
+ */
 @media (pointer: fine) {
   html,
   html *,
@@ -187,14 +193,14 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────
+/*
    Custom Scrollbar — Cross-browser
    
    1. Modern standard (Firefox 64+, Chrome 121+, Edge 121+):
       scrollbar-width + scrollbar-color
    2. Legacy WebKit (Chrome < 121, Safari, older Edge):
       ::-webkit-scrollbar pseudo-elements
-────────────────────────────────────────────────────────── */
+ */
 
 /* Global scrollbar — applied to everything */
 * {
@@ -210,18 +216,22 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e1e2e; /* Catppuccin base */
+  background: #1e1e2e;
+  /* Catppuccin base */
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #45475a; /* Catppuccin surface1 */
+  background: #45475a;
+  /* Catppuccin surface1 */
   border-radius: 999px;
-  border: 2px solid #1e1e2e; /* creates padding around thumb */
+  border: 2px solid #1e1e2e;
+  /* creates padding around thumb */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #cba6f7; /* Catppuccin mauve on hover */
+  background: #cba6f7;
+  /* Catppuccin mauve on hover */
 }
 
 ::-webkit-scrollbar-corner {
@@ -230,64 +240,186 @@
 
 /* Custom README Typography Utility for Tailwind v4 */
 @utility readme-prose {
-  & h1 { @apply text-4xl font-black font-heading uppercase tracking-tight text-foreground mb-8 border-b border-border pb-4; }
-  & h2 { @apply text-2xl font-black font-heading uppercase tracking-tight text-ctp-mauve mt-12 mb-4 border-b border-border/50 pb-2; }
-  & h3 { @apply text-xl font-bold font-heading uppercase text-ctp-sky mt-8 mb-3; }
-  & p { @apply text-muted-foreground leading-relaxed mb-4 last:mb-0; }
-  & ul { @apply list-disc list-outside mb-4 ml-6 space-y-2 text-muted-foreground; }
-  & ol { @apply list-decimal list-outside mb-4 ml-6 space-y-2 text-muted-foreground; }
-  & li { @apply pl-2; }
-  & li > p { @apply inline; }
-  & code { @apply text-ctp-mauve bg-ctp-surface0 px-1.5 py-0.5 rounded font-mono text-sm border border-border/30; }
-  & pre { @apply bg-ctp-mantle p-4 rounded-xl border border-border/50 overflow-x-auto my-6; }
-  & pre code { @apply bg-transparent border-none p-0 text-ctp-text; }
-  & blockquote { @apply border-l-4 border-ctp-mauve pl-4 italic text-muted-foreground my-6; }
-  & a { @apply text-ctp-sky no-underline hover:underline decoration-ctp-sky/30 underline-offset-4; }
-  & img { @apply rounded-2xl border border-border/50 my-8 shadow-2xl; }
-  & strong { @apply text-foreground font-bold; }
-  & hr { @apply border-border/50 my-12; }
-  & table { @apply w-full text-left border-collapse my-6; }
-  & th { @apply border-b-2 border-border/50 p-3 font-bold font-mono text-xs uppercase tracking-wider text-ctp-mauve; }
-  & td { @apply border-b border-border/30 p-3 text-sm text-muted-foreground; }
+  & h1 {
+    @apply text-4xl font-black font-heading uppercase tracking-tight text-foreground mb-8 border-b border-border pb-4;
+  }
+
+  & h2 {
+    @apply text-2xl font-black font-heading uppercase tracking-tight text-ctp-mauve mt-12 mb-4 border-b border-border/50 pb-2;
+  }
+
+  & h3 {
+    @apply text-xl font-bold font-heading uppercase text-ctp-sky mt-8 mb-3;
+  }
+
+  & p {
+    @apply text-muted-foreground leading-relaxed mb-4 last:mb-0;
+  }
+
+  & ul {
+    @apply list-disc list-outside mb-4 ml-6 space-y-2 text-muted-foreground;
+  }
+
+  & ol {
+    @apply list-decimal list-outside mb-4 ml-6 space-y-2 text-muted-foreground;
+  }
+
+  & li {
+    @apply pl-2;
+  }
+
+  & li > p {
+    @apply inline;
+  }
+
+  & code {
+    @apply text-ctp-mauve bg-ctp-surface0 px-1.5 py-0.5 rounded font-mono text-sm border border-border/30;
+  }
+
+  & pre {
+    @apply bg-ctp-mantle p-4 rounded-xl border border-border/50 overflow-x-auto my-6;
+  }
+
+  & pre code {
+    @apply bg-transparent border-none p-0 text-ctp-text;
+  }
+
+  & blockquote {
+    @apply border-l-4 border-ctp-mauve pl-4 italic text-muted-foreground my-6;
+  }
+
+  & a {
+    @apply text-ctp-sky no-underline hover:underline decoration-ctp-sky/30 underline-offset-4;
+  }
+
+  & img {
+    @apply rounded-2xl border border-border/50 my-8 shadow-2xl;
+  }
+
+  & strong {
+    @apply text-foreground font-bold;
+  }
+
+  & hr {
+    @apply border-border/50 my-12;
+  }
+
+  & table {
+    @apply w-full text-left border-collapse my-6;
+  }
+
+  & th {
+    @apply border-b-2 border-border/50 p-3 font-bold font-mono text-xs uppercase tracking-wider text-ctp-mauve;
+  }
+
+  & td {
+    @apply border-b border-border/30 p-3 text-sm text-muted-foreground;
+  }
 }
 
 /* Utility: terminal-prose for AI responses in the CLI */
 @utility terminal-prose {
-  & h1 { @apply text-base font-black font-heading uppercase tracking-wider text-ctp-green mb-2 mt-0; }
-  & h2 { @apply text-sm font-black font-heading uppercase tracking-wide text-ctp-green/90 mt-4 mb-1; }
-  & h3 { @apply text-[13px] font-bold font-heading uppercase text-ctp-green/80 mt-3 mb-1; }
-  & p { @apply text-ctp-green/90 leading-relaxed mb-2 mt-0 last:mb-0; }
-  & ul { @apply list-disc list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0; }
-  & ol { @apply list-decimal list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0; }
-  & li { @apply pl-1; }
-  & li > p { @apply inline mb-0; }
-  & code { @apply text-ctp-mauve bg-ctp-crust/80 px-1 py-0.5 rounded font-mono text-[11px] border border-ctp-green/20; }
-  & pre { @apply bg-ctp-crust/50 p-3 rounded-lg border border-ctp-green/10 overflow-x-auto my-2; }
-  & pre code { @apply bg-transparent border-none p-0 text-ctp-green/90; }
-  & blockquote { @apply border-l-2 border-ctp-green/30 pl-3 italic text-ctp-green/70 my-2; }
-  & a { @apply text-ctp-sky underline decoration-ctp-sky/30 underline-offset-4 hover:text-ctp-sky/80; }
-  & strong { @apply text-ctp-green font-bold; }
-  & hr { @apply border-ctp-green/10 my-2; }
+  & h1 {
+    @apply text-base font-black font-heading uppercase tracking-wider text-ctp-green mb-2 mt-0;
+  }
 
-  /* Table — the main offender in terminal outputs */
-  & table { @apply w-full text-left border-collapse mt-1 mb-2; }
-  & th { @apply border-b border-ctp-green/20 py-1 px-1.5 font-bold font-mono text-[10px] uppercase tracking-wider text-ctp-green; }
-  & td { @apply border-b border-ctp-green/10 py-1 px-1.5 text-[11px] text-ctp-green/80 align-top; }
-  & tr:last-child td { @apply border-b-0; }
+  & h2 {
+    @apply text-sm font-black font-heading uppercase tracking-wide text-ctp-green/90 mt-4 mb-1;
+  }
+
+  & h3 {
+    @apply text-[13px] font-bold font-heading uppercase text-ctp-green/80 mt-3 mb-1;
+  }
+
+  & p {
+    @apply text-ctp-green/90 leading-relaxed mb-2 mt-0 last:mb-0;
+  }
+
+  & ul {
+    @apply list-disc list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0;
+  }
+
+  & ol {
+    @apply list-decimal list-outside mb-2 ml-4 space-y-0.5 text-ctp-green/80 mt-0;
+  }
+
+  & li {
+    @apply pl-1;
+  }
+
+  & li > p {
+    @apply inline mb-0;
+  }
+
+  & code {
+    @apply text-ctp-mauve bg-ctp-crust/80 px-1 py-0.5 rounded font-mono text-[11px] border border-ctp-green/20;
+  }
+
+  & pre {
+    @apply bg-ctp-crust/50 p-3 rounded-lg border border-ctp-green/10 overflow-x-auto my-2;
+  }
+
+  & pre code {
+    @apply bg-transparent border-none p-0 text-ctp-green/90;
+  }
+
+  & blockquote {
+    @apply border-l-2 border-ctp-green/30 pl-3 italic text-ctp-green/70 my-2;
+  }
+
+  & a {
+    @apply text-ctp-sky underline decoration-ctp-sky/30 underline-offset-4 hover:text-ctp-sky/80;
+  }
+
+  & strong {
+    @apply text-ctp-green font-bold;
+  }
+
+  & hr {
+    @apply border-ctp-green/10 my-2;
+  }
+
+  /* Tables */
+  & table {
+    @apply w-full text-left border-collapse mt-1 mb-2;
+  }
+
+  & th {
+    @apply border-b border-ctp-green/20 py-1 px-1.5 font-bold font-mono text-[10px] uppercase tracking-wider text-ctp-green;
+  }
+
+  & td {
+    @apply border-b border-ctp-green/10 py-1 px-1.5 text-[11px] text-ctp-green/80 align-top;
+  }
+
+  & tr:last-child td {
+    @apply border-b-0;
+  }
 
   /* Nuclear option: kill any rogue top margins from browser UA stylesheet */
-  & * { @apply mt-0; }
-  & h2, & h3 { @apply mt-4; }
+  & * {
+    @apply mt-0;
+  }
+
+  & h2,
+  & h3 {
+    @apply mt-4;
+  }
 }
 
 /* Utility: hide scrollbar but keep scrolling (used on contribution graph) */
 .scrollbar-none {
-  scrollbar-width: none;       /* Firefox */
-  -ms-overflow-style: none;    /* IE / Edge legacy */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE / Edge legacy */
 }
+
 .scrollbar-none::-webkit-scrollbar {
-  display: none;               /* WebKit */
+  display: none;
+  /* WebKit */
 }
+
 /* Accessibility: Respect Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,

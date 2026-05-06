@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
 
-export const PixelMenu = ({ className = "w-8 h-8", ...props }: React.SVGProps<SVGSVGElement>) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 32 32" 
+export const PixelMenu = ({
+  className = "w-8 h-8",
+  ...props
+}: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
     className={className}
     fill="currentColor"
     {...props}

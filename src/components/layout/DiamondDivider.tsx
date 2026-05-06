@@ -10,28 +10,31 @@ interface DiamondDividerProps {
 
 const CTP_HEX: Record<string, string> = {
   "ctp-rosewater": "#f5e0dc",
-  "ctp-flamingo":  "#f2cdcd",
-  "ctp-pink":      "#f5c2e7",
-  "ctp-mauve":     "#cba6f7",
-  "ctp-red":       "#f38ba8",
-  "ctp-maroon":    "#eba0ac",
-  "ctp-peach":     "#fab387",
-  "ctp-yellow":    "#f9e2af",
-  "ctp-green":     "#a6e3a1",
-  "ctp-teal":      "#94e2d5",
-  "ctp-sky":       "#89dceb",
-  "ctp-sapphire":  "#74c7ec",
-  "ctp-blue":      "#89b4fa",
-  "ctp-lavender":  "#b4befe",
-  "ctp-base":      "#1e1e2e",
-  "ctp-mantle":    "#181825",
-  "ctp-crust":     "#11111b",
-  "ctp-surface0":  "#313244",
-  "ctp-surface1":  "#45475a",
-  "ctp-surface2":  "#585b70",
+  "ctp-flamingo": "#f2cdcd",
+  "ctp-pink": "#f5c2e7",
+  "ctp-mauve": "#cba6f7",
+  "ctp-red": "#f38ba8",
+  "ctp-maroon": "#eba0ac",
+  "ctp-peach": "#fab387",
+  "ctp-yellow": "#f9e2af",
+  "ctp-green": "#a6e3a1",
+  "ctp-teal": "#94e2d5",
+  "ctp-sky": "#89dceb",
+  "ctp-sapphire": "#74c7ec",
+  "ctp-blue": "#89b4fa",
+  "ctp-lavender": "#b4befe",
+  "ctp-base": "#1e1e2e",
+  "ctp-mantle": "#181825",
+  "ctp-crust": "#11111b",
+  "ctp-surface0": "#313244",
+  "ctp-surface1": "#45475a",
+  "ctp-surface2": "#585b70",
 };
 
-export function DiamondDivider({ color = "ctp-surface2", className }: DiamondDividerProps) {
+export function DiamondDivider({
+  color = "ctp-surface2",
+  className,
+}: DiamondDividerProps) {
   const fill = CTP_HEX[color] ?? color;
 
   const SIZE = 14;
@@ -46,11 +49,12 @@ export function DiamondDivider({ color = "ctp-surface2", className }: DiamondDiv
 
   return (
     <div
-      className={cn("w-full pointer-events-none select-none relative z-10 overflow-hidden", className)}
+      className={cn(
+        "w-full pointer-events-none select-none relative z-10 overflow-hidden",
+        className,
+      )}
       style={{
-        // Give it just enough height to contain the diamonds without clipping
         height: diagonal + 2,
-        // Pull the sections together so the diamonds straddle the seam
         marginTop: -(diagonal + 2) / 2,
         marginBottom: -(diagonal + 2) / 2,
       }}
@@ -75,7 +79,6 @@ export function DiamondDivider({ color = "ctp-surface2", className }: DiamondDiv
           return (
             <m.div
               key={i}
-              // Use motion's own rotate + scale — DO NOT mix with CSS transform string
               initial={{ opacity: 0, scale: 0, rotate: 45 }}
               whileInView={{ opacity: targetOpacity, scale: 1, rotate: 45 }}
               viewport={{ once: true, margin: "80px" }}
@@ -90,7 +93,6 @@ export function DiamondDivider({ color = "ctp-surface2", className }: DiamondDiv
                 height: SIZE,
                 flexShrink: 0,
                 background: fill,
-                // Spacing each layout box so that the rotated visual diagonals touch corner-to-corner
                 marginLeft: overlap,
                 marginRight: overlap,
               }}

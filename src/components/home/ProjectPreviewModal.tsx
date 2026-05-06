@@ -3,8 +3,15 @@ import { Project } from "@/data/portfolio";
 import { PixelClose } from "@/components/icons/PixelClose";
 import { PixelGitHub } from "@/components/icons/PixelGitHub";
 import { SkillIcon } from "@/components/icons/SkillIcons";
-import { ExternalLink, Loader2, ChevronLeft, ChevronRight, Monitor, Image as ImageIcon } from "lucide-react";
-import React, { useState } from 'react';
+import {
+  ExternalLink,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  Monitor,
+  Image as ImageIcon,
+} from "lucide-react";
+import React, { useState } from "react";
 import { ProjectReadme } from "./ProjectReadme";
 import { cn } from "@/lib/utils";
 
@@ -13,11 +20,14 @@ interface ProjectPreviewModalProps {
   onClose: () => void;
 }
 
-type ViewMode = 'interactive' | 'snapshot';
+type ViewMode = "interactive" | "snapshot";
 
-export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalProps) {
+export function ProjectPreviewModal({
+  project,
+  onClose,
+}: ProjectPreviewModalProps) {
   const [isIframeLoading, setIsIframeLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<ViewMode>('snapshot');
+  const [viewMode, setViewMode] = useState<ViewMode>("snapshot");
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
 
   if (!project) return null;
@@ -33,13 +43,17 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
 
   const prevImg = () => {
     if (project.screenshots) {
-      setCurrentImgIdx((prev) => (prev - 1 + project.screenshots!.length) % project.screenshots!.length);
+      setCurrentImgIdx(
+        (prev) =>
+          (prev - 1 + project.screenshots!.length) %
+          project.screenshots!.length,
+      );
     }
   };
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-100 flex items-center justify-center p-2 md:p-10">
+      <div className="fixed inset-0 z-120 flex items-center justify-center p-2 md:p-10">
         {/* Backdrop */}
         <m.div
           initial={{ opacity: 0 }}
@@ -74,23 +88,27 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
             </div>
 
             {/* View Mode Toggle - Only for Web projects with links AND screenshots */}
-            {project.type === 'web' && hasLink && hasScreenshots && (
+            {project.type === "web" && hasLink && hasScreenshots && (
               <div className="flex items-center bg-ctp-surface0/50 p-1 rounded-xl border border-border/20 gap-1 mx-2">
                 <button
-                  onClick={() => setViewMode('interactive')}
+                  onClick={() => setViewMode("interactive")}
                   className={cn(
                     "flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all",
-                    viewMode === 'interactive' ? "bg-ctp-mauve text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
+                    viewMode === "interactive"
+                      ? "bg-ctp-mauve text-background shadow-lg"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <Monitor className="w-3 h-3" />
                   <span className="hidden sm:inline">Interactive</span>
                 </button>
                 <button
-                  onClick={() => setViewMode('snapshot')}
+                  onClick={() => setViewMode("snapshot")}
                   className={cn(
                     "flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all",
-                    viewMode === 'snapshot' ? "bg-ctp-mauve text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
+                    viewMode === "snapshot"
+                      ? "bg-ctp-mauve text-background shadow-lg"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   <ImageIcon className="w-3 h-3" />
@@ -112,12 +130,14 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
           <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-6">
             {/* Preview Container */}
             <div className="aspect-video w-full bg-ctp-crust rounded-xl border-2 border-border/30 overflow-hidden relative group shrink-0">
-              {viewMode === 'interactive' && project.link ? (
+              {viewMode === "interactive" && project.link ? (
                 <>
                   {isIframeLoading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-ctp-crust z-10">
                       <Loader2 className="w-8 h-8 animate-spin text-ctp-mauve" />
-                      <span className="font-mono text-[10px] text-muted-foreground">Initializing Preview System...</span>
+                      <span className="font-mono text-[10px] text-muted-foreground">
+                        Initializing Preview System...
+                      </span>
                     </div>
                   )}
                   <iframe
@@ -164,7 +184,9 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                             key={i}
                             className={cn(
                               "w-1.5 h-1.5 rounded-full transition-all",
-                              i === currentImgIdx ? "bg-ctp-mauve w-4" : "bg-ctp-surface2"
+                              i === currentImgIdx
+                                ? "bg-ctp-mauve w-4"
+                                : "bg-ctp-surface2",
                             )}
                           />
                         ))}
@@ -242,8 +264,11 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                     Tech Stack
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="px-2 py-1 bg-ctp-surface0 border border-border/30 rounded font-mono text-[9px] md:text-[10px] text-ctp-text">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-ctp-surface0 border border-border/30 rounded font-mono text-[9px] md:text-[10px] text-ctp-text"
+                      >
                         {tag}
                       </span>
                     ))}

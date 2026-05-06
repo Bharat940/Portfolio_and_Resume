@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { AtSign } from 'lucide-react';
-import { m, AnimatePresence, Variants } from 'motion/react';
-import { PixelMenu } from '@/components/icons/PixelMenu';
-import { PixelClose } from '@/components/icons/PixelClose';
-import { PixelGitHub } from '@/components/icons/PixelGitHub';
-import { PixelLinkedIn } from '@/components/icons/PixelLinkedIn';
-import { PixelTerminal } from '@/components/icons/PixelTerminal';
-import { PixelArrowRight } from '@/components/icons/PixelArrowRight';
-import { useTerminal } from '@/context/TerminalContext';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { AtSign } from "lucide-react";
+import { m, AnimatePresence, Variants } from "motion/react";
+import { PixelMenu } from "@/components/icons/PixelMenu";
+import { PixelClose } from "@/components/icons/PixelClose";
+import { PixelGitHub } from "@/components/icons/PixelGitHub";
+import { PixelLinkedIn } from "@/components/icons/PixelLinkedIn";
+import { PixelTerminal } from "@/components/icons/PixelTerminal";
+import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
+import { TransitionLink } from "@/components/ui/TransitionLink";
+import { useTerminal } from "@/context/TerminalContext";
 
 export function Navbar() {
   const { toggleTerminal } = useTerminal();
@@ -20,20 +21,44 @@ export function Navbar() {
   // Prevent background scrolling on mobile when menu is open
   useEffect(() => {
     if (isOpen && window.innerWidth < 768) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
   const navLinks = [
-    { name: 'Home', href: '/', hoverColor: 'group-hover:text-ctp-blue', hoverBorder: 'hover:border-ctp-blue', iconColor: 'text-ctp-blue' },
-    { name: 'About', href: '/about', hoverColor: 'group-hover:text-ctp-green', hoverBorder: 'hover:border-ctp-green', iconColor: 'text-ctp-green' },
-    { name: 'Projects', href: '/projects', hoverColor: 'group-hover:text-ctp-peach', hoverBorder: 'hover:border-ctp-peach', iconColor: 'text-ctp-peach' },
-    { name: 'Blog', href: '/blog', hoverColor: 'group-hover:text-ctp-pink', hoverBorder: 'hover:border-ctp-pink', iconColor: 'text-ctp-pink' },
+    {
+      name: "Home",
+      href: "/",
+      hoverColor: "group-hover:text-ctp-blue",
+      hoverBorder: "hover:border-ctp-blue",
+      iconColor: "text-ctp-blue",
+    },
+    {
+      name: "About",
+      href: "/about",
+      hoverColor: "group-hover:text-ctp-green",
+      hoverBorder: "hover:border-ctp-green",
+      iconColor: "text-ctp-green",
+    },
+    {
+      name: "Projects",
+      href: "/projects",
+      hoverColor: "group-hover:text-ctp-peach",
+      hoverBorder: "hover:border-ctp-peach",
+      iconColor: "text-ctp-peach",
+    },
+    {
+      name: "Blog",
+      href: "/blog",
+      hoverColor: "group-hover:text-ctp-pink",
+      hoverBorder: "hover:border-ctp-pink",
+      iconColor: "text-ctp-pink",
+    },
   ];
 
   // Framer Motion Variants
@@ -44,15 +69,15 @@ export function Navbar() {
       transition: {
         staggerChildren: 0.1,
         delayChildren: 0.1,
-      }
+      },
     },
     exit: {
       opacity: 0,
       transition: {
         staggerChildren: 0.05,
         staggerDirection: -1,
-      }
-    }
+      },
+    },
   };
 
   const itemVariants: Variants = {
@@ -61,35 +86,33 @@ export function Navbar() {
       opacity: 1,
       x: 0,
       filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 300, damping: 24 }
+      transition: { type: "spring", stiffness: 300, damping: 24 },
     },
-    exit: { opacity: 0, x: -10, filter: "blur(5px)" }
+    exit: { opacity: 0, x: -10, filter: "blur(5px)" },
   };
 
   return (
     <>
-      {/* Floating Header Elements - z-[60] so it sits ABOVE the Modal overlay */}
-      <header className="fixed top-0 left-0 w-full z-60 pointer-events-none">
+      <header className="fixed top-0 left-0 w-full z-120 pointer-events-none">
         <div className="flex justify-between items-start p-6 md:p-8 max-w-screen-2xl mx-auto relative">
-
           {/* Logo Box - Expands on hover */}
           <div className="pointer-events-auto">
-            <Link
+            <TransitionLink
               href="/"
               className="flex items-center h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-all duration-500 group cursor-pointer overflow-hidden max-w-16 hover:max-w-70 px-4"
-              aria-label="Home"
             >
               <Image
-                src="/logos/gengar_pfp.png"
+                src="/logo.png"
                 alt="Logo"
                 width={40}
                 height={40}
                 className="shrink-0 group-hover:scale-110 transition-transform rounded-xl object-cover shadow-sm border border-border/20"
+                priority
               />
               <span className="ml-4 font-bold text-primary whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75 font-heading text-lg">
                 Bharat Dangi
               </span>
-            </Link>
+            </TransitionLink>
           </div>
 
           {/* Hamburger / Menu Box */}
@@ -126,11 +149,14 @@ export function Navbar() {
                   <m.div
                     initial={{ opacity: 0, filter: "blur(10px)" }}
                     animate={{ opacity: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, filter: "blur(10px)", transition: { duration: 0.2 } }}
+                    exit={{
+                      opacity: 0,
+                      filter: "blur(10px)",
+                      transition: { duration: 0.2 },
+                    }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-h-[85vh] md:absolute md:top-0 md:right-18 md:left-auto md:translate-x-0 md:translate-y-0 md:w-87.5 bg-card border border-border/50 rounded-[32px] md:rounded-[40px] shadow-2xl flex flex-col overflow-hidden z-60"
                   >
-
                     {/* Custom X Button inside the Card - MOBILE ONLY */}
                     <div className="absolute top-6 right-6 z-10 md:hidden">
                       <button
@@ -143,7 +169,6 @@ export function Navbar() {
 
                     {/* Inner Panel Content - Scrollable container for links and socials */}
                     <div className="flex flex-col p-8 py-12 md:p-10 overflow-y-auto overflow-x-hidden scrollbar-none">
-
                       {/* Links List */}
                       <m.nav
                         variants={containerVariants}
@@ -154,21 +179,25 @@ export function Navbar() {
                       >
                         {navLinks.map((link) => (
                           <m.div key={link.name} variants={itemVariants}>
-                            <Link
+                            <TransitionLink
                               href={link.href}
                               onClick={() => setIsOpen(false)}
                               className={`group flex items-center justify-between py-4 border-b border-border/40 transition-colors cursor-pointer ${link.hoverBorder}`}
                             >
                               <div className="flex items-start">
-                                <span className={`text-2xl md:text-3xl font-bold tracking-tight text-foreground transition-colors font-heading ${link.hoverColor}`}>
+                                <span
+                                  className={`text-2xl md:text-3xl font-bold tracking-tight text-foreground transition-colors font-heading ${link.hoverColor}`}
+                                >
                                   {link.name}
                                 </span>
                               </div>
 
                               <div className="w-8 h-8 rounded-lg bg-background items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 border border-border/50 shadow-sm hidden md:flex">
-                                <PixelArrowRight className={`w-4 h-4 transition-colors ${link.iconColor}`} />
+                                <PixelArrowRight
+                                  className={`w-4 h-4 transition-colors ${link.iconColor}`}
+                                />
                               </div>
-                            </Link>
+                            </TransitionLink>
                           </m.div>
                         ))}
                       </m.nav>
@@ -184,12 +213,12 @@ export function Navbar() {
                           Let&apos;s Connect
                         </p>
                         <div className="flex flex-wrap gap-4">
-                          <button 
+                          <button
                             onClick={() => {
                               toggleTerminal();
                               setIsOpen(false);
-                            }} 
-                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer relative group/term" 
+                            }}
+                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer relative group/term"
                             title="Terminal (⌘K)"
                           >
                             <PixelTerminal className="w-6 h-6 text-ctp-blue group-hover/term:text-background transition-colors" />
@@ -197,13 +226,28 @@ export function Navbar() {
                               ⌘K
                             </span>
                           </button>
-                          <Link href="https://github.com" target="_blank" className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-lavender hover:text-background hover:border-ctp-lavender transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer" title="GitHub">
+                          <Link
+                            href="https://github.com"
+                            target="_blank"
+                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-lavender hover:text-background hover:border-ctp-lavender transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
+                            title="GitHub"
+                          >
                             <PixelGitHub className="w-6 h-6 grayscale group-hover:grayscale-0 transition-all" />
                           </Link>
-                          <Link href="https://twitter.com" target="_blank" className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-sky hover:text-background hover:border-ctp-sky transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer" title="Twitter">
+                          <Link
+                            href="https://twitter.com"
+                            target="_blank"
+                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-sky hover:text-background hover:border-ctp-sky transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
+                            title="Twitter"
+                          >
                             <AtSign className="w-4 h-4" />
                           </Link>
-                          <Link href="https://linkedin.com" target="_blank" className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer" title="LinkedIn">
+                          <Link
+                            href="https://linkedin.com"
+                            target="_blank"
+                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
+                            title="LinkedIn"
+                          >
                             <PixelLinkedIn className="w-6 h-6" />
                           </Link>
                         </div>

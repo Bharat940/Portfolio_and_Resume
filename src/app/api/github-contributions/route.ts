@@ -19,24 +19,22 @@ export async function GET() {
   for (const url of apis) {
     try {
       console.log(`[GitHub Proxy] Attempting fetch from: ${url}`);
-      const response = await fetch(url, { 
+      const response = await fetch(url, {
         next: { revalidate: 3600 }, // Cache for 1 hour
       });
 
       if (response.ok) {
         const data = await response.json();
-        
+
         let formatted: { date: string, count: number, level: number }[] = [];
-        
+
         if (url.includes('jogruber.de')) {
-          // Jo Gruber format: { contributions: [{ date, count, level }] }
           formatted = data.contributions.map((d: { date: string, count: number, level: number }) => ({
             date: d.date,
             count: d.count,
             level: d.level
           }));
         } else if (url.includes('vercel.app')) {
-          // Vercel API format might differ, usually it's { contributions: [] }
           formatted = (data.contributions || data).map((d: ContributionDay) => ({
             date: d.date || d.day || '',
             count: d.count || d.value || 0,
