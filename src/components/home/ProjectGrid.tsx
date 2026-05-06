@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { ProjectPreviewModal } from "./ProjectPreviewModal";
 import { projects, Project } from "@/data/portfolio";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ export function ProjectGrid() {
   const featuredProjects = projects.slice(0, 3);
 
   return (
-    <section id="projects" className="w-full py-24 px-6 md:px-12 lg:px-20">
+    <section id="projects" className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
           <div className="space-y-4">
@@ -36,7 +36,7 @@ export function ProjectGrid() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredProjects.map((project, idx) => (
-            <motion.div
+            <m.div
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -47,7 +47,7 @@ export function ProjectGrid() {
                 project={project} 
                 onClick={() => setSelectedProject(project)} 
               />
-            </motion.div>
+            </m.div>
           ))}
           
           {/* Placeholder for "Coming Soon" or Empty Slots to fill the grid look */}

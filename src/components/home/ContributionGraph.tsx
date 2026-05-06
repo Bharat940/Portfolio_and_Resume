@@ -80,7 +80,7 @@ export function ContributionGraph() {
 
 
   return (
-    <section id="activity" className="w-full py-24 px-6 md:px-12 lg:px-20 space-y-20">
+    <section id="activity" className="w-full py-24 px-6 md:px-12 lg:px-20 space-y-20 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Left Aligned Header */}
         <div className="flex flex-col items-start mb-12 space-y-4">

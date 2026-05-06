@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'motion/react';
+import { m, useMotionValue, useSpring, AnimatePresence } from 'motion/react';
 import { useCursor, CursorType } from '@/context/CursorContext';
 
 // ── SVG cursor shapes ────────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ export function CustomCursor() {
   return (
     <>
       {/* SVG ring — lags slightly */}
-      <motion.div
+      <m.div
         className="fixed top-0 left-0 pointer-events-none z-[9999]"
         style={{
           x: ringX,
@@ -227,7 +227,7 @@ export function CustomCursor() {
         transition={{ type: 'spring', stiffness: 180, damping: 22 }}
       >
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={cursorType}
             className="w-full h-full"
             initial={{ opacity: 0, scale: 0.7, rotate: -15 }}
@@ -236,13 +236,13 @@ export function CustomCursor() {
             transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <CursorShape type={cursorType} hovering={isHovering} />
-          </motion.div>
+          </m.div>
         </AnimatePresence>
-      </motion.div>
+      </m.div>
 
       {/* Dot — snappy, instant */}
       {cfg.dot > 0 && (
-        <motion.div
+        <m.div
           className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
           style={{
             x: dotX,

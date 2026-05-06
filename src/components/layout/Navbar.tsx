@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AtSign } from 'lucide-react';
-import { motion, AnimatePresence, Variants } from 'motion/react';
+import { m, AnimatePresence, Variants } from 'motion/react';
 import { PixelMenu } from '@/components/icons/PixelMenu';
 import { PixelClose } from '@/components/icons/PixelClose';
 import { PixelGitHub } from '@/components/icons/PixelGitHub';
@@ -69,14 +69,14 @@ export function Navbar() {
   return (
     <>
       {/* Floating Header Elements - z-[60] so it sits ABOVE the Modal overlay */}
-      <header className="fixed top-0 left-0 w-full z-[60] pointer-events-none">
+      <header className="fixed top-0 left-0 w-full z-60 pointer-events-none">
         <div className="flex justify-between items-start p-6 md:p-8 max-w-screen-2xl mx-auto relative">
 
           {/* Logo Box - Expands on hover */}
           <div className="pointer-events-auto">
             <Link
               href="/"
-              className="flex items-center h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-all duration-500 group cursor-pointer overflow-hidden max-w-[64px] hover:max-w-[280px] px-4"
+              className="flex items-center h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-all duration-500 group cursor-pointer overflow-hidden max-w-16 hover:max-w-70 px-4"
               aria-label="Home"
             >
               <Image
@@ -96,7 +96,7 @@ export function Navbar() {
           <div className="pointer-events-auto relative flex items-center gap-3">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center justify-center w-16 h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-transform hover:scale-105 focus:outline-none group cursor-pointer relative md:z-[70]"
+              className="flex items-center justify-center w-16 h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-transform hover:scale-105 focus:outline-none group cursor-pointer relative md:z-70"
               aria-label={isOpen ? "Close Menu" : "Open Menu"}
             >
               {isOpen ? (
@@ -113,22 +113,22 @@ export function Navbar() {
               {isOpen && (
                 <>
                   {/* Mobile Overlay */}
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 bg-background/95 md:bg-transparent z-[50]"
+                    className="fixed inset-0 bg-background/95 md:bg-transparent z-50"
                     onClick={() => setIsOpen(false)}
                   />
 
                   {/* Dropdown Card (Desktop) / Centered Modal (Mobile) */}
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, filter: "blur(10px)" }}
                     animate={{ opacity: 1, filter: "blur(0px)" }}
                     exit={{ opacity: 0, filter: "blur(10px)", transition: { duration: 0.2 } }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-h-[85vh] md:absolute md:top-0 md:right-[72px] md:left-auto md:translate-x-0 md:translate-y-0 md:w-[350px] bg-card border border-border/50 rounded-[32px] md:rounded-[40px] shadow-2xl flex flex-col overflow-hidden z-[60]"
+                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-h-[85vh] md:absolute md:top-0 md:right-18 md:left-auto md:translate-x-0 md:translate-y-0 md:w-87.5 bg-card border border-border/50 rounded-[32px] md:rounded-[40px] shadow-2xl flex flex-col overflow-hidden z-60"
                   >
 
                     {/* Custom X Button inside the Card - MOBILE ONLY */}
@@ -145,7 +145,7 @@ export function Navbar() {
                     <div className="flex flex-col p-8 py-12 md:p-10 overflow-y-auto overflow-x-hidden scrollbar-none">
 
                       {/* Links List */}
-                      <motion.nav
+                      <m.nav
                         variants={containerVariants}
                         initial="hidden"
                         animate="visible"
@@ -153,7 +153,7 @@ export function Navbar() {
                         className="mt-4 flex flex-col justify-center gap-1"
                       >
                         {navLinks.map((link) => (
-                          <motion.div key={link.name} variants={itemVariants}>
+                          <m.div key={link.name} variants={itemVariants}>
                             <Link
                               href={link.href}
                               onClick={() => setIsOpen(false)}
@@ -165,16 +165,16 @@ export function Navbar() {
                                 </span>
                               </div>
 
-                              <div className="w-8 h-8 rounded-lg bg-background flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 border border-border/50 shadow-sm hidden md:flex">
+                              <div className="w-8 h-8 rounded-lg bg-background items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 border border-border/50 shadow-sm hidden md:flex">
                                 <PixelArrowRight className={`w-4 h-4 transition-colors ${link.iconColor}`} />
                               </div>
                             </Link>
-                          </motion.div>
+                          </m.div>
                         ))}
-                      </motion.nav>
+                      </m.nav>
 
                       {/* Footer / Socials inside the menu */}
-                      <motion.div
+                      <m.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
@@ -207,9 +207,9 @@ export function Navbar() {
                             <PixelLinkedIn className="w-6 h-6" />
                           </Link>
                         </div>
-                      </motion.div>
+                      </m.div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 </>
               )}
             </AnimatePresence>

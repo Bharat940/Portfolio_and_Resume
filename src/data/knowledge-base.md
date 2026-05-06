@@ -17,7 +17,7 @@
 ## Experience
 ### Full Stack Intern @ SoundSpire (Aug 2025 - Nov 2025)
 - **Key Achievements**:
-    - Built core features for SoundSpire’s Artist Hub platform.
+    - Built core features for SoundSpire's Artist Hub platform.
     - Developed frontend (Next.js) and backend (Node.js) endpoints for authentication and onboarding.
     - Implemented Google & Email authentication and preference selection logic.
     - Integrated Soundcharts API for artist analytics.

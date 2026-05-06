@@ -94,7 +94,7 @@ export const SkillIcon = ({ skill }: { skill: string }) => {
         "w-16 h-16 md:w-24 md:h-24",
         // Pixel-art tile look: dark surface, chunky border, inner bevel shadow
         "bg-ctp-surface0",
-        "border-[3px] md:border-[4px] border-ctp-surface2",
+        "border-[3px] md:border-4 border-ctp-surface2",
         "shadow-[inset_-3px_-3px_0_0_rgba(0,0,0,0.45),inset_2px_2px_0_0_rgba(255,255,255,0.06)]",
         // Centering + font
         "flex items-center justify-center",

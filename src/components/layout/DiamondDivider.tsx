@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { cn } from "@/lib/utils";
 
 interface DiamondDividerProps {
@@ -73,7 +73,7 @@ export function DiamondDivider({ color = "ctp-surface2", className }: DiamondDiv
           const targetOpacity = Math.max(0, 1 - Math.pow(dist, 1.6));
 
           return (
-            <motion.div
+            <m.div
               key={i}
               // Use motion's own rotate + scale — DO NOT mix with CSS transform string
               initial={{ opacity: 0, scale: 0, rotate: 45 }}

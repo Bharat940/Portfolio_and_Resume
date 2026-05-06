@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 import { useTerminal } from '@/context/TerminalContext';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
@@ -331,16 +331,16 @@ export function TerminalOverlay() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           key="terminal-root"
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-8 lg:p-12 pointer-events-none"
+          className="fixed inset-0 z-100 flex items-center justify-center p-0 md:p-8 lg:p-12 pointer-events-none"
         >
           <div key="terminal-backdrop" className="absolute inset-0 bg-background/90 backdrop-blur-md pointer-events-auto" onClick={closeTerminal} />
 
-          <motion.div
+          <m.div
             key="terminal-window"
             className="relative w-full max-w-6xl h-full sm:h-auto sm:max-h-[85vh] bg-ctp-mantle sm:border border-ctp-surface1 sm:rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto font-mono ring-1 ring-white/5"
             onClick={(e) => e.stopPropagation()}
@@ -369,8 +369,8 @@ export function TerminalOverlay() {
             </div>
 
             <TerminalFooter inputLength={input.length} />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
       <MascotGames key="mascot-games" open={showGames} onOpenChange={setShowGames} />
     </AnimatePresence>

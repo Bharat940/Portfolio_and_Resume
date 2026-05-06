@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { PixelTerminal } from '@/components/icons/PixelTerminal';
 import { PixelGitHub } from '@/components/icons/PixelGitHub';
 import { PixelLinkedIn } from '@/components/icons/PixelLinkedIn';
@@ -44,9 +44,9 @@ export function AboutContent() {
       <MobileBottomNav items={aboutNavItems} />
 
       {/* Philosophy Section */}
-      <section id="philosophy" className="bg-[var(--section-1)] pt-32 pb-24 px-6 md:px-12 lg:px-20 relative z-0">
+      <section id="philosophy" className="bg-(--section-1) pt-32 pb-24 px-6 md:px-12 lg:px-20 relative z-0">
         <div className="max-w-7xl mx-auto">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex flex-col items-start space-y-6"
@@ -62,19 +62,19 @@ export function AboutContent() {
               I bridge the gap between low-level efficiency and distributed system architecture.
               Currently focused on crafting high-performance full-stack solutions with Next.js and C++.
             </p>
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
       <DiamondDivider color="ctp-green" />
 
       {/* Origin Section — Now Unified */}
-      <section id="origin" className="bg-[var(--section-2)] py-24 px-6 md:px-12 lg:px-20 relative z-0">
+      <section id="origin" className="bg-(--section-2) py-24 px-6 md:px-12 lg:px-20 relative z-0">
         <div className="max-w-7xl mx-auto">
           <div className="space-y-24">
 
             {/* Origin & Socials Brief */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -149,12 +149,12 @@ export function AboutContent() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Curriculum Vitae Section */}
             <div id="cv" className="relative z-0">
               <DiamondDivider color="ctp-mauve" className="mb-24" />
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -186,13 +186,13 @@ export function AboutContent() {
                     <h3 className="text-xs font-mono text-ctp-green uppercase tracking-[0.4em] border-b border-ctp-green/20 pb-2">01_Experience</h3>
                     <div className="space-y-8">
                       <div className="relative pl-6 border-l-2 border-border/30">
-                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-ctp-green/20 border-2 border-ctp-green" />
+                        <div className="absolute -left-2.25 top-0 w-4 h-4 rounded-full bg-ctp-green/20 border-2 border-ctp-green" />
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-bold text-lg">Full Stack Intern @ SoundSpire</h4>
                           <span className="text-xs font-mono text-muted-foreground">Aug 2025 - Nov 2025</span>
                         </div>
                         <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
-                          <li>Built core features for SoundSpire’s Artist Hub platform, focusing on authentication and onboarding flows.</li>
+                          <li>Built core features for SoundSpire&apos;s Artist Hub platform, focusing on authentication and onboarding flows.</li>
                           <li>Developed frontend (Next.js), backend endpoints (Node.js), and PostgreSQL schema for Sign-up and Preference Selection.</li>
                           <li>Implemented Google & Email authentication, Sign-out, Forgot password, and preference logic.</li>
                           <li>Integrated Soundcharts API for artist analytics and profile insights.</li>
@@ -242,7 +242,7 @@ export function AboutContent() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             </div>
           </div>
         </div>

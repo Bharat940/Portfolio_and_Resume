@@ -124,7 +124,7 @@ export const experiences: Experience[] = [
     company: 'SoundSpire',
     period: 'Aug 2025 - Nov 2025',
     description: [
-      'Built core features for SoundSpire’s Artist Hub platform, focusing on authentication and onboarding flows.',
+      "Built core features for SoundSpire's Artist Hub platform, focusing on authentication and onboarding flows.",
       'Developed frontend (Next.js), backend endpoints (Node.js), and PostgreSQL schema for Sign-up and Preference Selection.',
       'Implemented Google & Email authentication, Sign-out, Forgot password, and preference logic.',
       'Integrated Soundcharts API for artist analytics and profile insights.',

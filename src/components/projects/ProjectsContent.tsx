@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ProjectCard } from "@/components/home/ProjectCard";
 import { ProjectPreviewModal } from "@/components/home/ProjectPreviewModal";
 import { projects, Project } from "@/data/portfolio";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { PixelArrowLeft } from "@/components/icons/PixelArrowLeft";
 import Link from "next/link";
 import { QuickNav, MobileBottomNav, NavItem } from "@/components/layout/QuickNav";
@@ -37,7 +37,7 @@ export function ProjectsContent() {
       <MobileBottomNav items={projectsNavItems} />
 
       {/* Header / Arsenal Section */}
-      <section id="arsenal" className="bg-[var(--section-1)] pt-32 pb-24 px-6 relative z-0">
+      <section id="arsenal" className="bg-(--section-1) pt-32 pb-24 px-6 relative z-0">
         {/* Background Technical Grid */}
         <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(#cba6f7 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
@@ -91,7 +91,7 @@ export function ProjectsContent() {
       <DiamondDivider color="ctp-sky" />
 
       {/* Web Systems Section */}
-      <section id="web-nodes" className="bg-[var(--section-2)] py-24 px-6 relative z-0">
+      <section id="web-nodes" className="bg-(--section-2) py-24 px-6 relative z-0">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-sky">01_Web_Systems</h2>
@@ -99,7 +99,7 @@ export function ProjectsContent() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {webProjects.map((project, idx) => (
-              <motion.div
+              <m.div
                 key={project.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -107,7 +107,7 @@ export function ProjectsContent() {
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
               >
                 <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -116,7 +116,7 @@ export function ProjectsContent() {
       <DiamondDivider color="ctp-peach" />
 
       {/* Native Core Section */}
-      <section id="native-nodes" className="bg-[var(--section-3)] py-24 px-6 relative z-0">
+      <section id="native-nodes" className="bg-(--section-3) py-24 px-6 relative z-0">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-peach">02_Native_Core</h2>
@@ -124,7 +124,7 @@ export function ProjectsContent() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {nativeProjects.map((project, idx) => (
-              <motion.div
+              <m.div
                 key={project.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -132,7 +132,7 @@ export function ProjectsContent() {
                 transition={{ duration: 0.5, delay: idx * 0.05 }}
               >
                 <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

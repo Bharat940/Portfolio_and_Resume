@@ -13,7 +13,7 @@ import {
 export function MascotGames({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:w-[540px] border-l border-border/30 bg-background/95 backdrop-blur-xl">
+      <SheetContent side="right" className="w-full sm:w-135 border-l border-border/30 bg-background/95 backdrop-blur-xl">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <PixelGamepad className="w-6 h-6 text-primary" />

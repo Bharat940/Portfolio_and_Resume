@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { experiences, education, clubs } from "@/data/portfolio";
 import { PixelCalendarIcon } from "@/components/icons/PixelCalendarIcon";
 import { Briefcase, GraduationCap, Users } from "lucide-react";
@@ -14,7 +14,7 @@ export function ExperienceTimeline() {
   ];
 
   return (
-    <section id="experience" className="w-full py-24 px-6 md:px-12 lg:px-20">
+    <section id="experience" className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-start mb-16 space-y-4 text-left">
           <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight">
@@ -28,7 +28,7 @@ export function ExperienceTimeline() {
           <div className="absolute left-6 md:left-1/2 top-2 bottom-2 w-0.5 bg-border/40 -translate-x-1/2 block" />
 
           {allMilestones.map((item, idx) => (
-            <motion.div
+            <m.div
               key={item.id}
               initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -89,7 +89,7 @@ export function ExperienceTimeline() {
 
               {/* Spacer for the other side */}
               <div className="hidden md:block md:w-1/2" />
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

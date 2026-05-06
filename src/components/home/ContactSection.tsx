@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { Mail, Send, Copy, Check, MessageSquare, Loader2, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
@@ -75,7 +75,7 @@ export function ContactSection() {
   if (status === 'succeeded') {
     return (
       <section id="contact" className="w-full py-24 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="bg-card border-2 border-ctp-green p-12 rounded-[2rem] shadow-2xl flex flex-col items-center text-center space-y-6"
@@ -98,7 +98,7 @@ export function ContactSection() {
           >
             New Transmission
           </Button>
-        </motion.div>
+        </m.div>
       </section>
     );
   }
@@ -151,7 +151,7 @@ export function ContactSection() {
           </div>
 
           {/* Right Side: The Form */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -234,7 +234,7 @@ export function ContactSection() {
                   )}
                 </span>
                 {status !== 'submitting' && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-ctp-lavender to-ctp-sky opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-linear-to-r from-ctp-lavender to-ctp-sky opacity-0 group-hover:opacity-100 transition-opacity" />
                 )}
               </Button>
             </form>
@@ -242,7 +242,7 @@ export function ContactSection() {
             {/* Decorative Corner */}
             <div className="absolute -top-3 -right-3 w-12 h-12 border-t-4 border-r-4 border-ctp-lavender rounded-tr-2xl" />
             <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-4 border-l-4 border-ctp-lavender rounded-bl-2xl" />
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

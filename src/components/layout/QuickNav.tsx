@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { Home, Briefcase, Mail, BookOpen, GraduationCap, Activity } from 'lucide-react';
 import { PixelArrowLeft } from '../icons/PixelArrowLeft';
@@ -107,7 +107,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
         <div className="flex items-center">
           <AnimatePresence mode="wait">
             {!isOpen ? (
-              <motion.button
+              <m.button
                 key="open"
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -116,9 +116,9 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                 className="bg-card border-l border-y border-border/50 p-3 pr-2 rounded-l-2xl shadow-lg hover:bg-muted/50 transition-colors group cursor-pointer"
               >
                 <PixelArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
-              </motion.button>
+              </m.button>
             ) : (
-              <motion.div
+              <m.div
                 key="card"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
@@ -133,7 +133,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                   <PixelArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <div className="bg-card border border-border/50 rounded-l-3xl p-6 shadow-2xl min-w-[220px]">
+                <div className="bg-card border border-border/50 rounded-l-3xl p-6 shadow-2xl min-w-55">
                   <div className="flex flex-col gap-1">
                     {items.map((item) => {
                       const isActive = activeHref === item.href;
@@ -170,7 +170,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                     })}
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
@@ -233,7 +233,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
       {/* Hovered/active label badge */}
       <AnimatePresence>
         {isOpen && (hoveredLabel ?? activeHref) && (
-          <motion.div
+          <m.div
             key={hoveredLabel ?? activeHref}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -242,7 +242,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
             className="absolute -top-10 left-1/2 -translate-x-1/2 bg-ctp-surface0 text-ctp-mauve text-[10px] font-mono font-bold px-3 py-1 rounded-full border border-ctp-surface2 whitespace-nowrap pointer-events-none"
           >
             {hoveredLabel ?? items.find(i => i.href === activeHref)?.name}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -254,7 +254,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
             const pos = getArcStyle(i, items.length);
             const isActive = activeHref === item.href;
             return (
-              <motion.a
+              <m.a
                 key={item.name}
                 href={item.href}
                 initial={{ scale: 0, opacity: 0 }}
@@ -269,10 +269,10 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                   transition: { delay: (items.length - 1 - i) * 0.03, duration: 0.18 }
                 }}
                 style={{ position: 'absolute', width: ITEM_SIZE, height: ITEM_SIZE, ...pos }}
-                onClick={(e) => { 
+                onClick={(e) => {
                   if (item.isSection && item.href.startsWith('#')) {
-                    e.preventDefault(); 
-                    scrollTo(item.href); 
+                    e.preventDefault();
+                    scrollTo(item.href);
                   }
                 }}
                 onPointerEnter={() => setHoveredLabel(item.name)}
@@ -289,13 +289,13 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                 {isActive && (
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-ctp-mauve border border-ctp-mantle" />
                 )}
-              </motion.a>
+              </m.a>
             );
           })}
         </AnimatePresence>
 
         {/* Trigger — shows active section icon when closed */}
-        <motion.button
+        <m.button
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ type: 'spring', stiffness: 420, damping: 28 }}
           onClick={(e) => { e.stopPropagation(); setIsOpen(p => !p); }}
@@ -306,20 +306,20 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
-        </motion.button>
+        </m.button>
       </div>
 
-      {/* Closed-state active section label — sits BELOW the trigger button */}
+      {/* Closed-state active section label — sits ABOVE the trigger button */}
       <AnimatePresence>
         {!isOpen && activeHref && (
-          <motion.div
-            initial={{ opacity: 0, y: -4 }}
+          <m.div
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            className="absolute top-[calc(100%+6px)] left-1/2 -translate-x-1/2 text-[9px] font-mono font-bold text-ctp-mauve/60 whitespace-nowrap pointer-events-none uppercase tracking-widest"
+            exit={{ opacity: 0, y: 4 }}
+            className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 text-[9px] font-mono font-bold text-ctp-mauve/60 whitespace-nowrap pointer-events-none uppercase tracking-widest"
           >
             {items.find(i => i.href === activeHref)?.name}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

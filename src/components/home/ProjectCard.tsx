@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, Variants } from "motion/react";
+import { m, Variants } from "motion/react";
 import { Project } from "@/data/portfolio";
 import { PixelGitHub } from "@/components/icons/PixelGitHub";
 import { cn } from "@/lib/utils";
@@ -32,7 +32,7 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
   };
 
   return (
-    <motion.div
+    <m.div
       onClick={onClick}
       initial="initial"
       whileHover="hover"
@@ -43,7 +43,7 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
     >
       {/* Main Screenshot Background */}
       {project.screenshots && project.screenshots[0] ? (
-        <motion.div 
+        <m.div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${project.screenshots[0]})` }}
           variants={{
@@ -61,8 +61,8 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
       )}
 
       {/* Dark Overlay Gradient */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-t from-ctp-base via-ctp-base/20 to-transparent"
+      <m.div 
+        className="absolute inset-0 bg-linear-to-t from-ctp-base via-ctp-base/20 to-transparent"
         variants={{
           initial: { opacity: 0.4 },
           hover: { opacity: 0.9 }
@@ -71,7 +71,7 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
 
       {/* Slide-in Content */}
       <div className="absolute inset-0 flex flex-col justify-end p-8 overflow-hidden">
-        <motion.div 
+        <m.div 
           variants={contentVariants}
           className="space-y-3"
         >
@@ -93,7 +93,7 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
               </span>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Top Badge (Always visible) */}
@@ -103,6 +103,6 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
           <span className="text-[10px] font-mono font-bold text-ctp-text uppercase tracking-widest">{project.id}</span>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useMemo, useState, useEffect } from 'react';
 
 interface ContributionDay {
@@ -70,7 +70,7 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
   const colors = colorMap[colorType];
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -104,18 +104,18 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
       <div className="relative group/calendar">
         {/* Scrollable container — month labels live inside so they scroll with the grid */}
         <div className="w-full overflow-x-auto scrollbar-none pb-2">
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
             className="flex flex-col gap-2 min-w-max px-1"
           >
             {/* Month label row */}
-            <div className="flex gap-[5px]">
+            <div className="flex gap-1.25">
               {weeks.map((week, i) => {
                 const indicator = monthIndicators.find(m => m.index === i);
                 return (
-                  <div key={i} className="w-[12px] md:w-[15px] text-[8px] md:text-[9px] font-bold font-mono text-muted-foreground/60 uppercase overflow-visible whitespace-nowrap">
+                  <div key={i} className="w-3 md:w-3.75 text-[8px] md:text-[9px] font-bold font-mono text-muted-foreground/60 uppercase overflow-visible whitespace-nowrap">
                     {indicator ? indicator.month : ''}
                   </div>
                 );
@@ -123,20 +123,20 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
             </div>
 
             {/* Week columns */}
-            <div className="flex gap-[5px]">
+            <div className="flex gap-1.25">
               {weeks.map((week, i) => (
-                <div key={i} className="flex flex-col gap-[5px]">
+                <div key={i} className="flex flex-col gap-1.25">
                   {week.map((day) => (
                     <div
                       key={day.date}
-                      className={`w-[12px] h-[12px] md:w-[15px] md:h-[15px] rounded-[3px] transition-all duration-300 hover:scale-150 hover:z-20 hover:shadow-lg cursor-crosshair border border-white/5 ${colors[Math.min(day.level, 4)]}`}
+                      className={`w-3 h-3 md:w-3.75 md:h-3.75 rounded-[3px] transition-all duration-300 hover:scale-150 hover:z-20 hover:shadow-lg cursor-crosshair border border-white/5 ${colors[Math.min(day.level, 4)]}`}
                       title={`${new Date(day.date).toDateString()}: ${day.count} items`}
                     />
                   ))}
                 </div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         <div className="flex flex-wrap justify-between items-center mt-6 pt-6 border-t border-border/20 gap-4">
@@ -157,6 +157,6 @@ export function PixelCalendar({ data, colorType, label, icon, profileUrl }: Pixe
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

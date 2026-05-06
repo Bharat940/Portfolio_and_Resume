@@ -98,7 +98,7 @@ Full Stack Developer & Systems Engineer
 
 ## EXPERIENCE
 ### Full Stack Intern @ SoundSpire (Aug 2025 - Nov 2025)
-- Built core features for SoundSpire’s Artist Hub platform.
+- Built core features for SoundSpire's Artist Hub platform.
 - Developed frontend (Next.js) and backend (Node.js) endpoints for authentication and onboarding.
 - Integrated Soundcharts API for artist analytics.
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, Variants, useMotionValue, useSpring } from "motion/react";
+import { m, Variants, useMotionValue, useSpring } from "motion/react";
 import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
 
 const containerVariants: Variants = {
@@ -71,16 +71,16 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex flex-col min-h-[100dvh] px-5 sm:px-8 md:px-12 lg:px-20 overflow-hidden bg-mesh"
+      className="relative flex flex-col min-h-dvh px-5 sm:px-8 md:px-12 lg:px-20 overflow-hidden bg-mesh"
     >
       {/* Ambient blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <motion.div
+        <m.div
           className="absolute top-1/3 right-0 w-[60%] h-[40%] bg-ctp-mauve/[0.07] blur-[120px] rounded-full"
           animate={{ scale: [1, 1.08, 1], opacity: [0.07, 0.11, 0.07] }}
           transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
         />
-        <motion.div
+        <m.div
           className="absolute bottom-1/4 -left-16 w-[50%] h-[35%] bg-ctp-blue/[0.07] blur-[120px] rounded-full"
           animate={{ scale: [1, 1.05, 1], opacity: [0.07, 0.1, 0.07] }}
           transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 2 }}
@@ -102,7 +102,7 @@ export function Hero() {
         style={{ zIndex: 0 }}
       >
         <span
-          className="font-mono font-black uppercase text-foreground/[0.06]"
+          className="font-mono font-black uppercase text-foreground/6"
           style={{
             writingMode: 'vertical-lr',
             textOrientation: 'mixed',
@@ -121,7 +121,7 @@ export function Hero() {
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto w-full flex flex-col justify-center flex-1">
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -132,7 +132,7 @@ export function Hero() {
           }}
         >
           {/* Status badge — slides in from left */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1, type: "spring", stiffness: 80, damping: 18 }}
@@ -144,39 +144,39 @@ export function Hero() {
               </span>
               System Status: Active &amp; Available
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Title — each line reveals from below its overflow clip */}
           <div className="flex flex-col gap-0 md:gap-1">
             {/* Line 1 */}
             <div className="overflow-hidden">
-              <motion.h1
+              <m.h1
                 className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
-                style={{ fontSize: 'clamp(2.4rem, 9.5vw, 8rem)' }}
+                style={{ fontSize: 'clamp(2.4rem, 9vw, 8rem)' }}
                 initial={{ y: "110%", skewY: 4 }}
                 animate={{ y: 0, skewY: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
                 ENGINEERING
-              </motion.h1>
+              </m.h1>
             </div>
 
             {/* Line 2 */}
             <div className="overflow-hidden">
-              <motion.h1
+              <m.h1
                 className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
-                style={{ fontSize: 'clamp(2.4rem, 9.5vw, 8rem)' }}
+                style={{ fontSize: 'clamp(2.4rem, 9vw, 8rem)' }}
                 initial={{ y: "110%", skewY: 4 }}
                 animate={{ y: 0, skewY: 0 }}
                 transition={{ duration: 0.8, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
               >
                 DIGITAL
-              </motion.h1>
+              </m.h1>
             </div>
 
             {/* Line 3 — draws in letter by letter */}
             <div className="overflow-hidden">
-              <motion.h1
+              <m.h1
                 className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
                 style={{ fontSize: 'clamp(2.4rem, 9.5vw, 8rem)' }}
                 initial={{ y: "110%", skewY: 4 }}
@@ -184,7 +184,7 @@ export function Hero() {
                 transition={{ duration: 0.8, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
               >
                 {"SYSTEMS".split("").map((char, i) => (
-                  <motion.span
+                  <m.span
                     key={i}
                     initial={{ opacity: 0, filter: "blur(6px)" }}
                     animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -192,10 +192,10 @@ export function Hero() {
                     className="inline-block"
                   >
                     {char}
-                  </motion.span>
+                  </m.span>
                 ))}
                 {/* Terminal cursor — flickers after all letters have appeared */}
-                <motion.span
+                <m.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: [0, 1] }}
                   transition={{
@@ -208,17 +208,17 @@ export function Hero() {
                   className="inline-block text-ctp-mauve"
                 >
                   _
-                </motion.span>
-              </motion.h1>
+                </m.span>
+              </m.h1>
             </div>
           </div>
 
           {/* Animated divider line */}
-          <motion.div
+          <m.div
             className="flex items-center gap-4 max-w-2xl"
             variants={itemVariants}
           >
-            <motion.div
+            <m.div
               className="h-px bg-ctp-mauve/40"
               initial={{ width: 0 }}
               animate={{ width: '4rem' }}
@@ -229,25 +229,25 @@ export function Hero() {
               className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed"
               style={{ perspective: '600px' }}
             >
-              <motion.span
+              <m.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.85 }}
                 className="inline"
               >
                 I&apos;m{' '}
-              </motion.span>
-              <motion.span
+              </m.span>
+              <m.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.88 }}
                 className="text-foreground font-black uppercase tracking-tight"
               >
                 Bharat Dangi
-              </motion.span>
+              </m.span>
               {'. '}
               {words.map((word, i) => (
-                <motion.span
+                <m.span
                   key={i}
                   custom={i}
                   variants={wordVariants}
@@ -256,17 +256,17 @@ export function Hero() {
                   className="inline-block mr-[0.25em]"
                 >
                   {word}
-                </motion.span>
+                </m.span>
               ))}
             </p>
-          </motion.div>
+          </m.div>
 
           {/* CTAs — primary is magnetic on desktop */}
-          <motion.div
+          <m.div
             variants={itemVariants}
             className="flex flex-wrap items-center gap-3"
           >
-            <motion.a
+            <m.a
               ref={magnetRef}
               href="#projects"
               style={{ x: springX, y: springY }}
@@ -280,16 +280,16 @@ export function Hero() {
               className="group inline-flex items-center gap-2.5 px-5 py-2.5 md:px-8 md:py-3.5 bg-ctp-mauve text-ctp-base rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-ctp-mauve/20 cursor-pointer relative overflow-hidden"
             >
               {/* Shimmer sweep on hover */}
-              <motion.span
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full"
+              <m.span
+                className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full"
                 whileHover={{ translateX: "200%" }}
                 transition={{ duration: 0.5 }}
               />
               <span className="relative">Explore Archive</span>
               <PixelArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform relative" />
-            </motion.a>
+            </m.a>
 
-            <motion.a
+            <m.a
               href="#contact"
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
@@ -300,16 +300,16 @@ export function Hero() {
               className="inline-flex items-center px-5 py-2.5 md:px-8 md:py-3.5 border border-border/50 text-foreground rounded-xl font-black uppercase tracking-widest text-[10px] cursor-pointer backdrop-blur-sm transition-colors"
             >
               Initialize Connection
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
 
           {/* Tech stack — staggered pop-in */}
-          <motion.div
+          <m.div
             className="flex flex-wrap items-center gap-1.5 md:gap-2"
             variants={itemVariants}
           >
             {techStack.map((tech, i) => (
-              <motion.span
+              <m.span
                 key={tech}
                 initial={{ opacity: 0, scale: 0.7, y: 8 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -323,14 +323,14 @@ export function Hero() {
                 className="px-2.5 py-1 rounded-md bg-ctp-surface0/40 border border-border/20 text-[10px] font-mono text-muted-foreground/60 cursor-default"
               >
                 {tech}
-              </motion.span>
+              </m.span>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}
@@ -339,12 +339,12 @@ export function Hero() {
         <span className="text-[8px] font-mono text-muted-foreground/25 uppercase tracking-widest">
           scroll
         </span>
-        <motion.div
+        <m.div
           animate={{ y: [0, 6, 0], opacity: [0.25, 0.5, 0.25] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="w-px h-6 bg-gradient-to-b from-muted-foreground/40 to-transparent"
+          className="w-px h-6 bg-linear-to-b from-muted-foreground/40 to-transparent"
         />
-      </motion.div>
+      </m.div>
     </section>
   );
 }

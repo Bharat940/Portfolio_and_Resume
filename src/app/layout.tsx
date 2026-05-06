@@ -70,6 +70,8 @@ import { CursorProvider } from "@/context/CursorContext";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { TerminalProvider } from "@/context/TerminalContext";
 import { TerminalOverlay } from "@/components/terminal/TerminalOverlay";
+import { LazyMotion, domAnimation } from "motion/react";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 
 export default function RootLayout({
   children,
@@ -82,19 +84,22 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${sourceCodePro.variable} ${pixelifySans.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
-        <TerminalProvider>
-          <CursorProvider>
-            <CustomCursor />
-            <TooltipProvider>
-              <Navbar />
-              <main className="flex-1 flex flex-col">
-                {children}
-              </main>
-              <Footer />
-              <TerminalOverlay />
-            </TooltipProvider>
-          </CursorProvider>
-        </TerminalProvider>
+        <LazyMotion features={domAnimation} strict>
+          <TerminalProvider>
+            <CursorProvider>
+              <CustomCursor />
+              <TooltipProvider>
+                <Navbar />
+                <main className="flex-1 flex flex-col">
+                  {children}
+                </main>
+                <Footer />
+                <TerminalOverlay />
+                <ScrollProgress />
+              </TooltipProvider>
+            </CursorProvider>
+          </TerminalProvider>
+        </LazyMotion>
       </body>
     </html>
   );

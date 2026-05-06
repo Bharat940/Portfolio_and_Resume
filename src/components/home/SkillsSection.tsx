@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, Variants } from 'motion/react';
+import { m, AnimatePresence, Variants } from 'motion/react';
 import { SkillIcon } from '@/components/icons/SkillIcons';
 
 interface Category {
@@ -91,10 +91,10 @@ function CategoryRow({
         onMouseLeave={() => setActiveIndex(null)}
       >
         {/* Keeps the row at least 220px tall, but grows with content */}
-        <div className="relative min-h-[220px] flex items-center justify-center">
+        <div className="relative min-h-55 flex items-center justify-center">
           <AnimatePresence mode="popLayout">
             {!isActive ? (
-              <motion.div
+              <m.div
                 key="title"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -116,7 +116,7 @@ function CategoryRow({
                     };
 
                     return (
-                      <motion.span
+                      <m.span
                         key={`${letter}-${i}`}
                         custom={i}
                         variants={letterVariants}
@@ -126,13 +126,13 @@ function CategoryRow({
                         className="text-2xl md:text-5xl font-black font-heading uppercase tracking-[0.2em] text-foreground/80 inline-block"
                       >
                         {letter === " " ? "\u00A0" : letter}
-                      </motion.span>
+                      </m.span>
                     );
                   })}
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="skills"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -154,7 +154,7 @@ function CategoryRow({
                   };
 
                   return (
-                    <motion.div
+                    <m.div
                       key={skill}
                       custom={i}
                       variants={skillVariants}
@@ -167,10 +167,10 @@ function CategoryRow({
                       <span className="text-sm md:text-base font-bold font-mono text-muted-foreground group-hover/skill:text-ctp-mauve transition-colors">
                         {skill}
                       </span>
-                    </motion.div>
+                    </m.div>
                   );
                 })}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
@@ -193,22 +193,22 @@ function CategoryRow({
           className="w-full flex items-center justify-between px-5 py-5"
           onClick={() => setActiveIndex(isActive ? null : index)}
         >
-          <span className="text-lg font-black font-heading uppercase tracking-[0.1em] text-foreground/80">
+          <span className="text-lg font-black font-heading uppercase tracking-widest text-foreground/80">
             {category.title}
           </span>
-          <motion.span
+          <m.span
             animate={{ rotate: isActive ? 45 : 0 }}
             transition={{ duration: 0.25 }}
             className="text-ctp-mauve text-2xl font-light leading-none"
           >
             +
-          </motion.span>
+          </m.span>
         </button>
 
         {/* Skills drawer */}
         <AnimatePresence initial={false}>
           {isActive && (
-            <motion.div
+            <m.div
               key="mobile-skills"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
@@ -218,7 +218,7 @@ function CategoryRow({
             >
               <div className="flex flex-wrap items-start justify-center gap-x-6 gap-y-8 px-5 pb-8">
                 {category.skills.map((skill, i) => (
-                  <motion.div
+                  <m.div
                     key={skill}
                     initial={{ opacity: 0, y: 16 }}
                     animate={{
@@ -232,10 +232,10 @@ function CategoryRow({
                     <span className="text-[10px] font-bold font-mono text-muted-foreground text-center">
                       {skill}
                     </span>
-                  </motion.div>
+                  </m.div>
                 ))}
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

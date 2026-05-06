@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import { Project } from "@/data/portfolio";
 import { PixelClose } from "@/components/icons/PixelClose";
 import { PixelGitHub } from "@/components/icons/PixelGitHub";
@@ -39,9 +39,9 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-10">
+      <div className="fixed inset-0 z-100 flex items-center justify-center p-2 md:p-10">
         {/* Backdrop */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -50,7 +50,7 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
         />
 
         {/* Modal Content */}
-        <motion.div
+        <m.div
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -64,10 +64,10 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                 <SkillIcon skill={project.logo} />
               </div>
               <div className="-ml-2 md:-ml-3">
-                <h2 className="font-heading font-black text-sm md:text-xl text-foreground uppercase tracking-tight italic leading-none truncate max-w-[150px] md:max-w-none">
+                <h2 className="font-heading font-black text-sm md:text-xl text-foreground uppercase tracking-tight italic leading-none truncate max-w-37.5 md:max-w-none">
                   {project.title}
                 </h2>
-                <p className="text-[7px] md:text-[8px] font-mono text-muted-foreground/60 uppercase tracking-[0.1em] leading-none mt-1 truncate">
+                <p className="text-[7px] md:text-[8px] font-mono text-muted-foreground/60 uppercase tracking-widest leading-none mt-1 truncate">
                   {project.tags.slice(0, 3).join(" • ")}
                 </p>
               </div>
@@ -130,7 +130,7 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
               ) : hasScreenshots ? (
                 <div className="w-full h-full relative group/carousel bg-ctp-crust">
                   <AnimatePresence mode="wait">
-                    <motion.img
+                    <m.img
                       key={currentImgIdx}
                       src={project.screenshots![currentImgIdx]}
                       alt={`${project.title} Screenshot ${currentImgIdx + 1}`}
@@ -178,7 +178,7 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
                     <div className="w-16 h-16 md:w-20 md:h-20 bg-ctp-surface1 border-4 border-dashed border-ctp-surface2 rounded-2xl mx-auto flex items-center justify-center">
                       <PixelGitHub className="w-8 h-8 md:w-10 md:h-10 text-ctp-surface2" />
                     </div>
-                    <p className="font-mono text-[10px] md:text-sm text-muted-foreground max-w-[200px] md:max-w-none mx-auto">
+                    <p className="font-mono text-[10px] md:text-sm text-muted-foreground max-w-50 md:max-w-none mx-auto">
                       Project Intel: Visit GitHub for source & visual snapshots
                     </p>
                   </div>
@@ -252,7 +252,7 @@ export function ProjectPreviewModal({ project, onClose }: ProjectPreviewModalPro
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </AnimatePresence>
   );
