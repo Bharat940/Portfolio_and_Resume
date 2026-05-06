@@ -494,7 +494,7 @@ export function TerminalOverlay() {
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          className="fixed inset-0 z-100 flex items-center justify-center p-0 md:p-8 lg:p-12 pointer-events-none"
+          className="fixed inset-0 z-130 flex items-center justify-center p-0 md:p-8 lg:p-12 pointer-events-none"
         >
           <div
             key="terminal-backdrop"

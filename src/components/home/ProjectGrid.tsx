@@ -21,10 +21,24 @@ export function ProjectGrid() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-6">
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight">
-              Project <span className="text-ctp-sky italic">Manifest</span>
-            </h2>
-            <div className="h-1.5 w-32 bg-ctp-sky/30 rounded-full" />
+            <div className="overflow-hidden">
+              <m.h2
+                initial={{ y: "100%" }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight leading-none"
+              >
+                Project <span className="text-ctp-sky italic">Manifest</span>
+              </m.h2>
+            </div>
+            <m.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "8rem" }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="h-1.5 bg-ctp-sky/30 rounded-full"
+            />
           </div>
 
           <Link

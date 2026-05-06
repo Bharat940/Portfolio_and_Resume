@@ -394,7 +394,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                   ) : (
                     <TransitionLink
                       href={item.href}
-                      onClick={() => {}}
+                      onClick={() => { }}
                       className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
                       ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
                     >

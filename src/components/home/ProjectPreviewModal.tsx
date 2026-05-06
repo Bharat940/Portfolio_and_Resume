@@ -53,7 +53,7 @@ export function ProjectPreviewModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-120 flex items-center justify-center p-2 md:p-10">
+      <div className="fixed inset-0 z-130 flex items-start justify-center p-2 md:p-4 overflow-y-auto pt-4 md:pt-8 pb-10">
         {/* Backdrop */}
         <m.div
           initial={{ opacity: 0 }}
@@ -72,13 +72,20 @@ export function ProjectPreviewModal({
           className="relative w-full max-w-6xl max-h-[95vh] md:max-h-full bg-ctp-base border-2 md:border-4 border-ctp-surface2 shadow-2xl overflow-hidden flex flex-col rounded-3xl md:rounded-[2.5rem]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-2 px-4 md:px-5 border-b border-border/30 bg-ctp-mantle/50 backdrop-blur-md shrink-0">
+          <div className="flex items-center justify-between py-1.5 px-4 md:px-5 border-b border-border/30 bg-ctp-mantle/50 backdrop-blur-md shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               <div className="p-1 md:p-1.5 bg-ctp-surface0/50 rounded-lg border border-border/20 scale-75 origin-left">
                 <SkillIcon skill={project.logo} />
               </div>
               <div className="-ml-2 md:-ml-3">
-                <h2 className="font-heading font-black text-sm md:text-xl text-foreground uppercase tracking-tight italic leading-none truncate max-w-37.5 md:max-w-none">
+                <h2
+                  className={cn(
+                    "font-heading font-black text-foreground uppercase tracking-tight italic leading-none truncate max-w-37.5 md:max-w-none",
+                    project.title.length > 20
+                      ? "text-[10px] md:text-base"
+                      : "text-sm md:text-xl",
+                  )}
+                >
                   {project.title}
                 </h2>
                 <p className="text-[7px] md:text-[8px] font-mono text-muted-foreground/60 uppercase tracking-widest leading-none mt-1 truncate">
@@ -127,7 +134,7 @@ export function ProjectPreviewModal({
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-6">
+          <div className="flex-1 overflow-y-auto p-3 md:p-6 flex flex-col gap-4 md:gap-6">
             {/* Preview Container */}
             <div className="aspect-video w-full bg-ctp-crust rounded-xl border-2 border-border/30 overflow-hidden relative group shrink-0">
               {viewMode === "interactive" && project.link ? (

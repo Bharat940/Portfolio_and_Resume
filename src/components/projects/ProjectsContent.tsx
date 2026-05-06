@@ -61,7 +61,7 @@ export function ProjectsContent() {
       {/* Header / Arsenal Section */}
       <section
         id="arsenal"
-        className="bg-(--section-1) min-h-dvh flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 relative z-0"
+        className="bg-(--section-1) min-h-dvh flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 relative"
       >
         {/* Background Technical Grid */}
         <div
@@ -139,10 +139,7 @@ export function ProjectsContent() {
       <DiamondDivider color="ctp-sky" />
 
       {/* Web Systems Section */}
-      <section
-        id="web-nodes"
-        className="bg-(--section-2) py-24 px-6 relative z-0"
-      >
+      <section id="web-nodes" className="bg-(--section-2) py-24 px-6 relative">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-sky">
@@ -176,7 +173,7 @@ export function ProjectsContent() {
       {/* Native Core Section */}
       <section
         id="native-nodes"
-        className="bg-(--section-3) py-24 px-6 relative z-0"
+        className="bg-(--section-3) py-24 px-6 relative"
       >
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
