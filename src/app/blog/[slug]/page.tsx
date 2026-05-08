@@ -247,7 +247,7 @@ export default async function BlogPostPage({
                     className="group flex items-center gap-3 mt-12 mb-6 scroll-mt-32"
                   >
                     {Icon && (
-                      <div className="p-2 rounded-xl bg-ctp-mauve/10 text-ctp-mauve group-hover:scale-110 transition-transform">
+                      <div className="text-ctp-mauve group-hover:scale-110 transition-transform shrink-0">
                         <Icon className="w-5 h-5" />
                       </div>
                     )}

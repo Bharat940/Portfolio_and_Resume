@@ -67,11 +67,13 @@ const defaultItems: NavItem[] = [
   },
 ];
 
-function useActiveSection(items: NavItem[]) {
+function useActiveSection(items: NavItem[], isLocked: boolean = false) {
   const [activeHref, setActiveHref] = useState<string | null>(null);
 
   useEffect(() => {
-    const sectionItems = items.filter((i) => i.isSection);
+    const sectionItems = items.filter(
+      (i) => i.isSection && i.href.startsWith("#"),
+    );
     if (!sectionItems.length) return;
 
     const ratios = new Map<string, number>();
@@ -82,15 +84,38 @@ function useActiveSection(items: NavItem[]) {
       observers = [];
 
       const pickWinner = () => {
+        if (isLocked) return;
+
         let best = { href: null as string | null, ratio: 0 };
-        ratios.forEach((ratio, href) => {
-          if (ratio > best.ratio) best = { href, ratio };
+
+        sectionItems.forEach((item) => {
+          const ratio = ratios.get(item.href) || 0;
+          if (item.href !== "#top") {
+            // High threshold to ensure it's actually the main thing being looked at
+            if (ratio > best.ratio) {
+              best = { href: item.href, ratio };
+            }
+          }
         });
-        if (best.href) setActiveHref(best.href);
+
+        // Only fallback to #top if we are near the actual top of the page
+        // or if no sub-section has ANY visibility and we are near the top.
+        const isNearTop = typeof window !== "undefined" && window.scrollY < 300;
+
+        if (best.ratio < 0.05 && isNearTop) {
+          const topRatio = ratios.get("#top") || 0;
+          if (topRatio > 0) {
+            best = { href: "#top", ratio: topRatio };
+          }
+        }
+
+        // Only update if we have a clear winner that is different
+        if (best.href && best.href !== activeHref) {
+          setActiveHref(best.href);
+        }
       };
 
       sectionItems.forEach((item) => {
-        if (!item.href.startsWith("#")) return;
         const el = document.querySelector(item.href);
         if (!el) return;
 
@@ -102,8 +127,8 @@ function useActiveSection(items: NavItem[]) {
             pickWinner();
           },
           {
-            threshold: Array.from({ length: 21 }, (_, i) => i * 0.05),
-            rootMargin: "0px",
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+            rootMargin: "-15% 0px -65% 0px",
           },
         );
 
@@ -112,31 +137,41 @@ function useActiveSection(items: NavItem[]) {
       });
     };
 
-    const timer = setTimeout(attach, 300);
+    const timer = setTimeout(attach, 500);
 
     return () => {
       clearTimeout(timer);
       observers.forEach((o) => o.disconnect());
     };
-  }, [items]);
+  }, [items, activeHref, isLocked]);
 
   return { activeHref, setActiveHref };
 }
 
 export function QuickNav({ items = defaultItems }: QuickNavProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { activeHref, setActiveHref } = useActiveSection(items);
+  const [isLocked, setIsLocked] = useState(false);
+  const { activeHref, setActiveHref } = useActiveSection(items, isLocked);
 
   const scrollTo = useCallback(
     (href: string) => {
       if (!href.startsWith("#") || href === "#") return;
+
+      setIsLocked(true);
+      setActiveHref(href); // Set immediately to show the user we are moving there
+
       try {
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: "smooth" });
       } catch {
         console.warn("Invalid selector:", href);
       }
-      setActiveHref(href);
+
+      // Longer lock for smooth scroll completion
+      setTimeout(() => {
+        setIsLocked(false);
+      }, 1200);
+
       setIsOpen(false);
     },
     [setActiveHref],
@@ -270,8 +305,9 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
 
 export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
-  const { activeHref, setActiveHref } = useActiveSection(items);
+  const { activeHref, setActiveHref } = useActiveSection(items, isLocked);
   const [footerOffset, setFooterOffset] = useState(0);
 
   const TRIGGER_SIZE = 56;
@@ -332,17 +368,39 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
   const scrollTo = useCallback(
     (href: string) => {
       if (!href.startsWith("#") || href === "#") return;
+
+      setIsLocked(true);
+      setActiveHref(href);
+
       try {
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: "smooth" });
       } catch {
         console.warn("Invalid selector:", href);
       }
-      setActiveHref(href);
+
+      setTimeout(() => {
+        setIsLocked(false);
+      }, 1200);
+
       setIsOpen(false);
     },
     [setActiveHref],
   );
+
+  useEffect(() => {
+    if (isOpen && activeHref) {
+      const dock = document.getElementById("mobile-nav-dock");
+      const activeItem = document.getElementById("active-nav-item");
+      if (dock && activeItem) {
+        const scrollLeft =
+          activeItem.offsetLeft -
+          dock.offsetWidth / 2 +
+          activeItem.offsetWidth / 2;
+        dock.scrollTo({ left: scrollLeft, behavior: "smooth" });
+      }
+    }
+  }, [activeHref, isOpen]);
 
   const centerX = TRIGGER_SIZE / 2 - ITEM_SIZE / 2;
   const centerY = TRIGGER_SIZE / 2 - ITEM_SIZE / 2;
@@ -356,24 +414,25 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
       transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
     >
       <AnimatePresence>
-        {(isOpen || activeHref?.startsWith("#")) && (
-          <m.div
-            key={hoveredLabel ?? activeHref}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.15 }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2 bg-ctp-surface0 text-ctp-mauve text-[10px] font-mono font-bold px-3 py-1 rounded-full border border-ctp-surface2 whitespace-nowrap pointer-events-none shadow-lg shadow-ctp-base/50"
-          >
-            {(() => {
-              const name =
-                hoveredLabel ??
-                items.find((i) => i.href === activeHref)?.name ??
-                "Top";
-              return name.length > 20 ? name.slice(0, 20) + "..." : name;
-            })()}
-          </m.div>
-        )}
+        {(!isOpen || items.length <= 6) &&
+          (isOpen || activeHref?.startsWith("#")) && (
+            <m.div
+              key={hoveredLabel ?? activeHref}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.15 }}
+              className="absolute -top-10 left-1/2 -translate-x-1/2 bg-ctp-surface0 text-ctp-mauve text-[10px] font-mono font-bold px-3 py-1 rounded-full border border-ctp-surface2 whitespace-nowrap pointer-events-none shadow-lg shadow-ctp-base/50"
+            >
+              {(() => {
+                const name =
+                  hoveredLabel ??
+                  items.find((i) => i.href === activeHref)?.name ??
+                  "Top";
+                return name.length > 30 ? name.slice(0, 30) + "..." : name;
+              })()}
+            </m.div>
+          )}
       </AnimatePresence>
 
       <div
@@ -388,26 +447,32 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
               exit={{ opacity: 0, y: 30, scale: 0.95 }}
               className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[90vw] bg-ctp-mantle/80 backdrop-blur-xl border border-ctp-surface1/50 rounded-3xl shadow-2xl overflow-hidden"
             >
-              <div className="flex items-center gap-1.5 p-2 overflow-x-auto no-scrollbar snap-x px-4">
+              <div
+                id="mobile-nav-dock"
+                className="flex items-center gap-1.5 p-2 overflow-x-auto no-scrollbar snap-x px-4 scroll-smooth"
+              >
                 {items.map((item, i) => {
                   const isActive = activeHref === item.href;
                   const isSection = item.isSection || item.href.startsWith("#");
+
+                  // Auto-scroll effect for active item
                   return (
                     <div
                       key={item.href || i}
+                      id={isActive ? "active-nav-item" : undefined}
                       className="shrink-0 snap-center relative py-4 px-1"
                     >
                       <AnimatePresence>
                         {isActive && (
                           <m.div
                             layoutId="active-label-dock"
-                            initial={{ opacity: 0, y: 5 }}
+                            initial={{ opacity: 0, y: 2 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 5 }}
-                            className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-ctp-surface0/50 text-[8px] font-mono font-bold text-ctp-mauve whitespace-nowrap z-50"
+                            exit={{ opacity: 0, y: 2 }}
+                            className="absolute -top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-ctp-surface0/80 text-[7px] font-mono font-bold text-ctp-mauve whitespace-nowrap z-50 shadow-sm border border-ctp-surface2/30"
                           >
-                            {item.name.length > 15
-                              ? item.name.slice(0, 15) + "..."
+                            {item.name.length > 20
+                              ? item.name.slice(0, 20) + "..."
                               : item.name}
                           </m.div>
                         )}
@@ -500,7 +565,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                       }}
                     >
                       {item.onClick ? (
-                        <div className="relative group">
+                        <div className="relative group w-full h-full">
                           <button
                             onClick={() => {
                               item.onClick?.();
@@ -514,8 +579,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                                 ? item.name
                                 : "Action"
                             }
-                            className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
-                          ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
+                            className="w-full h-full rounded-full flex items-center justify-center border border-ctp-mauve/30 bg-ctp-mantle text-ctp-mauve transition-colors duration-200 shadow-md active:scale-95"
                           >
                             <span className="sr-only">
                               {typeof item.name === "string"
@@ -528,15 +592,10 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
                             <m.div
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
-                              className="absolute -top-19 left-1/2 -translate-x-1/2 min-w-30"
+                              className="absolute -top-16 left-1/2 -translate-x-1/2 min-w-36 z-50"
                             >
                               {item.customElement}
                             </m.div>
-                          )}
-                          {isOpen && isActive && (
-                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[7px] font-mono font-bold text-ctp-mauve uppercase tracking-widest whitespace-nowrap pointer-events-none bg-ctp-mantle/80 px-2 py-0.5 rounded-full border border-ctp-surface1">
-                              {item.name}
-                            </div>
                           )}
                         </div>
                       ) : item.customElement ? (

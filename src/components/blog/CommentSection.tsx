@@ -14,6 +14,7 @@ import {
   Reply,
   Send,
   User as UserIcon,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -119,7 +120,16 @@ export function CommentSection({
             />
           </div>
         </div>
-        <div className="flex justify-end pt-2 border-t border-border/10">
+        <div className="flex justify-end pt-2 border-t border-border/10 gap-2">
+          {!session && (
+            <Button
+              onClick={() => setIsLoginOpen(true)}
+              variant="outline"
+              className="border-ctp-mauve/30 text-ctp-mauve hover:bg-ctp-mauve/10"
+            >
+              <Shield className="w-4 h-4" /> Authorize
+            </Button>
+          )}
           <Button
             onClick={() => handlePost(rootComment)}
             disabled={!rootComment || isPending}
@@ -150,7 +160,12 @@ export function CommentSection({
           </div>
         ) : (
           commentTree.map((item) => (
-            <CommentItem key={item.id} comment={item} onReply={handlePost} />
+            <CommentItem
+              key={item.id}
+              comment={item}
+              onReply={handlePost}
+              onOpenLogin={() => setIsLoginOpen(true)}
+            />
           ))
         )}
       </div>
@@ -161,6 +176,7 @@ export function CommentSection({
 function CommentItem({
   comment,
   onReply,
+  onOpenLogin,
   depth = 0,
 }: {
   comment: CommentData & { replies?: CommentData[] };
@@ -169,6 +185,7 @@ function CommentItem({
     parentId?: string,
     customName?: string,
   ) => Promise<void>;
+  onOpenLogin: () => void;
   depth?: number;
 }) {
   const { data: session } = useSession();
@@ -389,7 +406,17 @@ function CommentItem({
                       placeholder="Enter reply protocol..."
                       className="w-full bg-transparent border-none focus:ring-0 text-sm font-medium leading-relaxed resize-none"
                     />
-                    <div className="flex justify-end pt-2 border-t border-border/10">
+                    <div className="flex justify-end pt-2 border-t border-border/10 gap-2">
+                      {!session && (
+                        <Button
+                          onClick={onOpenLogin}
+                          size="sm"
+                          variant="outline"
+                          className="border-ctp-mauve/30 text-ctp-mauve hover:bg-ctp-mauve/10"
+                        >
+                          Authorize
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         onClick={handleReplySubmit}
@@ -414,6 +441,7 @@ function CommentItem({
                   key={reply.id}
                   comment={reply}
                   onReply={onReply}
+                  onOpenLogin={onOpenLogin}
                   depth={depth + 1}
                 />
               ))}

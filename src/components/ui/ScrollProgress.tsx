@@ -42,7 +42,7 @@ export function ScrollProgress() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-11 left-1/2 -translate-x-1/2 md:top-auto md:left-auto md:bottom-20 md:right-8 md:translate-x-0 z-120 flex items-center gap-2 pointer-events-none"
+          className="fixed top-11 left-1/2 -translate-x-1/2 md:top-auto md:left-auto md:bottom-20 md:right-8 md:translate-x-0 z-100 flex items-center gap-2 pointer-events-none"
         >
           <div className="bg-ctp-mantle/60 backdrop-blur-md border border-ctp-surface1 px-3 py-1.5 rounded-lg shadow-xl flex items-center gap-2 font-mono text-[9px] md:text-[10px] tracking-widest text-ctp-blue ring-1 ring-white/5">
             <span className="text-ctp-surface2 font-bold">[</span>

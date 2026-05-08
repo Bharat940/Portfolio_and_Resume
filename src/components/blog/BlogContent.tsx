@@ -39,12 +39,17 @@ export function BlogContent({ posts }: BlogContentProps) {
         <Shield className="w-4 h-4" />
       ),
       customElement: session ? (
-        <button
-          onClick={() => signOut()}
-          className="mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-ctp-red/10 text-ctp-red text-[9px] font-bold uppercase tracking-widest hover:bg-ctp-red/20 transition-colors"
-        >
-          <LogOut className="w-3 h-3" /> Terminate Session
-        </button>
+        <div className="flex flex-col items-center gap-1 min-w-35">
+          <span className="text-[8px] font-mono font-bold text-ctp-subtext1 uppercase tracking-widest truncate max-w-32.5 text-center">
+            {session.user.name}
+          </span>
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-lg bg-ctp-red/10 text-ctp-red text-[8px] font-bold uppercase tracking-widest hover:bg-ctp-red/20 transition-colors border border-ctp-red/20"
+          >
+            <LogOut className="w-2.5 h-2.5" /> Sign Out
+          </button>
+        </div>
       ) : null,
     },
     { name: "Home", href: "/", icon: <Home className="w-4 h-4" /> },

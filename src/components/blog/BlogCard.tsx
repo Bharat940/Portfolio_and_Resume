@@ -17,7 +17,7 @@ import {
   Layers,
   Database,
 } from "lucide-react";
-import Link from "next/link";
+import { TransitionLink } from "@/components/ui/TransitionLink";
 import { Badge } from "@/components/ui/badge";
 
 import { BlogPost, IconMap } from "@/types/blog";
@@ -52,7 +52,7 @@ export function BlogCard({ post }: BlogCardProps) {
       className="group relative h-full"
       data-testid="blog-card"
     >
-      <Link href={`/blog/${post.slug}`} className="block h-full">
+      <TransitionLink href={`/blog/${post.slug}`} className="block h-full">
         <div className="relative h-full flex flex-col p-8 bg-card/30 border border-border/50 rounded-3xl overflow-hidden hover:border-ctp-mauve/50 transition-all duration-500 hover:shadow-2xl hover:shadow-ctp-mauve/10">
           {/* Background Technical Accent */}
           <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity group-hover:rotate-12 duration-700">
@@ -114,7 +114,7 @@ export function BlogCard({ post }: BlogCardProps) {
             </div>
           </div>
         </div>
-      </Link>
+      </TransitionLink>
     </m.div>
   );
 }
