@@ -40,7 +40,10 @@ export function SkillsSection() {
     >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-start mb-16 space-y-4">
-          <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading text-left tracking-tight">
+          <h2
+            data-cursor="focus"
+            className="text-4xl md:text-7xl font-black text-foreground font-heading text-left tracking-tight"
+          >
             Technical <span className="text-ctp-mauve italic">Arsenal</span>
           </h2>
           <div className="h-1.5 w-32 bg-primary/30 rounded-full" />
@@ -189,6 +192,7 @@ function CategoryRow({
                     <m.div
                       key={skill}
                       custom={i}
+                      data-cursor="crosshair"
                       variants={skillVariants}
                       initial="hidden"
                       animate="visible"

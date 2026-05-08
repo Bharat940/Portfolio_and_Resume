@@ -24,7 +24,7 @@ import {
 } from "@/lib/terminal/commands";
 
 export function TerminalOverlay() {
-  const { isOpen, closeTerminal } = useTerminal();
+  const { isOpen, closeTerminal, matrixMode, toggleMatrixMode } = useTerminal();
   const [isMobile, setIsMobile] = useState(false);
 
   const [history, setHistory] = useState<LogEntry[]>([]);
@@ -60,7 +60,6 @@ export function TerminalOverlay() {
   }, []);
 
   const [input, setInput] = useState("");
-  const [showMatrix, setShowMatrix] = useState(false);
   const [showGames, setShowGames] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -423,12 +422,12 @@ export function TerminalOverlay() {
         break;
 
       case "matrix":
-        setShowMatrix((prev) => !prev);
+        toggleMatrixMode();
         setHistory((prev) => [
           ...prev,
           {
             type: "output",
-            content: `Digital rain ${!showMatrix ? "enabled" : "disabled"}.`,
+            content: `Matrix rain ${!matrixMode ? "enabled" : "disabled"}.`,
           },
         ]);
         break;
@@ -507,7 +506,7 @@ export function TerminalOverlay() {
             className="relative w-full max-w-6xl h-full sm:h-auto sm:max-h-[85vh] bg-ctp-mantle sm:border border-ctp-surface1 sm:rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto font-mono ring-1 ring-white/5"
             onClick={(e) => e.stopPropagation()}
           >
-            {showMatrix && <MatrixRain />}
+            {matrixMode && <MatrixRain />}
 
             <TerminalHeader onClose={closeTerminal} />
 

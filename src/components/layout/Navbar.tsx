@@ -119,6 +119,7 @@ export function Navbar() {
           <div className="pointer-events-auto relative flex items-center gap-3">
             <button
               onClick={() => setIsOpen(!isOpen)}
+              data-testid="navbar-menu-btn"
               className="flex items-center justify-center w-16 h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-transform hover:scale-105 focus:outline-none group cursor-pointer relative md:z-70"
               aria-label={isOpen ? "Close Menu" : "Open Menu"}
             >
@@ -175,6 +176,7 @@ export function Navbar() {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
+                        data-testid="navbar-nav"
                         className="mt-4 flex flex-col justify-center gap-1"
                       >
                         {navLinks.map((link) => (

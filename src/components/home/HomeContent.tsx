@@ -1,13 +1,44 @@
 "use client";
 
-import { SkillsSection } from "@/components/home/SkillsSection";
-import { ContributionGraph } from "@/components/home/ContributionGraph";
-import { ProjectGrid } from "@/components/home/ProjectGrid";
-import { ExperienceTimeline } from "@/components/home/ExperienceTimeline";
-import { ContactSection } from "@/components/home/ContactSection";
+import dynamic from "next/dynamic";
 import { QuickNav, MobileBottomNav } from "@/components/layout/QuickNav";
 import { Hero } from "@/components/home/Hero";
 import { DiamondDivider } from "@/components/layout/DiamondDivider";
+
+const ProjectGrid = dynamic(
+  () => import("@/components/home/ProjectGrid").then((mod) => mod.ProjectGrid),
+  { ssr: false },
+);
+
+const SkillsSection = dynamic(
+  () =>
+    import("@/components/home/SkillsSection").then((mod) => mod.SkillsSection),
+  { ssr: false },
+);
+
+const ExperienceTimeline = dynamic(
+  () =>
+    import("@/components/home/ExperienceTimeline").then(
+      (mod) => mod.ExperienceTimeline,
+    ),
+  { ssr: false },
+);
+
+const ContributionGraph = dynamic(
+  () =>
+    import("@/components/home/ContributionGraph").then(
+      (mod) => mod.ContributionGraph,
+    ),
+  { ssr: false },
+);
+
+const ContactSection = dynamic(
+  () =>
+    import("@/components/home/ContactSection").then(
+      (mod) => mod.ContactSection,
+    ),
+  { ssr: false },
+);
 
 export function HomeContent() {
   return (

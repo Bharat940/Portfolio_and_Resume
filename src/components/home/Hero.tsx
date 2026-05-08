@@ -27,7 +27,7 @@ const taglineVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { delay: 0.8, duration: 0.8, ease: "easeOut" },
+    transition: { delay: 0.1, duration: 0.5, ease: "easeOut" },
   },
 };
 
@@ -67,14 +67,14 @@ export function Hero() {
       {/* Ambient blobs - Optimized blur and will-change */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <m.div
-          className="absolute top-1/3 right-0 w-[60%] h-[40%] bg-ctp-mauve/5 blur-[80px] rounded-full"
-          animate={{ scale: [1, 1.05, 1], opacity: [0.05, 0.08, 0.05] }}
+          className="absolute top-1/3 right-0 w-[60%] h-[40%] bg-ctp-mauve/5 blur-2xl rounded-full"
+          animate={{ scale: [1, 1.05, 1], opacity: [0.03, 0.06, 0.03] }}
           transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
           style={{ willChange: "transform, opacity" }}
         />
         <m.div
-          className="absolute bottom-1/4 -left-16 w-[50%] h-[35%] bg-ctp-blue/5 blur-[80px] rounded-full"
-          animate={{ scale: [1, 1.03, 1], opacity: [0.05, 0.07, 0.05] }}
+          className="absolute bottom-1/4 -left-16 w-[50%] h-[35%] bg-ctp-blue/5 blur-2xl rounded-full"
+          animate={{ scale: [1, 1.03, 1], opacity: [0.03, 0.05, 0.03] }}
           transition={{
             repeat: Infinity,
             duration: 10,
@@ -141,7 +141,7 @@ export function Hero() {
               damping: 15,
             }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ctp-surface0/60 border border-border/30 text-[10px] font-mono text-ctp-peach backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ctp-surface0/60 border border-border/30 text-[10px] font-mono text-ctp-peach">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ctp-peach opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-ctp-peach" />
@@ -154,6 +154,7 @@ export function Hero() {
           <div className="flex flex-col gap-0 md:gap-1">
             <div className="overflow-hidden">
               <m.h1
+                data-cursor="focus"
                 className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
                 style={{
                   fontSize: "clamp(2.4rem, 9vw, 8rem)",
@@ -162,8 +163,8 @@ export function Hero() {
                 initial={{ y: "110%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.8,
-                  delay: 0.2,
+                  duration: 0.6,
+                  delay: 0,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
@@ -173,6 +174,7 @@ export function Hero() {
 
             <div className="overflow-hidden">
               <m.h1
+                data-cursor="focus"
                 className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
                 style={{
                   fontSize: "clamp(2.4rem, 9vw, 8rem)",
@@ -181,8 +183,8 @@ export function Hero() {
                 initial={{ y: "110%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.8,
-                  delay: 0.32,
+                  duration: 0.6,
+                  delay: 0.08,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
@@ -192,6 +194,7 @@ export function Hero() {
 
             <div className="overflow-hidden">
               <m.h1
+                data-cursor="focus"
                 className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
                 style={{
                   fontSize: "clamp(2.4rem, 9.5vw, 8rem)",
@@ -200,8 +203,8 @@ export function Hero() {
                 initial={{ y: "110%" }}
                 animate={{ y: 0 }}
                 transition={{
-                  duration: 0.8,
-                  delay: 0.44,
+                  duration: 0.6,
+                  delay: 0.16,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
@@ -210,7 +213,7 @@ export function Hero() {
                     key={i}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 + i * 0.04, duration: 0.3 }}
+                    transition={{ delay: 0.3 + i * 0.03, duration: 0.2 }}
                     className="inline-block"
                   >
                     {char}
@@ -263,6 +266,7 @@ export function Hero() {
             <m.a
               ref={magnetRef}
               href="#projects"
+              data-cursor="focus"
               style={{ x: springX, y: springY, willChange: "transform" }}
               onMouseMove={onMove}
               onMouseLeave={onLeave}
@@ -284,6 +288,7 @@ export function Hero() {
 
             <m.a
               href="#contact"
+              data-cursor="focus"
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
                 e.preventDefault();
                 scrollTo("#contact");

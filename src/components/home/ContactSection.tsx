@@ -135,7 +135,10 @@ export function ContactSection() {
           {/* Left Side: Text & Info */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight">
+              <h2
+                data-cursor="focus"
+                className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight"
+              >
                 Direct <span className="text-ctp-lavender italic">Channel</span>
               </h2>
               <div className="h-1.5 w-32 bg-ctp-lavender/30 rounded-full" />
@@ -193,7 +196,11 @@ export function ContactSection() {
             viewport={{ once: true }}
             className="bg-card border-2 border-border/50 p-8 rounded-[2rem] shadow-2xl relative"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form
+              aria-label="Contact Form"
+              onSubmit={handleSubmit}
+              className="space-y-6"
+            >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 pl-1">

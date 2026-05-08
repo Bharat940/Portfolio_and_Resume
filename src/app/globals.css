@@ -4,6 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -147,19 +155,138 @@
   --sidebar-border: #313244;
   --sidebar-ring: #cba6f7;
 
-  /* Section alternating backgrounds */
+  /* section alternating backgrounds - same as above but could be tweaked */
   --section-1: #1e1e2e;
-  /* ctp-base — default */
   --section-2: #181825;
-  /* ctp-mantle — slightly darker */
   --section-3: #1a1826;
-  /* between base/mantle — subtle purple tint */
   --section-4: #1c1b2e;
-  /* slight blue tint */
   --section-5: #1e1d2e;
-  /* near-base */
   --section-6: #181a25;
-  /* cool tint */
+}
+
+/* Matrix Mode Overrides */
+:root.matrix-mode,
+html.matrix-mode,
+.matrix-mode {
+  --background: rgba(3, 8, 3, 0.5);
+  --foreground: #00ff41;
+  --card: #051005;
+  --card-foreground: #00ff41;
+  --popover: #051005;
+  --popover-foreground: #00ff41;
+  --primary: #00ff41;
+  --primary-foreground: #030803;
+  --secondary: #001a00;
+  --secondary-foreground: #00ff41;
+  --muted: #001a00;
+  --muted-foreground: #008f11;
+  --accent: #00ff41;
+  --accent-foreground: #030803;
+  --destructive: #ff0000;
+  --border: #003b00;
+  --input: #001a00;
+  --ring: #00ff41;
+
+  /* Catppuccin Accents -> Matrix Greens */
+  --color-ctp-rosewater: #00ff41;
+  --color-ctp-flamingo: #00ff41;
+  --color-ctp-pink: #00ff41;
+  --color-ctp-mauve: #00ff41;
+  --color-ctp-red: #00ff41;
+  --color-ctp-maroon: #00ff41;
+  --color-ctp-peach: #00ff41;
+  --color-ctp-yellow: #00ff41;
+  --color-ctp-green: #00ff41;
+  --color-ctp-teal: #00ff41;
+  --color-ctp-sky: #00ff41;
+  --color-ctp-sapphire: #00ff41;
+  --color-ctp-blue: #00ff41;
+  --color-ctp-lavender: #00ff41;
+
+  /* Surfaces */
+  --color-ctp-base: #030803;
+  --color-ctp-mantle: #000000;
+  --color-ctp-crust: #000000;
+  --color-ctp-surface0: #001a00;
+  --color-ctp-surface1: #003b00;
+  --color-ctp-surface2: #008f11;
+
+  /* Text */
+  --color-ctp-text: #00ff41;
+  --color-ctp-subtext1: #008f11;
+  --color-ctp-subtext0: #003b00;
+
+  /* section alternating backgrounds - Transparent in Matrix Mode */
+  --section-1: rgba(3, 8, 3, 0.7);
+  --section-2: rgba(0, 0, 0, 0.7);
+  --section-3: rgba(3, 8, 3, 0.8);
+  --section-4: rgba(0, 0, 0, 0.8);
+  --section-5: rgba(3, 8, 3, 0.7);
+  --section-6: rgba(0, 0, 0, 0.7);
+
+  /* Global UI Overrides */
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+
+.matrix-mode::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.03),
+      rgba(0, 255, 0, 0.01),
+      rgba(0, 0, 255, 0.03)
+    );
+  z-index: 9999;
+  background-size:
+    100% 3px,
+    3px 100%;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.matrix-mode::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.05);
+  opacity: 0;
+  z-index: 9998;
+  pointer-events: none;
+  animation: matrix-flicker 0.1s infinite;
+}
+
+@keyframes matrix-flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  50% {
+    opacity: 0.02;
+  }
+
+  100% {
+    opacity: 0.08;
+  }
+}
+
+.matrix-mode * {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-color: #003b00 !important;
+  transition: none !important;
+  /* Fast, harsh transitions */
 }
 
 @utility bg-mesh {
@@ -285,7 +412,58 @@
   }
 
   & blockquote {
-    @apply border-l-4 border-ctp-mauve pl-4 italic text-muted-foreground my-6;
+    @apply pl-6 border-l-4 border-ctp-mauve/30 italic text-muted-foreground bg-ctp-mauve/5 py-4 pr-6 rounded-r-2xl my-8;
+  }
+
+  & table {
+    @apply block md:table w-full my-8 border-collapse overflow-x-auto md:overflow-hidden rounded-2xl border border-border/50 bg-card/30;
+  }
+
+  & th {
+    @apply bg-ctp-mauve/10 text-ctp-mauve font-mono text-xs uppercase tracking-widest p-4 text-left border-b border-border/50;
+  }
+
+  & td {
+    @apply p-4 text-sm border-b border-border/50 text-muted-foreground;
+  }
+
+  & tr:last-child td {
+    @apply border-b-0;
+  }
+
+  & tr:hover td {
+    @apply bg-ctp-mauve/5 text-foreground transition-colors;
+  }
+
+  & ul {
+    @apply list-none space-y-2 my-6;
+  }
+
+  & li {
+    @apply relative pl-6 text-muted-foreground;
+  }
+
+  & li::before {
+    content: "→";
+    @apply absolute left-0 text-ctp-mauve font-mono opacity-50;
+  }
+
+  /* GFM Task Lists */
+  & li.task-list-item {
+    @apply pl-0 flex items-center gap-3;
+  }
+
+  & li.task-list-item::before {
+    @apply hidden;
+  }
+
+  & li.task-list-item input[type="checkbox"] {
+    @apply appearance-none w-4 h-4 rounded border border-border/50 bg-background checked:bg-ctp-mauve checked:border-ctp-mauve transition-all relative cursor-pointer;
+  }
+
+  & li.task-list-item input[type="checkbox"]:checked::after {
+    content: "✓";
+    @apply absolute inset-0 flex items-center justify-center text-[10px] text-background font-bold;
   }
 
   & a {
@@ -431,23 +609,45 @@
     scroll-behavior: auto !important;
   }
 }
+
 @keyframes glitch {
   0% {
     transform: translate(0);
   }
+
   20% {
     transform: translate(-2px, 2px);
   }
+
   40% {
     transform: translate(-2px, -2px);
   }
+
   60% {
     transform: translate(2px, 2px);
   }
+
   80% {
     transform: translate(2px, -2px);
   }
+
   100% {
     transform: translate(0);
+  }
+}
+@utility custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(203, 166, 247, 0.2);
+    border-radius: 999px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(203, 166, 247, 0.4);
   }
 }

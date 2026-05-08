@@ -82,6 +82,7 @@ function MissionCard({ milestone }: { milestone: Milestone }) {
         ease: [0.16, 1, 0.3, 1],
       }}
       className="group relative"
+      data-cursor="crosshair"
     >
       {/* Scanline glow on hover */}
       <div
@@ -274,7 +275,10 @@ export function ExperienceTimeline() {
             <span className="w-6 h-px bg-ctp-peach/40" />
           </div>
 
-          <h2 className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight leading-none">
+          <h2
+            data-cursor="focus"
+            className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight leading-none"
+          >
             Career <span className="text-ctp-peach italic">Log</span>
           </h2>
 

@@ -45,6 +45,7 @@ export function ProjectCard({ project, onClick, className }: ProjectCardProps) {
   return (
     <m.div
       onClick={onClick}
+      data-cursor="crosshair"
       variants={containerVariants}
       initial={isMobile ? "hover" : "initial"}
       whileHover="hover"

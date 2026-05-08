@@ -13,6 +13,7 @@ A high-performance, developer-centric portfolio built with **Next.js 16**, **Typ
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Database**: [Neon (PostgreSQL)](https://neon.tech/) with [Drizzle ORM](https://orm.drizzle.team/)
 - **AI Integration**: RAG Pipeline with [Gemini 3.0](https://ai.google.dev/) for interactive terminal intelligence.
+- **Testing**: Robust unit and integration testing with [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/).
 
 ## ✨ Key Features
 - **Tiered Architecture**: Modular, section-based layout with smooth scroll-sync and QuickNav.

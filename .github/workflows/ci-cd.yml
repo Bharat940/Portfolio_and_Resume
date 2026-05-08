@@ -8,6 +8,10 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+  GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
+  NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL || 'http://localhost:3000' }}
 
 jobs:
   build-and-test:
@@ -32,15 +36,6 @@ jobs:
 
       - name: Build Project
         run: npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgres://localhost:5432/placeholder' }}
-          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY || 'placeholder_key' }}
 
-      - name: Run Unit Tests (Vitest)
-        run: npx vitest run
-
-      # For now commented will work on it later on.
-      # - name: Install Playwright Browsers
-      #   run: npx playwright install --with-deps
-      # - name: Run E2E Tests (Playwright)
-      #   run: npx playwright test
+      - name: Run Integration Tests (Vitest)
+        run: npm test

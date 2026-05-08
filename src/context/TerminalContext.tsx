@@ -7,6 +7,8 @@ interface TerminalContextType {
   openTerminal: () => void;
   closeTerminal: () => void;
   toggleTerminal: () => void;
+  matrixMode: boolean;
+  toggleMatrixMode: () => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(
@@ -15,10 +17,27 @@ const TerminalContext = createContext<TerminalContextType | undefined>(
 
 export function TerminalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [matrixMode, setMatrixMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("matrix-mode-active") === "true";
+    }
+    return false;
+  });
+
+  // Save to localStorage and handle class toggle
+  useEffect(() => {
+    localStorage.setItem("matrix-mode-active", String(matrixMode));
+    if (matrixMode) {
+      document.documentElement.classList.add("matrix-mode");
+    } else {
+      document.documentElement.classList.remove("matrix-mode");
+    }
+  }, [matrixMode]);
 
   const openTerminal = () => setIsOpen(true);
   const closeTerminal = () => setIsOpen(false);
   const toggleTerminal = () => setIsOpen((prev) => !prev);
+  const toggleMatrixMode = () => setMatrixMode((prev) => !prev);
 
   // Keyboard shortcut: Cmd+K or Ctrl+K
   useEffect(() => {
@@ -38,7 +57,14 @@ export function TerminalProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <TerminalContext.Provider
-      value={{ isOpen, openTerminal, closeTerminal, toggleTerminal }}
+      value={{
+        isOpen,
+        openTerminal,
+        closeTerminal,
+        toggleTerminal,
+        matrixMode,
+        toggleMatrixMode,
+      }}
     >
       {children}
     </TerminalContext.Provider>

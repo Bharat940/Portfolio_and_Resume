@@ -87,7 +87,10 @@ export function AboutContent() {
                 <PixelTerminal className="w-3.5 h-3.5" />
                 Entity Profile: Bharat Dangi
               </div>
-              <h1 className="text-5xl md:text-8xl lg:text-9xl font-black text-foreground font-heading tracking-tighter uppercase leading-[0.85] italic">
+              <h1
+                data-cursor="focus"
+                className="text-5xl md:text-8xl lg:text-9xl font-black text-foreground font-heading tracking-tighter uppercase leading-[0.85] italic"
+              >
                 Technical <br />
                 <span className="text-ctp-green">Philosophy</span>
               </h1>
@@ -121,7 +124,10 @@ export function AboutContent() {
             >
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-4">
-                  <h2 className="text-3xl font-black font-heading flex items-center gap-4 uppercase tracking-tight">
+                  <h2
+                    data-cursor="focus"
+                    className="text-3xl font-black font-heading flex items-center gap-4 uppercase tracking-tight"
+                  >
                     <span className="w-12 h-1 bg-ctp-green rounded-full" />
                     Origin Sequence
                   </h2>
@@ -249,15 +255,26 @@ export function AboutContent() {
                   Distributed Core
                 </p>
               </div>
-              <a
-                href="/Bharat_Dangi_Resume.pdf"
-                download="Bharat_Dangi_Resume.pdf"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 px-6 py-3 bg-ctp-green text-background rounded-xl font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-lg shadow-ctp-green/20"
-              >
-                <Download className="w-4 h-4" />
-                Download PDF
-              </a>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="/Bharat_Dangi_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-6 py-3 bg-ctp-surface0 text-foreground border border-border/50 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-ctp-surface1 transition-all"
+                >
+                  <FileText className="w-4 h-4" />
+                  View CV
+                </a>
+                <a
+                  href="/Bharat_Dangi_Resume.pdf"
+                  download="Bharat_Dangi_Resume.pdf"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-6 py-3 bg-ctp-green text-background rounded-xl font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-all shadow-lg shadow-ctp-green/20"
+                >
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </a>
+              </div>
             </div>
 
             <div className="space-y-12">

@@ -6,28 +6,30 @@ import {
   Pixelify_Sans,
 } from "next/font/google";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { GlobalClientShell } from "@/components/layout/GlobalClientShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const sourceCodePro = Source_Code_Pro({
   variable: "--font-source-code-pro",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const pixelifySans = Pixelify_Sans({
   variable: "--font-pixelify-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -74,15 +76,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { CursorProvider } from "@/context/CursorContext";
-import { CustomCursor } from "@/components/ui/CustomCursor";
-import { TerminalProvider } from "@/context/TerminalContext";
-import { TerminalOverlay } from "@/components/terminal/TerminalOverlay";
-import { LazyMotion, domAnimation } from "motion/react";
-import { ScrollProgress } from "@/components/ui/ScrollProgress";
-import { TransitionProvider } from "@/context/TransitionContext";
-import { StaircaseTransition } from "@/components/ui/StaircaseTransition";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -94,23 +87,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${sourceCodePro.variable} ${pixelifySans.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
-        <LazyMotion features={domAnimation}>
-          <TerminalProvider>
-            <CursorProvider>
-              <TransitionProvider>
-                <CustomCursor />
-                <TooltipProvider>
-                  <Navbar />
-                  <StaircaseTransition />
-                  <main className="flex-1 flex flex-col">{children}</main>
-                  <Footer />
-                  <TerminalOverlay />
-                  <ScrollProgress />
-                </TooltipProvider>
-              </TransitionProvider>
-            </CursorProvider>
-          </TerminalProvider>
-        </LazyMotion>
+        <GlobalClientShell>{children}</GlobalClientShell>
       </body>
     </html>
   );

@@ -22,6 +22,7 @@ interface CursorContextType {
   pageCursorType: CursorType;
   isHovering: boolean;
   setIsHovering: (hovering: boolean) => void;
+  setTemporaryType: (type: CursorType | null) => void;
   onEnterLink: () => void;
   onLeaveLink: () => void;
   onEnterText: () => void;
@@ -36,6 +37,7 @@ const ROUTE_CURSOR_MAP: Record<string, CursorType> = {
   "/blog": "text",
   "/about": "focus",
   "/terminal": "block",
+  "/admin": "block",
 };
 
 function getRouteCursor(pathname: string): CursorType {
@@ -53,6 +55,13 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   const [cursorType, setCursorType] = useState<CursorType>("default");
   const [isHovering, setIsHovering] = useState(false);
 
+  const setTemporaryType = useCallback(
+    (type: CursorType | null) => {
+      setCursorType(type || pageCursorType);
+    },
+    [pageCursorType],
+  );
+
   // Sync cursorType with page default when route changes
   useEffect(() => {
     queueMicrotask(() => {
@@ -62,7 +71,6 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
 
   const onEnterLink = useCallback(() => {
     setIsHovering(true);
-    // Don't change cursor type — the CustomCursor handles hover state visually
   }, []);
 
   const onLeaveLink = useCallback(() => {
@@ -84,6 +92,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       value={{
         cursorType,
         setCursorType,
+        setTemporaryType, // New helper
         pageCursorType,
         isHovering,
         setIsHovering,

@@ -90,7 +90,10 @@ export function ProjectsContent() {
                     Full Archive
                   </span>
                 </div>
-                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black text-foreground font-heading tracking-tighter uppercase italic leading-[0.85] md:leading-[0.8]">
+                <h1
+                  data-cursor="focus"
+                  className="text-5xl md:text-8xl lg:text-9xl font-black text-foreground font-heading tracking-tighter uppercase italic leading-[0.85] md:leading-[0.8]"
+                >
                   Technical <br />
                   <span className="text-ctp-mauve">Arsenal</span>
                 </h1>
@@ -142,7 +145,10 @@ export function ProjectsContent() {
       <section id="web-nodes" className="bg-(--section-2) py-24 px-6 relative">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-sky">
+            <h2
+              data-cursor="focus"
+              className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-sky"
+            >
               01_Web_Systems
             </h2>
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
@@ -177,7 +183,10 @@ export function ProjectsContent() {
       >
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-peach">
+            <h2
+              data-cursor="focus"
+              className="text-3xl font-black font-heading uppercase tracking-tighter text-ctp-peach"
+            >
               02_Native_Core
             </h2>
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">

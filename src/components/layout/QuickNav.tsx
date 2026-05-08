@@ -19,6 +19,9 @@ export interface NavItem {
   href: string;
   icon: React.ReactNode;
   isSection?: boolean;
+  onClick?: () => void;
+  customElement?: React.ReactNode;
+  testId?: string;
 }
 
 interface QuickNavProps {
@@ -126,8 +129,13 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
 
   const scrollTo = useCallback(
     (href: string) => {
-      if (!href.startsWith("#")) return;
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      if (!href.startsWith("#") || href === "#") return;
+      try {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      } catch {
+        console.warn("Invalid selector:", href);
+      }
       setActiveHref(href);
       setIsOpen(false);
     },
@@ -146,6 +154,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 20, opacity: 0 }}
                 onClick={() => setIsOpen(true)}
+                data-testid="quicknav-toggle"
                 className="bg-card border-l border-y border-border/50 p-3 pr-2 rounded-l-2xl shadow-lg hover:bg-muted/50 transition-colors group cursor-pointer"
               >
                 <PixelArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
@@ -166,7 +175,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                   <PixelArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <div className="bg-card border border-border/50 rounded-l-3xl p-6 shadow-2xl min-w-55">
+                <div className="bg-card border border-border/50 rounded-l-3xl p-6 shadow-2xl min-w-55 max-h-[80vh] overflow-y-auto custom-scrollbar">
                   <div className="flex flex-col gap-1">
                     {items.map((item) => {
                       const isActive = activeHref === item.href;
@@ -175,30 +184,55 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
 
                       const linkProps = {
                         href: item.href,
-                        className: `flex items-center gap-4 px-4 py-3 rounded-xl transition-all group cursor-pointer ${isActive ? "bg-primary/10" : "hover:bg-primary/10"}`,
+                        "data-testid": item.testId,
+                        className: `block px-4 py-3 rounded-xl transition-all group cursor-pointer ${isActive ? "bg-primary/10" : "hover:bg-primary/10"}`,
                       };
 
                       const content = (
-                        <>
-                          <div className="relative flex items-center justify-center">
-                            {isActive && (
-                              <span className="absolute -left-2 w-1 h-4 rounded-full bg-primary" />
-                            )}
-                            <div
-                              className={`transition-colors group-hover:scale-110 duration-300
-                              ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`}
-                            >
-                              {item.icon}
+                        <div className="flex flex-col w-full">
+                          <div className="flex items-center gap-4">
+                            <div className="relative flex items-center justify-center">
+                              {isActive && (
+                                <span className="absolute -left-2 w-1 h-4 rounded-full bg-primary" />
+                              )}
+                              <div
+                                className={`transition-colors group-hover:scale-110 duration-300
+                                ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`}
+                              >
+                                {item.icon}
+                              </div>
                             </div>
+                            <span
+                              className={`text-sm font-heading font-bold transition-colors
+                              ${isActive ? "text-primary" : "text-foreground group-hover:text-primary"}`}
+                            >
+                              {item.name}
+                            </span>
                           </div>
-                          <span
-                            className={`text-sm font-heading font-bold transition-colors
-                            ${isActive ? "text-primary" : "text-foreground group-hover:text-primary"}`}
-                          >
-                            {item.name}
-                          </span>
-                        </>
+                          {item.customElement && (
+                            <div className="w-full pointer-events-auto">
+                              {item.customElement}
+                            </div>
+                          )}
+                        </div>
                       );
+
+                      if (item.onClick) {
+                        return (
+                          <div
+                            key={item.name}
+                            className={`px-4 py-3 rounded-xl transition-all group ${isActive ? "bg-primary/10" : "hover:bg-primary/10"}`}
+                          >
+                            <button
+                              onClick={item.onClick}
+                              data-testid={item.testId}
+                              className="w-full flex items-center gap-4 cursor-pointer"
+                            >
+                              {content}
+                            </button>
+                          </div>
+                        );
+                      }
 
                       if (isSection) {
                         return (
@@ -297,8 +331,13 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
 
   const scrollTo = useCallback(
     (href: string) => {
-      if (!href.startsWith("#")) return;
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      if (!href.startsWith("#") || href === "#") return;
+      try {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      } catch {
+        console.warn("Invalid selector:", href);
+      }
       setActiveHref(href);
       setIsOpen(false);
     },
@@ -312,20 +351,27 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
     <m.div
       id="mobile-arc-nav"
       className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-100"
+      data-menu-open={isOpen}
       animate={{ y: -footerOffset }}
       transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
     >
       <AnimatePresence>
-        {isOpen && (hoveredLabel ?? activeHref) && (
+        {(isOpen || activeHref?.startsWith("#")) && (
           <m.div
             key={hoveredLabel ?? activeHref}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
             transition={{ duration: 0.15 }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2 bg-ctp-surface0 text-ctp-mauve text-[10px] font-mono font-bold px-3 py-1 rounded-full border border-ctp-surface2 whitespace-nowrap pointer-events-none"
+            className="absolute -top-10 left-1/2 -translate-x-1/2 bg-ctp-surface0 text-ctp-mauve text-[10px] font-mono font-bold px-3 py-1 rounded-full border border-ctp-surface2 whitespace-nowrap pointer-events-none shadow-lg shadow-ctp-base/50"
           >
-            {hoveredLabel ?? items.find((i) => i.href === activeHref)?.name}
+            {(() => {
+              const name =
+                hoveredLabel ??
+                items.find((i) => i.href === activeHref)?.name ??
+                "Top";
+              return name.length > 20 ? name.slice(0, 20) + "..." : name;
+            })()}
           </m.div>
         )}
       </AnimatePresence>
@@ -335,78 +381,226 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
         style={{ width: TRIGGER_SIZE, height: TRIGGER_SIZE }}
       >
         <AnimatePresence>
-          {isOpen &&
-            items.map((item, i) => {
-              const pos = getArcPos(i, items.length);
-              const isActive = activeHref === item.href;
-              const isSection = item.isSection || item.href.startsWith("#");
-              return (
-                <m.div
-                  key={item.name}
-                  initial={{ scale: 0, opacity: 0, x: centerX, y: centerY }}
-                  animate={{
-                    scale: 1,
-                    opacity: 1,
-                    x: pos.x,
-                    y: pos.y,
-                    transition: {
-                      delay: i * 0.045,
-                      type: "spring",
-                      stiffness: 300,
-                      damping: 28,
-                    },
-                  }}
-                  exit={{
-                    scale: 0,
-                    opacity: 0,
-                    x: centerX,
-                    y: centerY,
-                    transition: {
-                      delay: (items.length - 1 - i) * 0.03,
-                      duration: 0.15,
-                    },
-                  }}
-                  style={{
-                    position: "absolute",
-                    width: ITEM_SIZE,
-                    height: ITEM_SIZE,
-                  }}
-                >
-                  {isSection ? (
-                    <a
-                      href={item.href}
-                      onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                        if (item.href.startsWith("#")) {
-                          e.preventDefault();
-                          scrollTo(item.href);
-                        }
+          {isOpen && items.length > 6 ? (
+            <m.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.95 }}
+              className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[90vw] bg-ctp-mantle/80 backdrop-blur-xl border border-ctp-surface1/50 rounded-3xl shadow-2xl overflow-hidden"
+            >
+              <div className="flex items-center gap-1.5 p-2 overflow-x-auto no-scrollbar snap-x px-4">
+                {items.map((item, i) => {
+                  const isActive = activeHref === item.href;
+                  const isSection = item.isSection || item.href.startsWith("#");
+                  return (
+                    <div
+                      key={item.href || i}
+                      className="shrink-0 snap-center relative py-4 px-1"
+                    >
+                      <AnimatePresence>
+                        {isActive && (
+                          <m.div
+                            layoutId="active-label-dock"
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 5 }}
+                            className="absolute -top-1 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-ctp-surface0/50 text-[8px] font-mono font-bold text-ctp-mauve whitespace-nowrap z-50"
+                          >
+                            {item.name.length > 15
+                              ? item.name.slice(0, 15) + "..."
+                              : item.name}
+                          </m.div>
+                        )}
+                      </AnimatePresence>
+
+                      {isSection ? (
+                        <a
+                          href={item.href}
+                          onClick={(e) => {
+                            if (item.href.startsWith("#")) {
+                              e.preventDefault();
+                              scrollTo(item.href);
+                            }
+                          }}
+                          data-testid={item.testId}
+                          aria-label={item.name as string}
+                          className={`relative w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-300
+                        ${
+                          isActive
+                            ? "bg-ctp-mauve text-ctp-base shadow-lg shadow-ctp-mauve/25 scale-110"
+                            : "text-ctp-subtext1 hover:bg-ctp-surface0 active:scale-90"
+                        }`}
+                        >
+                          <span className="sr-only">{item.name as string}</span>
+                          {item.icon}
+                          {isActive && (
+                            <m.div
+                              layoutId="active-dot-dock"
+                              className="absolute -bottom-1 w-1 h-1 rounded-full bg-ctp-base"
+                            />
+                          )}
+                        </a>
+                      ) : (
+                        <TransitionLink
+                          href={item.href}
+                          aria-label={item.name as string}
+                          className={`relative w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-300
+                        ${
+                          isActive
+                            ? "bg-ctp-mauve text-ctp-base shadow-lg shadow-ctp-mauve/25 scale-110"
+                            : "text-ctp-subtext1 hover:bg-ctp-surface0 active:scale-90"
+                        }`}
+                        >
+                          <span className="sr-only">{item.name as string}</span>
+                          {item.icon}
+                        </TransitionLink>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </m.div>
+          ) : (
+            <AnimatePresence>
+              {isOpen &&
+                items.map((item, i) => {
+                  const pos = getArcPos(i, items.length);
+                  const isActive = activeHref === item.href;
+                  const isSection = item.isSection || item.href.startsWith("#");
+                  return (
+                    <m.div
+                      key={item.href || i}
+                      initial={{ scale: 0, opacity: 0, x: centerX, y: centerY }}
+                      animate={{
+                        scale: 1,
+                        opacity: 1,
+                        x: pos.x,
+                        y: pos.y,
+                        transition: {
+                          delay: i * 0.045,
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 28,
+                        },
                       }}
-                      onPointerEnter={() => setHoveredLabel(item.name)}
-                      onPointerLeave={() => setHoveredLabel(null)}
-                      className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
-                      ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
+                      exit={{
+                        scale: 0,
+                        opacity: 0,
+                        x: centerX,
+                        y: centerY,
+                        transition: {
+                          delay: (items.length - 1 - i) * 0.03,
+                          duration: 0.15,
+                        },
+                      }}
+                      style={{
+                        position: "absolute",
+                        width: ITEM_SIZE,
+                        height: ITEM_SIZE,
+                      }}
                     >
-                      {item.icon}
-                      {isActive && (
-                        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-ctp-mauve border border-ctp-mantle" />
+                      {item.onClick ? (
+                        <div className="relative group">
+                          <button
+                            onClick={() => {
+                              item.onClick?.();
+                              setIsOpen(false);
+                            }}
+                            onPointerEnter={() => setHoveredLabel(item.name)}
+                            onPointerLeave={() => setHoveredLabel(null)}
+                            data-testid={item.testId}
+                            aria-label={
+                              typeof item.name === "string"
+                                ? item.name
+                                : "Action"
+                            }
+                            className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
+                          ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
+                          >
+                            <span className="sr-only">
+                              {typeof item.name === "string"
+                                ? item.name
+                                : "Action"}
+                            </span>
+                            {item.icon}
+                          </button>
+                          {item.customElement && (
+                            <m.div
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="absolute -top-19 left-1/2 -translate-x-1/2 min-w-30"
+                            >
+                              {item.customElement}
+                            </m.div>
+                          )}
+                          {isOpen && isActive && (
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[7px] font-mono font-bold text-ctp-mauve uppercase tracking-widest whitespace-nowrap pointer-events-none bg-ctp-mantle/80 px-2 py-0.5 rounded-full border border-ctp-surface1">
+                              {item.name}
+                            </div>
+                          )}
+                        </div>
+                      ) : item.customElement ? (
+                        <div className="relative group w-full h-full">
+                          <div
+                            className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1"}`}
+                          >
+                            {item.icon}
+                          </div>
+                          <m.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="absolute -top-19 left-1/2 -translate-x-1/2 min-w-35"
+                          >
+                            {item.customElement}
+                          </m.div>
+                          {isOpen && isActive && (
+                            <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[7px] font-mono font-bold text-ctp-mauve uppercase tracking-widest whitespace-nowrap pointer-events-none bg-ctp-mantle/80 px-2 py-0.5 rounded-full border border-ctp-surface1">
+                              {item.name}
+                            </div>
+                          )}
+                        </div>
+                      ) : isSection ? (
+                        <a
+                          href={item.href}
+                          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            if (item.href.startsWith("#")) {
+                              e.preventDefault();
+                              scrollTo(item.href);
+                            }
+                          }}
+                          aria-label={item.name as string}
+                          onPointerEnter={() => setHoveredLabel(item.name)}
+                          onPointerLeave={() => setHoveredLabel(null)}
+                          className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
+                        ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
+                        >
+                          <span className="sr-only">{item.name as string}</span>
+                          {item.icon}
+                          {isActive && (
+                            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-ctp-mauve border border-ctp-mantle" />
+                          )}
+                        </a>
+                      ) : (
+                        <TransitionLink
+                          href={item.href}
+                          onClick={() => {}}
+                          data-testid={item.testId}
+                          aria-label={item.name as string}
+                          className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
+                        ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
+                        >
+                          <span className="sr-only">{item.name as string}</span>
+                          {item.icon}
+                          {isActive && (
+                            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-ctp-mauve border border-ctp-mantle" />
+                          )}
+                        </TransitionLink>
                       )}
-                    </a>
-                  ) : (
-                    <TransitionLink
-                      href={item.href}
-                      onClick={() => { }}
-                      className={`w-full h-full rounded-full flex items-center justify-center border transition-colors duration-200 shadow-md
-                      ${isActive ? "bg-ctp-mauve border-ctp-mauve text-ctp-base" : "bg-ctp-mantle border-ctp-surface1 text-ctp-subtext1 active:border-ctp-mauve active:text-ctp-mauve"}`}
-                    >
-                      {item.icon}
-                      {isActive && (
-                        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-ctp-mauve border border-ctp-mantle" />
-                      )}
-                    </TransitionLink>
-                  )}
-                </m.div>
-              );
-            })}
+                    </m.div>
+                  );
+                })}
+            </AnimatePresence>
+          )}
         </AnimatePresence>
 
         <m.button
@@ -418,6 +612,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
           }}
           style={{ width: TRIGGER_SIZE, height: TRIGGER_SIZE }}
           className="absolute top-0 left-0 rounded-full bg-ctp-mauve text-ctp-base flex items-center justify-center shadow-lg shadow-ctp-mauve/25 active:scale-95 transition-[transform] cursor-pointer z-10"
+          data-testid="mobile-nav-trigger"
         >
           <svg
             width="22"

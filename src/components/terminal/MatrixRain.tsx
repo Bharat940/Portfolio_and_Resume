@@ -26,10 +26,10 @@ export function MatrixRain() {
     }
 
     const draw = () => {
-      ctx.fillStyle = "rgba(17, 17, 27, 0.05)"; // Catppuccin Mocha Mantle with alpha
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; // Darker, slower fade
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "#a6e3a1"; // Catppuccin Green
+      ctx.fillStyle = "#00FF41"; // Matrix Green
       ctx.font = fontSize + "px monospace";
 
       for (let i = 0; i < drops.length; i++) {
@@ -64,7 +64,7 @@ export function MatrixRain() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-20"
+      className="absolute inset-0 pointer-events-none opacity-60 mix-blend-screen"
     />
   );
 }

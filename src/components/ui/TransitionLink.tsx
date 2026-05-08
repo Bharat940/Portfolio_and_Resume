@@ -8,6 +8,7 @@ interface TransitionLinkProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  "data-testid"?: string;
 }
 
 /**
@@ -19,26 +20,36 @@ export function TransitionLink({
   children,
   className,
   onClick,
+  "data-testid": testId,
 }: TransitionLinkProps) {
-  const { navigateTo } = useTransition();
+  const { navigateTo, isTransitioning } = useTransition();
 
   const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Only handle left clicks and prevent default behavior
+    // Only handle standard left clicks without modifiers
     if (
       e.button === 0 &&
-      !e.metaKey &&
       !e.ctrlKey &&
-      !e.shiftKey &&
-      !e.altKey
+      !e.metaKey &&
+      !e.altKey &&
+      !e.shiftKey
     ) {
       e.preventDefault();
+
+      // If already transitioning, don't trigger again but allow the click to be "handled"
+      if (isTransitioning) return;
+
       onClick?.();
       navigateTo(href);
     }
   };
 
   return (
-    <a href={href} className={className} onClick={handleNavigation}>
+    <a
+      href={href}
+      className={className}
+      onClick={handleNavigation}
+      data-testid={testId}
+    >
       {children}
     </a>
   );

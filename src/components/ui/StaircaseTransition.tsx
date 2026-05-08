@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useTransition } from "@/context/TransitionContext";
+import { useTerminal } from "@/context/TerminalContext";
 
 const STEPS = 6;
 const LETTERS = ["B", "H", "A", "R", "A", "T"];
@@ -31,6 +32,7 @@ function getDeviceConfig() {
 
 export function StaircaseTransition() {
   const { isTransitioning } = useTransition();
+  const { matrixMode } = useTerminal();
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const configRef = useRef(getDeviceConfig());
@@ -96,14 +98,23 @@ export function StaircaseTransition() {
           ref={(el) => {
             panelRefs.current[i] = el;
           }}
-          className={`relative flex-1 flex items-center justify-center ${COLORS[i % COLORS.length]}`}
+          className={`relative flex-1 flex items-center justify-center transition-colors duration-500 ${
+            matrixMode ? "bg-[#030803]" : COLORS[i % COLORS.length]
+          }`}
           style={{ transform: "translateY(100vh)" }}
         >
+          {matrixMode && (
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-size-[100%_2px,3px_100%] opacity-10 pointer-events-none" />
+          )}
           <span
             ref={(el) => {
               letterRefs.current[i] = el;
             }}
-            className="text-ctp-base font-black font-heading text-5xl md:text-8xl select-none pointer-events-none"
+            className={`font-black font-heading text-5xl md:text-8xl select-none pointer-events-none ${
+              matrixMode
+                ? "text-[#00FF41] drop-shadow-[0_0_8px_rgba(0,255,65,0.8)]"
+                : "text-ctp-base"
+            }`}
             style={{ opacity: 0, transition: "opacity 0.15s ease" }}
           >
             {LETTERS[i]}

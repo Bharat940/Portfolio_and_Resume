@@ -1,16 +1,41 @@
-import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import { z } from 'zod';
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+import { z } from "zod";
+import { rateLimit } from "@/lib/rate-limit";
 
 // Validation schema for the contact form
 const contactSchema = z.object({
-  name: z.string().pipe(z.string().min(2, { message: "Name must be at least 2 characters" })),
+  name: z
+    .string()
+    .pipe(z.string().min(2, { message: "Name must be at least 2 characters" })),
   email: z.email({ message: "Invalid email address" }),
-  message: z.string().pipe(z.string().min(10, { message: "Message must be at least 10 characters" })),
+  message: z
+    .string()
+    .pipe(
+      z.string().min(10, { message: "Message must be at least 10 characters" }),
+    ),
 });
 
 export async function POST(req: Request) {
   try {
+    // 0. Rate limiting
+    const ip = req.headers.get("x-forwarded-for") || "anonymous";
+    const limitResult = await rateLimit(ip);
+
+    if (!limitResult.success) {
+      return NextResponse.json(
+        { error: "Too many transmissions. Please wait before trying again." },
+        {
+          status: 429,
+          headers: {
+            "X-RateLimit-Limit": limitResult.limit.toString(),
+            "X-RateLimit-Remaining": limitResult.remaining.toString(),
+            "X-RateLimit-Reset": limitResult.reset.toString(),
+          },
+        },
+      );
+    }
+
     const body = await req.json();
 
     // 1. Validate input
@@ -18,27 +43,28 @@ export async function POST(req: Request) {
     if (!result.success) {
       return NextResponse.json(
         { error: result.error.issues[0].message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const { name, email, message } = result.data;
 
-    // 2. Setup Nodemailer Transporter
-    // IMPORTANT: Make sure GMAIL_USER and GMAIL_APP_PASSWORD are set in .env.local
+    // 2. Setup Nodemailer Transporter using unified ENV variables
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT) || 587,
+      secure: process.env.EMAIL_SECURE === "true",
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     // 3. Define Email Options
     const mailOptions = {
-      from: process.env.GMAIL_USER, // Sent from your Gmail
-      to: process.env.GMAIL_USER,   // Sent to your Gmail
-      replyTo: email,               // Reply-To set to visitor's email
+      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Sent to your configured admin email
+      replyTo: email, // Reply-To set to visitor's email
       subject: `[Portfolio Signal] Transmission from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
@@ -59,14 +85,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { message: "Transmission successfully received" },
-      { status: 200 }
+      { status: 200 },
     );
-
   } catch (error) {
-    console.error('Contact API Error:', error);
+    console.error("Contact API Error:", error);
     return NextResponse.json(
       { error: "Internal Server Error. Failed to process transmission." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,30 +1,45 @@
-import { google } from '@ai-sdk/google';
-import { streamText, convertToModelMessages, embed, type UIMessage } from 'ai';
-import { db } from '@/lib/db';
-import { knowledge } from '@/lib/db/schema';
-import { cosineDistance, desc, gt, sql } from 'drizzle-orm';
+import { google } from "@ai-sdk/google";
+import { streamText, convertToModelMessages, embed, type UIMessage } from "ai";
+import { db } from "@/lib/db";
+import { knowledge } from "@/lib/db/schema";
+import { cosineDistance, desc, gt, sql } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  const ip = req.headers.get("x-forwarded-for") || "anonymous";
+  const { success, limit, remaining, reset } = await rateLimit(ip);
+
+  if (!success) {
+    return new Response("Too Many Requests", {
+      status: 429,
+      headers: {
+        "X-RateLimit-Limit": limit.toString(),
+        "X-RateLimit-Remaining": remaining.toString(),
+        "X-RateLimit-Reset": reset.toString(),
+      },
+    });
+  }
+
   const { messages }: { messages: UIMessage[] } = await req.json();
   const lastMessage = messages[messages.length - 1];
 
   // Extract text from the last message parts
   const lastMessageText = lastMessage.parts
-    .filter(part => part.type === 'text')
-    .map(part => {
-      if ('text' in part) return part.text;
-      return '';
+    .filter((part) => part.type === "text")
+    .map((part) => {
+      if ("text" in part) return part.text;
+      return "";
     })
-    .join(' ');
+    .join(" ");
 
   // 1. Generate embedding for the user's query
   const { embedding } = await embed({
-    model: google.embedding('gemini-embedding-2'),
-    value: lastMessageText || '',
+    model: google.embedding("gemini-embedding-2"),
+    value: lastMessageText || "",
   });
 
   // 2. Search for relevant context in the database
@@ -36,7 +51,7 @@ export async function POST(req: Request) {
     .orderBy((t) => desc(t.similarity))
     .limit(3);
 
-  const context = relevantChunks.map(c => c.content).join('\n\n');
+  const context = relevantChunks.map((c) => c.content).join("\n\n");
 
   // 3. System Prompt
   const systemPrompt = `
@@ -56,7 +71,7 @@ Instructions:
 
   // 4. Stream the response from Gemini
   const result = streamText({
-    model: google('gemini-3-flash-preview'),
+    model: google("gemini-3-flash-preview"),
     system: systemPrompt,
     messages: await convertToModelMessages(messages),
   });
