@@ -1,56 +1,178 @@
-# 🌌 Bharat Dangi // Technical Portfolio
+<div align="center">
+  <img src="./public/logo.png" alt="Portfolio Logo" width="120" height="120" />
+  <h1>Bharat Dangi's Technical Portfolio</h1>
+  <p><strong>A high-performance, developer-centric portfolio with an integrated AI terminal.</strong></p>
 
-A high-performance, developer-centric portfolio built with **Next.js 16**, **TypeScript**, and **Framer Motion**. Optimized for speed, aesthetics, and technical storytelling, featuring a unified **Catppuccin Mocha** design system.
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Drizzle-C5F74F?style=for-the-badge&logo=drizzle" alt="Drizzle ORM" />
+    <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+    <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer" alt="Framer Motion" />
+  </p>
 
-![Portfolio Banner](https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/banners/mocha.png)
+  <p>
+    <a href="#overview">Overview</a> •
+    <a href="#core-features">Features</a> •
+    <a href="#technology-stack">Tech Stack</a> •
+    <a href="#project-structure">Architecture</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#scripts-and-commands">Commands</a>
+  </p>
+</div>
 
-## 🚀 Technical Core
-- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
-- **Logic**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animation**: [Framer Motion](https://www.framer.com/motion/)
-- **Aesthetics**: [Catppuccin Mocha Palette](https://github.com/catppuccin/catppuccin)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Database**: [Neon (PostgreSQL)](https://neon.tech/) with [Drizzle ORM](https://orm.drizzle.team/)
-- **AI Integration**: RAG Pipeline with [Gemini 3.0](https://ai.google.dev/) for interactive terminal intelligence.
-- **Testing**: Robust unit and integration testing with [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/).
+<br />
 
-## ✨ Key Features
-- **Tiered Architecture**: Modular, section-based layout with smooth scroll-sync and QuickNav.
-- **Interactive Terminal**: (WIP) Full-screen CLI emulator with custom RAG AI commands.
-- **Technical Arsenal**: Categorized project archive with detailed metadata and technical stats.
-- **Dynamic Seams**: Custom DiamondDivider architecture for seamless, responsive section transitions.
-- **Low-Level Narrative**: Integrated technical dossiers for C++ Ray Tracing and system engineering projects.
+---
 
-## 🛠️ Local Development
+## Overview
 
-1. **Clone the repository**:
+This project is a modern developer portfolio that follows a premium Catppuccin Mocha aesthetic. It allows users to explore technical projects, interact with an AI-powered terminal emulator, and engage with technical blog posts through an authenticated comment system.
+
+The platform emphasizes professional dark mode consistency, high-performance animations using Framer Motion, and robust background operations powered by Next.js server actions and Drizzle ORM.
+
+---
+
+## Core Features
+
+### Interactive AI Terminal
+- **CLI Emulator**: A full-screen command-line interface built directly into the web application.
+- **RAG Pipeline**: Integrated with Google Gemini 3.0 for intelligent context retrieval and responses based on the internal knowledge base.
+- **Custom Commands**: Navigate the portfolio, fetch data, and interact using standard terminal commands.
+
+### Dynamic Blogging System
+- **Markdown Parsing**: Write and render technical content seamlessly using `react-markdown`.
+- **Authentication**: Powered by Better Auth, supporting passwordless, OAuth, and anonymous sessions.
+- **Interactive Comments**: Nested commenting system featuring Dicebear avatars and reaction tracking.
+
+### UI Architecture and Animations
+- **Staircase Transitions**: Seamless, app-like page navigation built with Framer Motion and the Next.js View Transitions API.
+- **Dynamic Seams**: Custom `DiamondDivider` component for precise diagonal transitions between sections.
+- **Immersive Effects**: Includes a custom magnetic cursor (`CustomCursor`), `GlobalMatrixEffects`, and smooth `ScrollProgress` indicators.
+- **QuickNav Dock**: A MacOS-style mobile dock navigation component for quick access.
+
+### Portfolio and Integrations
+- **Live Metrics**: `ContributionGraph` and `PixelCalendar` components fetch and visualize real-time GitHub and LeetCode statistics.
+- **Project Showcase**: Features an interactive `ProjectGrid` with a detailed `ProjectPreviewModal` and live README parsing (`ProjectReadme`).
+- **Interactive Timeline**: An animated `ExperienceTimeline` detailing professional and educational history.
+
+### Admin Dashboard
+- **Content Management**: Built-in protected routes for managing blog posts, portfolio projects, and comments securely.
+
+---
+
+## Technology Stack
+
+```mermaid
+graph TD
+    A[Frontend: Next.js 16 + React 19] --> B[API: Server Actions + Routes]
+    B --> C[Backend: Node.js + Drizzle]
+    C --> D[Database: Neon Serverless PostgreSQL]
+    A --> E[Visuals: Framer Motion]
+    A --> F[Styling: Tailwind CSS v4]
+    C --> G[Auth: Better Auth]
+    C --> H[AI: Vercel AI SDK + Gemini 3.0]
+```
+
+---
+
+## Project Structure
+
+```text
+portfolio/
+├── public/                 # Static assets, fonts, SVGs, and resume PDF
+├── src/
+│   ├── app/                # Next.js App Router and Layouts
+│   │   ├── admin/          # Protected dashboard routes
+│   │   ├── api/            # API endpoints (Auth, Chat, Contact, Github, Leetcode)
+│   │   ├── blog/           # Dynamic blog post rendering
+│   │   └── projects/       # Portfolio projects showcase
+│   ├── components/         # React Components
+│   │   ├── layout/         # Navbar, Footer, QuickNav, DiamondDivider
+│   │   ├── home/           # Hero, ExperienceTimeline, ProjectCards, Stats
+│   │   ├── ui/             # CustomCursor, MatrixEffects, Shadcn primitives
+│   │   ├── easter-eggs/    # Hidden interactive elements
+│   │   └── terminal/       # Logic and UI for the interactive terminal
+│   ├── context/            # React Context providers (Terminal, Cursor, Transitions)
+│   ├── lib/                # Core business logic and integrations
+│   │   ├── actions/        # Next.js Server Actions (Blogs, Comments)
+│   │   ├── auth/           # BetterAuth configuration and adapters
+│   │   ├── db/             # Drizzle schema, DB connections, AI ingest scripts
+│   │   └── terminal/       # Terminal parsing utilities
+│   ├── data/               # Static portfolio data and knowledge-base.md
+│   ├── types/              # TypeScript interfaces and global types
+│   └── __tests__/          # Vitest unit and integration test suites
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18 or higher
+- PostgreSQL Database
+- npm or pnpm
+
+### Quick Setup
+
+1. **Clone and Install**
    ```bash
    git clone https://github.com/Bharat940/portfolio.git
    cd portfolio
-   ```
-
-2. **Install dependencies**:
-   ```bash
    npm install
    ```
 
-3. **Environment Setup**:
-   Create a `.env` file in the root:
+2. **Environment Variables**
+   Create a `.env` file in the root directory:
    ```env
-   DATABASE_URL=your_neon_db_url
+   DATABASE_URL=postgres://user:password@hostname/dbname
+   BETTER_AUTH_SECRET=your_super_secret_key
+   BETTER_AUTH_URL=http://localhost:3000
    GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=465
+   SMTP_USER=your_email@gmail.com
+   SMTP_PASS=your_app_password
    ```
 
-4. **Run the development server**:
+3. **Database Migration**
+   ```bash
+   npx drizzle-kit push
+   ```
+
+4. **Development Server**
    ```bash
    npm run dev
    ```
 
-## 📈 Roadmap & Architecture
-For detailed implementation progress, check the internal documentation:
-- [Architecture & Planning](./REMAINING_PLAN.md)
-- [Design Vision](./PLAN.md)
+The application will be live at `http://localhost:3000`.
 
-## 🛡️ License
-MIT © [Bharat Dangi](https://github.com/Bharat940)
+---
+
+## Security and API
+
+### Authentication
+User authentication is managed securely via Better Auth, supporting encrypted session management, CSRF protection, and standardized OAuth flows. The database securely tracks active sessions, verifications, and accounts.
+
+### API Routes
+Internal API endpoints for external integrations (such as Contact, GitHub stats, and LeetCode stats) implement strict rate-limiting logic to prevent abuse and ensure reliable platform stability. Contact form submissions are handled safely through a verified Nodemailer SMTP transport.
+
+---
+
+## Scripts and Commands
+
+- `npm run dev` : Next.js development server.
+- `npm run build` : Production bundle generation.
+- `npm run test` : Run Vitest unit and integration suites.
+- `npm run lint` : Code quality enforcement.
+- `npm run ingest` : Execute the AI knowledge base vectorization script to update Gemini's RAG context.
+
+---
+
+<p align="center">
+  Distributed under the MIT License. Built with care by 
+  <strong>Bharat Dangi</strong> 
+  (<a href="mailto:bdangi450@gmail.com">bdangi450@gmail.com</a>).
+</p>
