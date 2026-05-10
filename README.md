@@ -34,6 +34,10 @@ This project is a modern developer portfolio that follows a premium Catppuccin M
 
 The platform emphasizes professional dark mode consistency, high-performance animations using Framer Motion, and robust background operations powered by Next.js server actions and Drizzle ORM.
 
+<p align="center">
+  <img src="./public/screenshots/Portfolio.png" alt="Portfolio Screenshot" width="800" />
+</p>
+
 ---
 
 ## Core Features
