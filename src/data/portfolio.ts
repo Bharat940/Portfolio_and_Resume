@@ -32,6 +32,19 @@ export interface Education {
 
 export const projects: Project[] = [
   {
+    id: 'portfolio',
+    title: 'Technical Portfolio & Resume',
+    description: 'High-performance developer portfolio with AI Terminal and Catppuccin aesthetic.',
+    longDescription: 'A premium developer portfolio built with Next.js 16 and Framer Motion. Features a RAG-powered AI terminal emulator using Gemini 3.0, custom section transitions, and real-time data integrations.',
+    tags: ['Next.js', 'TypeScript', 'Gemini AI', 'Framer Motion', 'PostgreSQL'],
+    type: 'web',
+    link: 'https://bharat-dangi.vercel.app/',
+    github: 'https://github.com/Bharat940/Portfolio_and_Resume',
+    logo: 'Next.js',
+    readmeUrl: 'https://raw.githubusercontent.com/Bharat940/Portfolio_and_Resume/main/README.md',
+    screenshots: ['/screenshots/Portfolio.png'],
+  },
+  {
     id: 'node-weave',
     title: 'NodeWeave',
     description: 'SaaS Automation Platform with distributed execution engine.',
@@ -45,6 +58,18 @@ export const projects: Project[] = [
     screenshots: ['/screenshots/NodeWeave.png'],
   },
   {
+    id: 'math-plotter',
+    title: 'Math Plotter',
+    description: 'Real-time function plotting engine with custom parser.',
+    longDescription: 'Built with SDL2 and CMake. Features a custom expression parser using the Shunting-Yard algorithm and numerical methods for root finding and derivatives.',
+    tags: ['C++', 'SDL2', 'CMake'],
+    type: 'native',
+    github: 'https://github.com/Bharat940/Simple-math-calculator-and-plotter',
+    logo: 'C++',
+    readmeUrl: 'https://raw.githubusercontent.com/Bharat940/Simple-math-calculator-and-plotter/main/README.md',
+    screenshots: ['/screenshots/Plotter.png'],
+  },
+  {
     id: 'url-shortener',
     title: 'URL Shortener',
     description: 'Analytics-driven URL shortener with Redis rate limiting.',
@@ -56,18 +81,6 @@ export const projects: Project[] = [
     logo: 'Node.js',
     readmeUrl: 'https://raw.githubusercontent.com/Bharat940/url-shortener-analytics/main/README.md',
     screenshots: ['/screenshots/URL_Shortener.png'],
-  },
-  {
-    id: 'math-plotter',
-    title: 'Math Plotter',
-    description: 'Real-time function plotting engine with custom parser.',
-    longDescription: 'Built with SDL2 and CMake. Features a custom expression parser using the Shunting-Yard algorithm and numerical methods for root finding and derivatives.',
-    tags: ['C++', 'SDL2', 'CMake'],
-    type: 'native',
-    github: 'https://github.com/Bharat940/Simple-math-calculator-and-plotter',
-    logo: 'C++',
-    readmeUrl: 'https://raw.githubusercontent.com/Bharat940/Simple-math-calculator-and-plotter/main/README.md',
-    screenshots: ['/screenshots/Plotter.png'],
   },
   {
     id: 'ray-tracer',

@@ -14,6 +14,7 @@
   </p>
 
   <p>
+    <a href="https://bharat-dangi.vercel.app/">Live Demo</a> •
     <a href="#overview">Overview</a> •
     <a href="#core-features">Features</a> •
     <a href="#technology-stack">Tech Stack</a> •
@@ -81,7 +82,7 @@ graph TD
 ## Project Structure
 
 ```text
-portfolio/
+Portfolio_and_Resume/
 ├── public/                 # Static assets, fonts, SVGs, and resume PDF
 ├── src/
 │   ├── app/                # Next.js App Router and Layouts
@@ -119,8 +120,8 @@ portfolio/
 
 1. **Clone and Install**
    ```bash
-   git clone https://github.com/Bharat940/portfolio.git
-   cd portfolio
+   git clone https://github.com/Bharat940/Portfolio_and_Resume.git
+   cd Portfolio_and_Resume
    npm install
    ```
 

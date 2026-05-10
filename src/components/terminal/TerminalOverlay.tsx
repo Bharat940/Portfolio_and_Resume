@@ -376,7 +376,7 @@ export function TerminalOverlay() {
           ...prev,
           {
             type: "output",
-            content: "Source Code: https://github.com/Bharat940/portfolio",
+            content: "Source Code: https://github.com/Bharat940/Portfolio_and_Resume",
           },
         ]);
         break;
