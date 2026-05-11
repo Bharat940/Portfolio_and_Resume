@@ -54,9 +54,15 @@ The platform emphasizes professional dark mode consistency, high-performance ani
 
 ### UI Architecture and Animations
 - **Staircase Transitions**: Seamless, app-like page navigation built with Framer Motion and the Next.js View Transitions API.
-- **Dynamic Seams**: Custom `DiamondDivider` component for precise diagonal transitions between sections.
-- **Immersive Effects**: Includes a custom magnetic cursor (`CustomCursor`), `GlobalMatrixEffects`, and smooth `ScrollProgress` indicators.
+- **Matrix Protocol**: A global, high-performance theme toggle that transforms the entire UI into a CRT-style terminal aesthetic with scanlines and green glow effects.
+- **DiamondDivider Optimization**: Custom divider components for precise diagonal transitions between sections using rotation-aware margins.
+- **Immersive UI Elements**: Includes a custom magnetic cursor (`CustomCursor`), `GlobalMatrixEffects`, and smooth `ScrollProgress` indicators.
 - **QuickNav Dock**: A MacOS-style mobile dock navigation component for quick access.
+
+### Retro Arcade Suite
+- **Standalone Game Center**: A dedicated `/arcade` route for immersive, full-screen gameplay outside the terminal environment.
+- **Responsive Pixel Games**: A collection of high-performance games including `Terminal Invaders`, `Cyber Slither`, `Binary Bound`, and `Memory Match`.
+- **Fluid Scaling**: Fully responsive layouts optimized for everything from mobile devices to laptops using custom aspect-ratio management.
 
 ### Portfolio and Integrations
 - **Live Metrics**: `ContributionGraph` and `PixelCalendar` components fetch and visualize real-time GitHub and LeetCode statistics.
@@ -92,6 +98,7 @@ Portfolio_and_Resume/
 │   ├── app/                # Next.js App Router and Layouts
 │   │   ├── admin/          # Protected dashboard routes
 │   │   ├── api/            # API endpoints (Auth, Chat, Contact, Github, Leetcode)
+│   │   ├── arcade/         # Standalone Retro Arcade Hub
 │   │   ├── blog/           # Dynamic blog post rendering
 │   │   └── projects/       # Portfolio projects showcase
 │   ├── components/         # React Components
