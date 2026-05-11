@@ -1,5 +1,5 @@
-import figlet from 'figlet';
-import { projects } from '@/data/portfolio';
+import figlet from "figlet";
+import { projects } from "@/data/portfolio";
 
 export const GREETING_ART_DESKTOP = `
           _             _            _            _                _        _       
@@ -22,19 +22,56 @@ export const GREETING_ART_MOBILE = `
  \\____\\___/|____/|_____| |___| |_|  
 `;
 
-export const MOCK_FILESYSTEM: Record<string, string | Record<string, string>> = {
-  'about': 'Bharat Dangi: Full Stack Developer & Systems Engineer. Pursuing B.Tech in IT @ UIT RGPV. Focus: Scalable distributed systems and real-time graphics.',
-  'experience': '• Full Stack Intern @ SoundSpire (Aug 2025 - Nov 2025)\n  - Built Artist Hub features using Next.js & Node.js\n  - Integrated Soundcharts API for analytics\n• Web Developer @ E-Cell RGPV (2024-Present)',
-  'skills': 'Languages: TypeScript, JavaScript, C++, Python\nFrontend: React 19, Next.js, Tailwind v4\nBackend: Node.js, tRPC, Hono\nDatabase: PostgreSQL, Redis, MongoDB\nTools: Docker, Prisma, CMake, Git',
-  'contact': 'Email: bdangi450@gmail.com\nGitHub: https://github.com/Bharat940\nLinkedIn: bharat-dangi-b186b3248',
-  'projects': Object.fromEntries(
-    projects.map(p => [
-      p.id,
-      `# ${p.title}\n${p.description}\n\nStack: ${p.tags.join(', ')}\nGitHub: ${p.github || 'N/A'}\nLink: ${p.link || 'N/A'}`
-    ])
-  ),
-  'readme.md': 'Welcome to my interactive CLI! Try commands like "neofetch" or "cat experience".\nYou can also talk to my AI assistant using "ask [question]".',
-};
+export const MOCK_FILESYSTEM: Record<string, string | Record<string, string>> =
+  {
+    about:
+      "Bharat Dangi: Full Stack Developer & Systems Engineer. Pursuing B.Tech in IT @ UIT RGPV. Focus: Scalable distributed systems and real-time graphics.",
+    experience:
+      "• Full Stack Intern @ SoundSpire (Aug 2025 - Nov 2025)\n  - Built Artist Hub features using Next.js & Node.js\n  - Integrated Soundcharts API for analytics\n• Web Developer @ E-Cell RGPV (2024-Present)",
+    skills:
+      "Languages: TypeScript, JavaScript, C++, Python\nFrontend: React 19, Next.js, Tailwind v4\nBackend: Node.js, tRPC, Hono\nDatabase: PostgreSQL, Redis, MongoDB\nTools: Docker, Prisma, CMake, Git",
+    contact:
+      "Email: bdangi450@gmail.com\nGitHub: https://github.com/Bharat940\nLinkedIn: bharat-dangi-b186b3248",
+    projects: Object.fromEntries(
+      projects.map((p) => [
+        p.id,
+        `# ${p.title}\n${p.description}\n\nStack: ${p.tags.join(", ")}\nGitHub: ${p.github || "N/A"}\nLink: ${p.link || "N/A"}`,
+      ]),
+    ),
+    "readme.md":
+      'Welcome to my interactive CLI! Try commands like "neofetch" or "cat experience".\nYou can also talk to my AI assistant using "ask [question]".',
+  };
+
+export const ARCADE_GAMES = [
+  {
+    id: "cyberslither",
+    name: "CyberSlither",
+    description:
+      "Navigate a low-level crawler through memory heap segments to collect data packets.",
+    inspiration: 'Inspired by the 1997 Nokia 6110 "Snake".',
+  },
+  {
+    id: "binarybound",
+    name: "BinaryBound",
+    description:
+      "A high-speed packet dodging network obstacles in a distributed environment.",
+    inspiration: 'Inspired by the Google Chrome "Dino" runner.',
+  },
+  {
+    id: "terminalinvaders",
+    name: "TerminalInvaders",
+    description:
+      "Defend the system firewall against waves of descending script-injection bugs.",
+    inspiration: 'Inspired by the 1978 classic "Space Invaders".',
+  },
+  {
+    id: "memorymatch",
+    name: "MemoryMatch",
+    description:
+      "Sync system cache by matching architectural patterns and technology icons.",
+    inspiration: "Inspired by classic concentration/memory card games.",
+  },
+];
 
 export const GENGAR_ART = `
 ⠀⠀⠀⠀⠀⢸⠓⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -124,16 +161,20 @@ Full Stack Developer & Systems Engineer
 
 export function generateAscii(text: string): Promise<string> {
   // Set the font path to point to our public directory
-  figlet.defaults({ fontPath: '/fonts' });
+  figlet.defaults({ fontPath: "/fonts" });
 
   return new Promise((resolve, reject) => {
-    figlet.text(text, {
-      font: 'Standard',
-      horizontalLayout: 'default',
-      verticalLayout: 'default',
-    }, (err, data) => {
-      if (err) reject(err);
-      else resolve(data || '');
-    });
+    figlet.text(
+      text,
+      {
+        font: "Standard",
+        horizontalLayout: "default",
+        verticalLayout: "default",
+      },
+      (err: Error | null, data: string | undefined) => {
+        if (err) reject(err);
+        else resolve(data || "");
+      },
+    );
   });
 }

@@ -13,6 +13,7 @@ import {
 import { PixelArrowLeft } from "../icons/PixelArrowLeft";
 import { PixelArrowRight } from "../icons/PixelArrowRight";
 import { TransitionLink } from "../ui/TransitionLink";
+import { useWindowManager } from "@/context/WindowManagerContext";
 
 export interface NavItem {
   name: string;
@@ -309,6 +310,9 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const { activeHref, setActiveHref } = useActiveSection(items, isLocked);
   const [footerOffset, setFooterOffset] = useState(0);
+  const { windows } = useWindowManager();
+
+  const hasActiveWindow = windows.some((w) => !w.isMinimized);
 
   const TRIGGER_SIZE = 56;
   const ITEM_SIZE = 44;
@@ -410,7 +414,11 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
       id="mobile-arc-nav"
       className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-100"
       data-menu-open={isOpen}
-      animate={{ y: -footerOffset }}
+      animate={{
+        y: hasActiveWindow ? 100 : -footerOffset,
+        opacity: hasActiveWindow ? 0 : 1,
+        pointerEvents: hasActiveWindow ? "none" : "auto",
+      }}
       transition={{ type: "spring", stiffness: 400, damping: 40, mass: 0.8 }}
     >
       <AnimatePresence>

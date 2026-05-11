@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { m, useMotionValue, useSpring, AnimatePresence } from "motion/react";
 import { useCursor, CursorType } from "@/context/CursorContext";
 import { useTerminal } from "@/context/TerminalContext";
@@ -13,6 +13,11 @@ const COLOR_MAP: Record<CursorType, string> = {
   block: "#f38ba8",
   focus: "#fab387",
   hidden: "transparent",
+  move: "#89b4fa",
+  "ns-resize": "#f5e0dc",
+  "ew-resize": "#f5e0dc",
+  "nwse-resize": "#f5e0dc",
+  "nesw-resize": "#f5e0dc",
 };
 
 function DefaultCursorShape({
@@ -448,6 +453,116 @@ function FocusCursorShape({
   );
 }
 
+function MoveCursorShape({ color }: { color: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      className="w-full h-full overflow-visible"
+    >
+      <path
+        d="M20 4V36M4 20H36"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M16 8L20 4L24 8M16 32L20 36L24 32M8 16L4 20L8 24M32 16L36 20L32 24"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function NSResizeShape({ color }: { color: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      className="w-full h-full overflow-visible"
+    >
+      <path d="M20 8V32" stroke={color} strokeWidth="3" strokeLinecap="round" />
+      <path
+        d="M14 14L20 8L26 14M14 26L20 32L26 26"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function EWResizeShape({ color }: { color: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      className="w-full h-full overflow-visible"
+    >
+      <path d="M8 20H32" stroke={color} strokeWidth="3" strokeLinecap="round" />
+      <path
+        d="M14 14L8 20L14 26M26 14L32 20L26 26"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function NWSEResizeShape({ color }: { color: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      className="w-full h-full overflow-visible"
+    >
+      <path
+        d="M10 10L30 30"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10 20V10H20M20 30H30V20"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function NESWResizeShape({ color }: { color: string }) {
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      className="w-full h-full overflow-visible"
+    >
+      <path
+        d="M30 10L10 30"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 10H30V20M10 20V30H20"
+        stroke={color}
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ── Config ───────────────────────────────────────────────────────────────────
 
 const CURSOR_SIZE: Record<
@@ -460,9 +575,14 @@ const CURSOR_SIZE: Record<
   block: { idle: 36, hover: 44, dot: 0 },
   focus: { idle: 44, hover: 56, dot: 4 },
   hidden: { idle: 0, hover: 0, dot: 0 },
+  move: { idle: 40, hover: 40, dot: 0 },
+  "ns-resize": { idle: 32, hover: 32, dot: 0 },
+  "ew-resize": { idle: 32, hover: 32, dot: 0 },
+  "nwse-resize": { idle: 32, hover: 32, dot: 0 },
+  "nesw-resize": { idle: 32, hover: 32, dot: 0 },
 };
 
-function CursorShape({
+const CursorShape = memo(function CursorShape({
   type,
   hovering,
   matrixMode,
@@ -490,10 +610,20 @@ function CursorShape({
       );
     case "focus":
       return <FocusCursorShape hovering={hovering} color={color} />;
+    case "move":
+      return <MoveCursorShape color={color} />;
+    case "ns-resize":
+      return <NSResizeShape color={color} />;
+    case "ew-resize":
+      return <EWResizeShape color={color} />;
+    case "nwse-resize":
+      return <NWSEResizeShape color={color} />;
+    case "nesw-resize":
+      return <NESWResizeShape color={color} />;
     default:
       return null;
   }
-}
+});
 
 // ── Component ────────────────────────────────────────────────────────────────
 
@@ -512,10 +642,24 @@ export function CustomCursor() {
   const mouseX = useMotionValue(-200);
   const mouseY = useMotionValue(-200);
 
-  const ringX = useSpring(mouseX, { stiffness: 160, damping: 20 });
-  const ringY = useSpring(mouseY, { stiffness: 160, damping: 20 });
-  const dotX = useSpring(mouseX, { stiffness: 600, damping: 32 });
-  const dotY = useSpring(mouseY, { stiffness: 600, damping: 32 });
+  const isFunctional = [
+    "move",
+    "ns-resize",
+    "ew-resize",
+    "nwse-resize",
+    "nesw-resize",
+  ].includes(cursorType);
+
+  const ringX = useSpring(mouseX, {
+    stiffness: isFunctional ? 1000 : 160,
+    damping: isFunctional ? 50 : 20,
+  });
+  const ringY = useSpring(mouseY, {
+    stiffness: isFunctional ? 1000 : 160,
+    damping: isFunctional ? 50 : 20,
+  });
+  const dotX = useSpring(mouseX, { stiffness: 1000, damping: 40 });
+  const dotY = useSpring(mouseY, { stiffness: 1000, damping: 40 });
 
   useEffect(() => {
     const checkMobile = () => {
@@ -530,15 +674,23 @@ export function CustomCursor() {
 
     document.documentElement.style.setProperty("cursor", "none", "important");
 
-    const move = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+    const move = (e: Event) => {
+      const pe = e as PointerEvent;
+      mouseX.set(pe.clientX);
+      mouseY.set(pe.clientY);
       setVisible(true);
     };
     const hide = () => setVisible(false);
     const show = () => setVisible(true);
 
-    window.addEventListener("mousemove", move);
+    window.addEventListener("pointermove", move, {
+      capture: true,
+      passive: true,
+    });
+    window.addEventListener("pointerdown", move, {
+      capture: true,
+      passive: true,
+    });
     document.addEventListener("mouseleave", hide);
     document.addEventListener("mouseenter", show);
 

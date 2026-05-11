@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTransition } from "@/context/TransitionContext";
 import { useTerminal } from "@/context/TerminalContext";
 import { m, AnimatePresence } from "motion/react";
@@ -41,6 +41,13 @@ export function StaircaseTransition() {
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const configRef = useRef(getDeviceConfig());
   const enterFiredRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    React.startTransition(() => {
+      setMounted(true);
+    });
+  }, []);
 
   // --- Enter animation: fires when phase becomes "entering" ---
   useEffect(() => {
@@ -154,11 +161,11 @@ export function StaircaseTransition() {
             panelRefs.current[i] = el;
           }}
           className={`relative flex-1 flex items-center justify-center transition-colors duration-500 ${
-            matrixMode ? "bg-[#030803]" : COLORS[i % COLORS.length]
+            mounted && matrixMode ? "bg-[#030803]" : COLORS[i % COLORS.length]
           }`}
           style={{ transform: "translateY(100vh)" }}
         >
-          {matrixMode && (
+          {mounted && matrixMode && (
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-size-[100%_2px,3px_100%] opacity-10 pointer-events-none" />
           )}
           <span
@@ -166,7 +173,7 @@ export function StaircaseTransition() {
               letterRefs.current[i] = el;
             }}
             className={`font-black font-heading text-5xl md:text-8xl select-none pointer-events-none ${
-              matrixMode
+              mounted && matrixMode
                 ? "text-[#00FF41] drop-shadow-[0_0_8px_rgba(0,255,65,0.8)]"
                 : "text-ctp-base"
             }`}
@@ -206,7 +213,7 @@ export function StaircaseTransition() {
                       key={i}
                       className={`h-1.5 flex-1 rounded-sm transition-colors duration-300 ${
                         isFilled
-                          ? matrixMode
+                          ? mounted && matrixMode
                             ? "bg-[#00FF41]"
                             : "bg-ctp-base"
                           : "bg-white/10"

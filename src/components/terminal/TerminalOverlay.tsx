@@ -1,17 +1,16 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { m, AnimatePresence } from "motion/react";
 import { useTerminal } from "@/context/TerminalContext";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { useWindowManager } from "@/context/WindowManagerContext";
 
 import { MatrixRain } from "./MatrixRain";
-import { MascotGames } from "../easter-eggs/MascotGames";
-import { TerminalHeader } from "./TerminalHeader";
 import { TerminalFooter } from "./TerminalFooter";
 import { TerminalOutput, LogEntry } from "./TerminalOutput";
 import { TerminalInput } from "./TerminalInput";
+import { GameId } from "@/context/ArcadeContext";
 
 import {
   GREETING_ART_DESKTOP,
@@ -21,10 +20,12 @@ import {
   NEOFETCH_DATA_DESKTOP,
   NEOFETCH_DATA_MOBILE,
   generateAscii,
+  ARCADE_GAMES,
 } from "@/lib/terminal/commands";
 
 export function TerminalOverlay() {
-  const { isOpen, closeTerminal, matrixMode, toggleMatrixMode } = useTerminal();
+  const { closeTerminal, matrixMode, toggleMatrixMode } = useTerminal();
+  const { openWindow } = useWindowManager();
   const [isMobile, setIsMobile] = useState(false);
 
   const [history, setHistory] = useState<LogEntry[]>([]);
@@ -60,7 +61,6 @@ export function TerminalOverlay() {
   }, []);
 
   const [input, setInput] = useState("");
-  const [showGames, setShowGames] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -94,12 +94,37 @@ export function TerminalOverlay() {
     }
   }, [history, lastAiMessage, isLoading]);
 
-  // Focus input on open
+  // Focus input on mount and whenever the window might have been clicked
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
+    const focusInput = () => {
+      // Small delay to ensure any other focus transitions have finished
+      setTimeout(() => inputRef.current?.focus(), 10);
+    };
+
+    const handleRetroFocus = (e: Event) => {
+      const customEvent = e as CustomEvent<{ id: string }>;
+      // If our window was focused, focus the input
+      if (customEvent.detail?.id?.startsWith("terminal")) {
+        focusInput();
+      }
+    };
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeTerminal();
+      }
+    };
+
+    focusInput();
+    window.addEventListener("focus", focusInput);
+    window.addEventListener("retro-window-focus", handleRetroFocus);
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      window.removeEventListener("focus", focusInput);
+      window.removeEventListener("retro-window-focus", handleRetroFocus);
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [closeTerminal]);
 
   const handleCommand = async (cmd: string) => {
     const trimmedCmd = cmd.trim();
@@ -376,7 +401,8 @@ export function TerminalOverlay() {
           ...prev,
           {
             type: "output",
-            content: "Source Code: https://github.com/Bharat940/Portfolio_and_Resume",
+            content:
+              "Source Code: https://github.com/Bharat940/Portfolio_and_Resume",
           },
         ]);
         break;
@@ -433,41 +459,87 @@ export function TerminalOverlay() {
         break;
 
       case "game":
-        setHistory((prev) => [
-          ...prev,
-          {
-            type: "output",
-            content: (
-              <div className="mt-2 p-3 border border-ctp-surface2 rounded-lg bg-ctp-base/50">
-                <div className="text-ctp-yellow font-bold mb-1">
-                  🎮 Arcade Center Initialized
+        const gameAction = args[0]?.toLowerCase();
+        const gameId = args[1]?.toLowerCase() as GameId;
+
+        if (gameAction === "launch" && gameId) {
+          const game = ARCADE_GAMES.find((g) => g.id === gameId);
+          if (game) {
+            setHistory((prev) => [
+              ...prev,
+              {
+                type: "output",
+                content: `Initializing Standalone Kernel... Spawning ${game.name} in separate thread.`,
+              },
+            ]);
+            openWindow("arcade", game.name, gameId);
+          } else {
+            setHistory((prev) => [
+              ...prev,
+              { type: "error", content: `game: ${gameId}: Module not found.` },
+            ]);
+          }
+        } else {
+          setHistory((prev) => [
+            ...prev,
+            {
+              type: "output",
+              content: (
+                <div className="mt-2 p-3 md:p-4 border border-ctp-surface2 rounded-xl bg-ctp-mantle/50 backdrop-blur-sm max-w-full overflow-hidden">
+                  <div className="text-ctp-yellow font-bold mb-2 flex items-center gap-2 text-xs md:text-sm">
+                    <span className="animate-pulse">🎮</span> ARCADE KERNEL
+                    v2.0.0
+                  </div>
+                  <div className="space-y-3 md:space-y-4">
+                    {ARCADE_GAMES.map((game) => (
+                      <div
+                        key={game.id}
+                        className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 p-2 rounded-lg hover:bg-ctp-surface0/30 transition-colors"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-ctp-blue font-bold text-xs md:text-sm truncate">
+                              {game.name}
+                            </span>
+                            <span className="text-[8px] md:text-[10px] text-ctp-overlay0 uppercase tracking-widest bg-ctp-surface0 px-1.5 py-0.5 rounded shrink-0">
+                              {game.id}
+                            </span>
+                          </div>
+                          <div className="text-[10px] md:text-xs text-ctp-subtext0 mt-0.5 line-clamp-2 md:line-clamp-none">
+                            {game.description}
+                          </div>
+                          <div className="hidden md:block text-[9px] text-ctp-overlay1 italic mt-0.5 truncate">
+                            {game.inspiration}
+                          </div>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openWindow("arcade", game.name, game.id);
+                          }}
+                          className="w-full sm:w-auto px-3 py-1.5 sm:py-1 bg-ctp-surface1 hover:bg-ctp-blue hover:text-ctp-mantle text-ctp-blue text-[9px] md:text-[10px] font-bold rounded uppercase tracking-tighter transition-all shrink-0 text-center"
+                        >
+                          Initialize
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 md:mt-4 pt-3 border-t border-ctp-surface1 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 text-[9px] md:text-[11px]">
+                    <div className="text-ctp-subtext1">
+                      Usage:{" "}
+                      <span className="text-ctp-green font-mono">
+                        game launch [id]
+                      </span>
+                    </div>
+                    <div className="text-ctp-overlay0 italic">
+                      Click initialize to spawn process
+                    </div>
+                  </div>
                 </div>
-                <div className="text-ctp-subtext0 mb-2 italic">
-                  Select a module to launch:
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-ctp-green animate-pulse"></span>{" "}
-                    Mascot Runner
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-ctp-blue"></span>{" "}
-                    Matrix Rain (v2.0)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-ctp-mauve"></span>{" "}
-                    Memory Match (Coming Soon)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-ctp-red"></span>{" "}
-                    Terminal Invaders (Legacy)
-                  </div>
-                </div>
-              </div>
-            ),
-          },
-        ]);
-        setShowGames(true);
+              ),
+            },
+          ]);
+        }
         break;
 
       default:
@@ -486,58 +558,29 @@ export function TerminalOverlay() {
   }, [history, lastAiMessage, isLoading]);
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <m.div
-          key="terminal-root"
-          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          className="fixed inset-0 z-130 flex items-center justify-center p-0 md:p-8 lg:p-12 pointer-events-none"
-        >
-          <div
-            key="terminal-backdrop"
-            className="absolute inset-0 bg-background/90 backdrop-blur-md pointer-events-auto"
-            onClick={closeTerminal}
-          />
-
-          <m.div
-            key="terminal-window"
-            className="relative w-full max-w-6xl h-full sm:h-auto sm:max-h-[85vh] bg-ctp-mantle sm:border border-ctp-surface1 sm:rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto font-mono ring-1 ring-white/5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {matrixMode && <MatrixRain />}
-
-            <TerminalHeader onClose={closeTerminal} />
-
-            <div
-              ref={scrollRef}
-              className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin scrollbar-thumb-ctp-surface2 relative z-10"
-            >
-              <TerminalOutput
-                history={history}
-                status={status}
-                messages={messages}
-              />
-
-              <TerminalInput
-                ref={inputRef}
-                value={input}
-                onChange={setInput}
-                onSubmit={handleCommand}
-                currentDir={currentDir}
-              />
-            </div>
-
-            <TerminalFooter inputLength={input.length} />
-          </m.div>
-        </m.div>
+    <div className="w-full h-full flex flex-col bg-ctp-mantle text-ctp-text font-mono relative overflow-hidden">
+      {matrixMode && (
+        <div className="absolute inset-0 pointer-events-none z-0 opacity-50">
+          <MatrixRain />
+        </div>
       )}
-      <MascotGames
-        key="mascot-games"
-        open={showGames}
-        onOpenChange={setShowGames}
-      />
-    </AnimatePresence>
+
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-ctp-surface0 scrollbar-track-transparent relative z-10"
+        onClick={() => inputRef.current?.focus()}
+      >
+        <TerminalOutput history={history} status={status} messages={messages} />
+        <TerminalInput
+          ref={inputRef}
+          value={input}
+          onChange={setInput}
+          onSubmit={handleCommand}
+          currentDir={currentDir}
+        />
+      </div>
+
+      <TerminalFooter inputLength={input.length} />
+    </div>
   );
 }

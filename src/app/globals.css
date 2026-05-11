@@ -228,6 +228,11 @@ html.matrix-mode,
   text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
 }
 
+.matrix-glow {
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4) !important;
+  border-color: #00ff41 !important;
+}
+
 .matrix-mode::before {
   content: " ";
   display: block;
@@ -281,12 +286,13 @@ html.matrix-mode,
   }
 }
 
-.matrix-mode * {
+.matrix-mode
+  *:not(.matrix-glow):not(.pixel-card-inner):not(.pixel-card-face):not(
+    .pixel-card-3d
+  ):not(.pixel-card):not(canvas) {
   border-radius: 0 !important;
   box-shadow: none !important;
   border-color: #003b00 !important;
-  transition: none !important;
-  /* Fast, harsh transitions */
 }
 
 @utility bg-mesh {
@@ -650,4 +656,94 @@ html.matrix-mode,
   &::-webkit-scrollbar-thumb:hover {
     background: rgba(203, 166, 247, 0.4);
   }
+}
+
+/* Retro Arcade Utilities */
+@utility arcade-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.035;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #000 0px,
+    #000 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+@utility pixel-bg-scroll {
+  white-space: nowrap;
+  animation: scrollBg 16s linear infinite;
+  image-rendering: pixelated;
+}
+
+@utility retro-btn-pixel {
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  pointer-events: auto;
+  border: 2px solid var(--color-ctp-lavender);
+  box-shadow: 4px 4px 0 var(--color-ctp-surface1);
+  background-color: var(--color-ctp-blue);
+  color: var(--color-ctp-crust);
+
+  &:hover {
+    background-color: var(--color-ctp-lavender);
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--color-ctp-surface2);
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--color-ctp-surface1);
+  }
+}
+
+@utility pixel-card {
+  border: 2px solid var(--color-ctp-surface1);
+  background-color: var(--color-ctp-mantle);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+@keyframes scrollBg {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility pixel-card-3d {
+  perspective: 600px;
+  image-rendering: pixelated;
+}
+
+@utility pixel-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@utility pixel-card-flipped {
+  transform: rotateY(180deg);
+}
+
+@utility pixel-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@utility pixel-card-front {
+  transform: rotateY(180deg);
 }

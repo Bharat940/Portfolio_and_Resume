@@ -14,7 +14,12 @@ export type CursorType =
   | "text"
   | "block"
   | "focus"
-  | "hidden";
+  | "hidden"
+  | "move"
+  | "ns-resize"
+  | "ew-resize"
+  | "nwse-resize"
+  | "nesw-resize";
 
 interface CursorContextType {
   cursorType: CursorType;

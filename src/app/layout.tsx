@@ -85,7 +85,23 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${sourceCodePro.variable} ${pixelifySans.variable} h-full antialiased dark`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          id="matrix-theme-lock"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem('matrix-mode-active') === 'true') {
+                  document.documentElement.classList.add('matrix-mode');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <GlobalClientShell>{children}</GlobalClientShell>
       </body>

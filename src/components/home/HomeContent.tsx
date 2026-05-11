@@ -5,15 +5,17 @@ import { QuickNav, MobileBottomNav } from "@/components/layout/QuickNav";
 import { Hero } from "@/components/home/Hero";
 import { DiamondDivider } from "@/components/layout/DiamondDivider";
 
+import { SectionPlaceholder } from "@/components/layout/SectionPlaceholder";
+
 const ProjectGrid = dynamic(
   () => import("@/components/home/ProjectGrid").then((mod) => mod.ProjectGrid),
-  { ssr: false },
+  { ssr: false, loading: () => <SectionPlaceholder /> },
 );
 
 const SkillsSection = dynamic(
   () =>
     import("@/components/home/SkillsSection").then((mod) => mod.SkillsSection),
-  { ssr: false },
+  { ssr: false, loading: () => <SectionPlaceholder /> },
 );
 
 const ExperienceTimeline = dynamic(
@@ -21,7 +23,7 @@ const ExperienceTimeline = dynamic(
     import("@/components/home/ExperienceTimeline").then(
       (mod) => mod.ExperienceTimeline,
     ),
-  { ssr: false },
+  { ssr: false, loading: () => <SectionPlaceholder /> },
 );
 
 const ContributionGraph = dynamic(
@@ -29,7 +31,7 @@ const ContributionGraph = dynamic(
     import("@/components/home/ContributionGraph").then(
       (mod) => mod.ContributionGraph,
     ),
-  { ssr: false },
+  { ssr: false, loading: () => <SectionPlaceholder /> },
 );
 
 const ContactSection = dynamic(
@@ -37,7 +39,7 @@ const ContactSection = dynamic(
     import("@/components/home/ContactSection").then(
       (mod) => mod.ContactSection,
     ),
-  { ssr: false },
+  { ssr: false, loading: () => <SectionPlaceholder /> },
 );
 
 export function HomeContent() {

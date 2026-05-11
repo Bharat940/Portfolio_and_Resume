@@ -17,12 +17,17 @@ const TerminalContext = createContext<TerminalContextType | undefined>(
 
 export function TerminalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [matrixMode, setMatrixMode] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("matrix-mode-active") === "true";
+  const [matrixMode, setMatrixMode] = useState(false);
+
+  // Handle mount-only initialization
+  useEffect(() => {
+    const saved = localStorage.getItem("matrix-mode-active") === "true";
+    if (saved) {
+      React.startTransition(() => {
+        setMatrixMode(true);
+      });
     }
-    return false;
-  });
+  }, []);
 
   // Save to localStorage and handle class toggle
   useEffect(() => {
