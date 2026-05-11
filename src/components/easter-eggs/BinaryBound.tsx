@@ -146,8 +146,8 @@ export function BinaryBound() {
         isAirborneRef.current = false;
       }
 
-      const speed = gameSpeedRef.current;
       const containerW = containerRef.current?.clientWidth ?? 800;
+      const speed = gameSpeedRef.current * (containerW / 800);
 
       // Move & cull obstacles
       obstaclesRef.current = obstaclesRef.current
@@ -463,7 +463,7 @@ export function BinaryBound() {
       })}
 
       {/* HUD */}
-      <div className="absolute top-2 right-2 md:top-4 md:right-4 z-30 text-right pointer-events-none flex flex-col gap-1">
+      <div className="absolute top-1 right-1 md:top-4 md:right-4 z-30 text-right pointer-events-none flex flex-col gap-1">
         <div>
           <div className="text-ctp-subtext0 uppercase tracking-[2px] md:tracking-[3px] text-[6px] md:text-[7px]">
             RECORD

@@ -108,14 +108,16 @@ function ArcadeStandalone() {
       }`}
     >
       <div className="h-24 md:h-32 shrink-0" />
-      <div className="w-full max-w-5xl flex-1 flex items-center justify-center relative">
+      <div className="w-full max-w-5xl flex-1 flex items-center justify-center relative px-2 md:px-4">
+        <div className="w-full h-full max-h-[70dvh] md:max-h-none aspect-video md:aspect-auto relative overflow-hidden flex items-center justify-center">
         {gameId === "cyberslither" && <CyberSlither />}
         {gameId === "binarybound" && <BinaryBound />}
         {gameId === "terminalinvaders" && <TerminalInvaders />}
         {gameId === "memorymatch" && <MemoryMatch />}
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default function ArcadePage() {
