@@ -28,7 +28,7 @@ function ArcadeStandalone() {
   if (gameId === "none" || !game) {
     return (
       <div
-        className={`min-h-screen p-6 md:p-12 flex flex-col items-center transition-colors duration-500 ${
+        className={`min-h-dvh p-6 md:p-12 flex flex-col items-center justify-start transition-colors duration-500 ${
           matrixMode ? "bg-transparent" : "bg-ctp-crust"
         }`}
       >
@@ -103,12 +103,12 @@ function ArcadeStandalone() {
 
   return (
     <div
-      className={`h-screen overflow-hidden flex flex-col items-center transition-colors duration-500 ${
+      className={`h-dvh overflow-hidden flex flex-col items-center transition-colors duration-500 ${
         matrixMode ? "bg-transparent" : "bg-ctp-crust"
       }`}
     >
       <div className="h-24 md:h-32 shrink-0" />
-      <div className="w-full max-w-5xl h-full flex items-center justify-center relative">
+      <div className="w-full max-w-5xl flex-1 flex items-center justify-center relative">
         {gameId === "cyberslither" && <CyberSlither />}
         {gameId === "binarybound" && <BinaryBound />}
         {gameId === "terminalinvaders" && <TerminalInvaders />}
