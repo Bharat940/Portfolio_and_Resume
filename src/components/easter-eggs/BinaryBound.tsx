@@ -104,7 +104,8 @@ export function BinaryBound() {
   const isAirborneRef = useRef<boolean>(false);
 
   const getGroundY = useCallback(() => {
-    return (containerRef.current?.clientHeight ?? 400) - 90;
+    const height = containerRef.current?.clientHeight ?? 400;
+    return height * 0.75;
   }, []);
 
   const startGame = useCallback(() => {
@@ -311,6 +312,7 @@ export function BinaryBound() {
 
   const { playerY, groundY, obstacles, isAirborne, speedBars } = gameState;
   const groundTop = groundY + PLAYER_H;
+  const containerHeight = containerRef.current?.clientHeight ?? 400;
 
   return (
     <div
@@ -346,23 +348,9 @@ export function BinaryBound() {
       </div>
 
       {/* Grid Floor */}
-      <div className="absolute left-0 right-0" style={{ top: groundTop }}>
-        <div className="w-full bg-ctp-surface2 h-0.75" />
-        <div className="w-full bg-ctp-surface0 h-2.5 flex overflow-hidden">
-          {Array.from({ length: 100 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-full shrink-0 border-r border-ctp-mantle"
-              style={{
-                width: 28,
-                background:
-                  i % 2 === 0
-                    ? "var(--color-ctp-surface0)"
-                    : "var(--color-ctp-mantle)",
-              }}
-            />
-          ))}
-        </div>
+      <div className="absolute left-0 right-0 bottom-0" style={{ top: groundTop }}>
+        <div className="w-full bg-ctp-surface2 h-1 md:h-1.5" />
+        <div className="w-full h-full bg-ctp-surface0/50" />
       </div>
 
       {/* Player */}

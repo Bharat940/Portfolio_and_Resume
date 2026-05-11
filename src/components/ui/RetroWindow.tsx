@@ -213,7 +213,7 @@ export function RetroWindow({
         x: isMaximized ? 0 : geometry.x,
         y: isMaximized ? 0 : geometry.y,
         width: isMaximized ? "100vw" : geometry.width,
-        height: isMaximized ? "100vh" : geometry.height,
+        height: isMaximized ? "100dvh" : geometry.height,
         zIndex,
         scale: 1,
         opacity: geometry.isInitialized ? 1 : 0,

@@ -979,7 +979,7 @@ export function TerminalInvaders() {
       </AnimatePresence>
 
       {/* Mobile Controls */}
-      <div className="md:hidden absolute bottom-8 left-0 right-0 z-50 flex justify-between px-4 pointer-events-none">
+      <div className="md:hidden absolute bottom-12 left-0 right-0 z-50 flex justify-between px-4 pointer-events-none">
         <div className="flex gap-2 pointer-events-auto">
           <button
             onPointerDown={() => keysRef.current.add("ArrowLeft")}
