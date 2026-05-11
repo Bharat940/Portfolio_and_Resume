@@ -312,7 +312,6 @@ export function BinaryBound() {
 
   const { playerY, groundY, obstacles, isAirborne, speedBars } = gameState;
   const groundTop = groundY + PLAYER_H;
-  const containerHeight = containerRef.current?.clientHeight ?? 400;
 
   return (
     <div
