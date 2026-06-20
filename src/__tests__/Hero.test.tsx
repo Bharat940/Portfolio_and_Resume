@@ -33,6 +33,16 @@ vi.mock('motion/react', () => ({
   Variants: {},
 }))
 
+// Mock TerminalContext
+vi.mock('@/context/TerminalContext', () => ({
+  useTerminal: () => ({
+    recruiterMode: false,
+    setRecruiterMode: vi.fn(),
+    terminalOpen: false,
+    setTerminalOpen: vi.fn(),
+  }),
+}))
+
 describe('Hero Component', () => {
   it('renders the main name heading', () => {
     render(<Hero />)

@@ -13,6 +13,16 @@ vi.mock('motion/react', () => ({
   Variants: {},
 }))
 
+// Mock TerminalContext
+vi.mock('@/context/TerminalContext', () => ({
+  useTerminal: () => ({
+    recruiterMode: false,
+    setRecruiterMode: vi.fn(),
+    terminalOpen: false,
+    setTerminalOpen: vi.fn(),
+  }),
+}))
+
 // Mock fetch
 global.fetch = vi.fn()
 
