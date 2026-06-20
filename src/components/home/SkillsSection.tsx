@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { m, AnimatePresence, Variants } from "motion/react";
 import { SkillIcon } from "@/components/icons/SkillIcons";
+import { useTerminal } from "@/context/TerminalContext";
 
 interface Category {
   title: string;
@@ -30,8 +31,43 @@ const skillCategories: Category[] = [
 ];
 
 export function SkillsSection() {
-  // Hoisted so only one can be active at a time (used on mobile too)
+  const { recruiterMode } = useTerminal();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  if (recruiterMode) {
+    return (
+      <section
+        id="skills"
+        className="w-full py-24 px-6 md:px-12 lg:px-20 overflow-hidden"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-start mb-12 space-y-2">
+            <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight leading-none uppercase">
+              Technical Arsenal
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {skillCategories.map((category) => (
+              <div key={category.title} className="space-y-3">
+                <h3 className="text-base font-bold font-sans text-primary uppercase tracking-wide">
+                  {category.title}
+                </h3>
+                <ul className="space-y-1.5">
+                  {category.skills.map((skill) => (
+                    <li key={skill} className="text-sm font-sans text-foreground/90 flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

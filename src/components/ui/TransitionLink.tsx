@@ -33,6 +33,27 @@ export function TransitionLink({
       !e.altKey &&
       !e.shiftKey
     ) {
+      if (typeof window !== "undefined") {
+        const currentPathname = window.location.pathname;
+        try {
+          const targetUrl = new URL(href, window.location.href);
+          
+          if (targetUrl.pathname === currentPathname && targetUrl.hash) {
+            // Same page hash navigation!
+            onClick?.();
+            const targetId = targetUrl.hash.slice(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              e.preventDefault();
+              targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+            return;
+          }
+        } catch (err) {
+          console.error("Failed to parse URL in TransitionLink:", err);
+        }
+      }
+
       e.preventDefault();
 
       // If already transitioning, don't trigger again but allow the click to be "handled"

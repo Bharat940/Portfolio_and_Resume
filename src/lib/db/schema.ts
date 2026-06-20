@@ -106,3 +106,11 @@ export const knowledge = pgTable("knowledge", {
   content: text("content").notNull(),
   embedding: vector("embedding", { dimensions: 3072 }), // Gemini gemini-embedding-2 native dimension size
 });
+
+// Portfolio Analytics Table
+export const analytics = pgTable("analytics", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  metricName: text("metric_name").notNull().unique(),
+  value: integer("value").default(0).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});

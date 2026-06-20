@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { m } from "motion/react";
 import {
   Code,
@@ -41,8 +42,24 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Stable helper function declared outside the render loop
+function getBlogIcon(iconName: string | null, slug: string, id: string) {
+  if (iconName && iconName !== "Code" && iconMap[iconName]) {
+    return iconMap[iconName];
+  }
+  // Hash function to pick a stable random icon based on slug (excluding Code)
+  const keys = Object.keys(iconMap).filter((k) => k !== "Code");
+  const identifier = slug || id || "";
+  let hash = 0;
+  for (let i = 0; i < identifier.length; i++) {
+    hash = identifier.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % keys.length;
+  return iconMap[keys[index]];
+}
+
 export function BlogCard({ post }: BlogCardProps) {
-  const IconComponent = iconMap[post.icon || "Code"] || Code;
+  const icon = getBlogIcon(post.icon, post.slug, post.id);
 
   return (
     <m.div
@@ -56,14 +73,14 @@ export function BlogCard({ post }: BlogCardProps) {
         <div className="relative h-full flex flex-col p-8 bg-card/30 border border-border/50 rounded-3xl overflow-hidden hover:border-ctp-mauve/50 transition-all duration-500 hover:shadow-2xl hover:shadow-ctp-mauve/10">
           {/* Background Technical Accent */}
           <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity group-hover:rotate-12 duration-700">
-            <IconComponent className="w-32 h-32" />
+            {React.createElement(icon, { className: "w-32 h-32" })}
           </div>
 
           <div className="relative z-10 flex-1 flex flex-col space-y-6">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-ctp-mauve/10 rounded-xl text-ctp-mauve group-hover:scale-110 transition-transform duration-500">
-                  <IconComponent className="w-5 h-5" />
+                  {React.createElement(icon, { className: "w-5 h-5" })}
                 </div>
                 <div>
                   <span className="text-[10px] font-mono text-ctp-mauve uppercase tracking-[0.2em] font-bold">

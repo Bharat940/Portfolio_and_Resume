@@ -1,31 +1,14 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import Image from "next/image";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Loader2, FileText, AlertCircle } from "lucide-react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { cn } from "@/lib/utils";
 import mermaid from "mermaid";
-import type { CSSProperties, ReactElement } from "react";
-
-// --- Optimized Syntax Highlighting ---
-import tsx from "react-syntax-highlighter/dist/esm/languages/prism/tsx";
-import typescript from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
-import javascript from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
-import bash from "react-syntax-highlighter/dist/esm/languages/prism/bash";
-import json from "react-syntax-highlighter/dist/esm/languages/prism/json";
-import markdown from "react-syntax-highlighter/dist/esm/languages/prism/markdown";
-
-SyntaxHighlighter.registerLanguage("tsx", tsx);
-SyntaxHighlighter.registerLanguage("typescript", typescript);
-SyntaxHighlighter.registerLanguage("javascript", javascript);
-SyntaxHighlighter.registerLanguage("bash", bash);
-SyntaxHighlighter.registerLanguage("json", json);
-SyntaxHighlighter.registerLanguage("markdown", markdown);
+import type { ReactElement } from "react";
+import { CodeBlock } from "@/components/ui/CodeBlock";
 
 interface ProjectReadmeProps {
   url: string;
@@ -129,17 +112,15 @@ export function ProjectReadme({ url, className }: ProjectReadmeProps) {
   const components: Components = useMemo(
     () => ({
       img: ({ alt, src }) => (
-        <Image
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
           src={(src as string) || ""}
           alt={alt || ""}
-          width={100}
-          height={100}
-          className="rounded-xl border border-border/30 my-8 shadow-lg max-w-full h-auto mx-auto"
-          unoptimized
+          className="rounded-xl border border-border/30 my-8 shadow-lg max-w-full h-auto mx-auto object-contain"
         />
       ),
 
-      pre: ({ children, ...props }) => {
+      pre: ({ children }) => {
         const codeEl = (children as ReactElement<CodeElementProps>)?.props;
         const className = codeEl?.className || "";
         const match = /language-(\w+)/.exec(className);
@@ -150,39 +131,11 @@ export function ProjectReadme({ url, className }: ProjectReadmeProps) {
           return <Mermaid chart={codeContent} />;
         }
 
-        if (language) {
-          return (
-            <div className="my-6 rounded-xl overflow-hidden border border-border/30 shadow-xl group/code">
-              <div className="bg-ctp-crust px-4 py-1 border-b border-border/30 flex justify-between items-center">
-                <span className="font-mono text-[9px] text-muted-foreground uppercase">
-                  {language}
-                </span>
-              </div>
-              <SyntaxHighlighter
-                style={vscDarkPlus as { [key: string]: CSSProperties }}
-                language={language}
-                PreTag="div"
-                customStyle={{
-                  margin: 0,
-                  padding: "1.25rem",
-                  fontSize: "0.8125rem",
-                  backgroundColor: "#11111b",
-                }}
-              >
-                {codeContent}
-              </SyntaxHighlighter>
-            </div>
-          );
-        }
-
-        // Fallback for plain <pre> without language
         return (
-          <pre
-            className="bg-ctp-crust p-4 rounded-xl border border-border/30 overflow-x-auto"
-            {...props}
-          >
-            {children}
-          </pre>
+          <CodeBlock
+            language={language || "text"}
+            value={codeContent}
+          />
         );
       },
 

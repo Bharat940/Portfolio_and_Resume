@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AtSign } from "lucide-react";
+import { AtSign, Briefcase, Terminal } from "lucide-react";
 import { m, AnimatePresence, Variants } from "motion/react";
 import { PixelMenu } from "@/components/icons/PixelMenu";
 import { PixelClose } from "@/components/icons/PixelClose";
@@ -15,7 +15,7 @@ import { TransitionLink } from "@/components/ui/TransitionLink";
 import { useTerminal } from "@/context/TerminalContext";
 
 export function Navbar() {
-  const { toggleTerminal } = useTerminal();
+  const { toggleTerminal, recruiterMode, toggleRecruiterMode } = useTerminal();
   const [isOpen, setIsOpen] = useState(false);
 
   // Prevent background scrolling on mobile when menu is open
@@ -30,36 +30,74 @@ export function Navbar() {
     };
   }, [isOpen]);
 
-  const navLinks = [
-    {
-      name: "Home",
-      href: "/",
-      hoverColor: "group-hover:text-ctp-blue",
-      hoverBorder: "hover:border-ctp-blue",
-      iconColor: "text-ctp-blue",
-    },
-    {
-      name: "About",
-      href: "/about",
-      hoverColor: "group-hover:text-ctp-green",
-      hoverBorder: "hover:border-ctp-green",
-      iconColor: "text-ctp-green",
-    },
-    {
-      name: "Projects",
-      href: "/projects",
-      hoverColor: "group-hover:text-ctp-peach",
-      hoverBorder: "hover:border-ctp-peach",
-      iconColor: "text-ctp-peach",
-    },
-    {
-      name: "Blog",
-      href: "/blog",
-      hoverColor: "group-hover:text-ctp-pink",
-      hoverBorder: "hover:border-ctp-pink",
-      iconColor: "text-ctp-pink",
-    },
-  ];
+  const navLinks = recruiterMode
+    ? [
+        {
+          name: "Summary",
+          href: "/#home",
+          hoverColor: "group-hover:text-ctp-blue",
+          hoverBorder: "hover:border-ctp-blue",
+          iconColor: "text-ctp-blue",
+        },
+        {
+          name: "Experience",
+          href: "/#experience",
+          hoverColor: "group-hover:text-ctp-green",
+          hoverBorder: "hover:border-ctp-green",
+          iconColor: "text-ctp-green",
+        },
+        {
+          name: "Projects",
+          href: "/#projects",
+          hoverColor: "group-hover:text-ctp-peach",
+          hoverBorder: "hover:border-ctp-peach",
+          iconColor: "text-ctp-peach",
+        },
+        {
+          name: "Skills",
+          href: "/#skills",
+          hoverColor: "group-hover:text-ctp-pink",
+          hoverBorder: "hover:border-ctp-pink",
+          iconColor: "text-ctp-pink",
+        },
+        {
+          name: "Contact",
+          href: "/#contact",
+          hoverColor: "group-hover:text-ctp-mauve",
+          hoverBorder: "hover:border-ctp-mauve",
+          iconColor: "text-ctp-mauve",
+        },
+      ]
+    : [
+        {
+          name: "Home",
+          href: "/",
+          hoverColor: "group-hover:text-ctp-blue",
+          hoverBorder: "hover:border-ctp-blue",
+          iconColor: "text-ctp-blue",
+        },
+        {
+          name: "About",
+          href: "/about",
+          hoverColor: "group-hover:text-ctp-green",
+          hoverBorder: "hover:border-ctp-green",
+          iconColor: "text-ctp-green",
+        },
+        {
+          name: "Projects",
+          href: "/projects",
+          hoverColor: "group-hover:text-ctp-peach",
+          hoverBorder: "hover:border-ctp-peach",
+          iconColor: "text-ctp-peach",
+        },
+        {
+          name: "Blog",
+          href: "/blog",
+          hoverColor: "group-hover:text-ctp-pink",
+          hoverBorder: "hover:border-ctp-pink",
+          iconColor: "text-ctp-pink",
+        },
+      ];
 
   // Framer Motion Variants
   const containerVariants: Variants = {
@@ -117,6 +155,28 @@ export function Navbar() {
 
           {/* Hamburger / Menu Box */}
           <div className="pointer-events-auto relative flex items-center gap-3">
+            {/* Recruiter Mode Toggle */}
+            <button
+              onClick={toggleRecruiterMode}
+              className="flex items-center justify-center w-16 h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-transform hover:scale-105 focus:outline-none group cursor-pointer relative z-40 md:z-50"
+              aria-label={
+                recruiterMode
+                  ? "Switch to Developer Mode"
+                  : "Switch to Recruiter Mode"
+              }
+              title={
+                recruiterMode
+                  ? "Switch to Developer Mode"
+                  : "Switch to Recruiter Mode"
+              }
+            >
+              {recruiterMode ? (
+                <Briefcase className="w-6 h-6 text-ctp-mauve group-hover:scale-110 transition-transform" />
+              ) : (
+                <Terminal className="w-6 h-6 text-ctp-blue group-hover:scale-110 transition-transform" />
+              )}
+            </button>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               data-testid="navbar-menu-btn"
@@ -215,19 +275,30 @@ export function Navbar() {
                           Let&apos;s Connect
                         </p>
                         <div className="flex flex-wrap gap-4">
-                          <button
-                            onClick={() => {
-                              toggleTerminal();
-                              setIsOpen(false);
-                            }}
-                            className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer relative group/term"
-                            title="Terminal (⌘K)"
-                          >
-                            <PixelTerminal className="w-6 h-6 text-ctp-blue group-hover/term:text-background transition-colors" />
-                            <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-ctp-crust text-ctp-subtext0 text-[10px] px-1.5 py-0.5 rounded border border-border/50 opacity-0 group-hover/term:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                              ⌘K
-                            </span>
-                          </button>
+                          {recruiterMode ? (
+                            <a
+                              href="/Bharat_Dangi_Resume.pdf"
+                              download
+                              className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-mauve hover:text-background hover:border-ctp-mauve transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer text-ctp-mauve"
+                              title="Download Resume PDF"
+                            >
+                              <Briefcase className="w-5 h-5" />
+                            </a>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                toggleTerminal();
+                                setIsOpen(false);
+                              }}
+                              className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer relative group/term"
+                              title="Terminal (⌘K)"
+                            >
+                              <PixelTerminal className="w-6 h-6 text-ctp-blue group-hover/term:text-background transition-colors" />
+                              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-ctp-crust text-ctp-subtext0 text-[10px] px-1.5 py-0.5 rounded border border-border/50 opacity-0 group-hover/term:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                ⌘K
+                              </span>
+                            </button>
+                          )}
                           <Link
                             href="https://github.com"
                             target="_blank"

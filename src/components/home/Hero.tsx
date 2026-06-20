@@ -3,6 +3,8 @@
 import React, { useRef } from "react";
 import { m, Variants, useMotionValue, useSpring } from "motion/react";
 import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
+import { useTerminal } from "@/context/TerminalContext";
+import { Briefcase } from "lucide-react";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -34,6 +36,7 @@ const taglineVariants: Variants = {
 const techStack = ["Next.js", "tRPC", "PostgreSQL", "C++", "Docker"];
 
 export function Hero() {
+  const { recruiterMode } = useTerminal();
   const scrollTo = (id: string) =>
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -141,121 +144,178 @@ export function Hero() {
               damping: 15,
             }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ctp-surface0/60 border border-border/30 text-[10px] font-mono text-ctp-peach">
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ctp-peach opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-ctp-peach" />
-              </span>
-              System Status: Active
-            </div>
+            {recruiterMode ? (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-[10px] font-mono text-primary font-bold uppercase tracking-wider">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                </span>
+                Available for Full-Time Roles
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-ctp-surface0/60 border border-border/30 text-[10px] font-mono text-ctp-peach">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-ctp-peach opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-ctp-peach" />
+                </span>
+                System Status: Active
+              </div>
+            )}
           </m.div>
 
           {/* Title */}
-          <div className="flex flex-col gap-0 md:gap-1">
-            <div className="overflow-hidden">
-              <m.h1
-                data-cursor="focus"
-                className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
-                style={{
-                  fontSize: "clamp(2.4rem, 9vw, 8rem)",
-                  willChange: "transform",
-                }}
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                ENGINEERING
-              </m.h1>
-            </div>
-
-            <div className="overflow-hidden">
-              <m.h1
-                data-cursor="focus"
-                className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
-                style={{
-                  fontSize: "clamp(2.4rem, 9vw, 8rem)",
-                  willChange: "transform",
-                }}
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.08,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                DIGITAL
-              </m.h1>
-            </div>
-
-            <div className="overflow-hidden">
-              <m.h1
-                data-cursor="focus"
-                className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
-                style={{
-                  fontSize: "clamp(2.4rem, 9.5vw, 8rem)",
-                  willChange: "transform",
-                }}
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.16,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {"SYSTEMS".split("").map((char, i) => (
-                  <m.span
-                    key={i}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 + i * 0.03, duration: 0.2 }}
-                    className="inline-block"
-                  >
-                    {char}
-                  </m.span>
-                ))}
-                <m.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1] }}
-                  transition={{
-                    delay: 1.2,
-                    duration: 0.5,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "linear",
-                  }}
-                  className="inline-block text-ctp-mauve"
+          {recruiterMode ? (
+            <div className="flex flex-col gap-2">
+              <h1 className="font-black tracking-tighter font-sans leading-none text-foreground text-5xl md:text-7xl uppercase">
+                Bharat Dangi
+              </h1>
+              <p className="text-lg md:text-xl font-bold text-primary tracking-wide">
+                Full Stack Developer & Systems Engineer
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1 text-xs md:text-sm text-muted-foreground font-mono">
+                <span>Bhopal, India</span>
+                <span>•</span>
+                <a
+                  href="mailto:bdangi450@gmail.com"
+                  className="hover:text-primary transition-colors"
                 >
-                  _
-                </m.span>
-              </m.h1>
+                  bdangi450@gmail.com
+                </a>
+                <span>•</span>
+                <a
+                  href="https://linkedin.com/in/bharat-dangi-b186b3248"
+                  target="_blank"
+                  className="hover:text-primary transition-colors"
+                >
+                  LinkedIn
+                </a>
+                <span>•</span>
+                <a
+                  href="https://github.com/Bharat940"
+                  target="_blank"
+                  className="hover:text-primary transition-colors"
+                >
+                  GitHub
+                </a>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-0 md:gap-1">
+              <div className="overflow-hidden">
+                <m.h1
+                  data-cursor="focus"
+                  className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
+                  style={{
+                    fontSize: "clamp(2.4rem, 9vw, 8rem)",
+                    willChange: "transform",
+                  }}
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  ENGINEERING
+                </m.h1>
+              </div>
+
+              <div className="overflow-hidden">
+                <m.h1
+                  data-cursor="focus"
+                  className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
+                  style={{
+                    fontSize: "clamp(2.4rem, 9vw, 8rem)",
+                    willChange: "transform",
+                  }}
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.08,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  DIGITAL
+                </m.h1>
+              </div>
+
+              <div className="overflow-hidden">
+                <m.h1
+                  data-cursor="focus"
+                  className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
+                  style={{
+                    fontSize: "clamp(2.4rem, 9.5vw, 8rem)",
+                    willChange: "transform",
+                  }}
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: 0.16,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                >
+                  {"SYSTEMS".split("").map((char, i) => (
+                    <m.span
+                      key={i}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 + i * 0.03, duration: 0.2 }}
+                      className="inline-block"
+                    >
+                      {char}
+                    </m.span>
+                  ))}
+                  <m.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1] }}
+                    transition={{
+                      delay: 1.2,
+                      duration: 0.5,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "linear",
+                    }}
+                    className="inline-block text-ctp-mauve"
+                  >
+                    _
+                  </m.span>
+                </m.h1>
+              </div>
+            </div>
+          )}
 
           {/* Tagline - Optimized to avoid word-by-word overhead */}
           <m.div
-            className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-2xl"
+            className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-3xl"
             variants={taglineVariants}
           >
-            <m.div
-              className="hidden sm:block h-px bg-ctp-mauve/30"
-              initial={{ width: 0 }}
-              animate={{ width: "3rem" }}
-              transition={{ delay: 1, duration: 0.6 }}
-            />
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
-              I&apos;m{" "}
-              <span className="text-foreground font-black uppercase tracking-tight">
-                Bharat Dangi
-              </span>
-              . Full Stack Developer & Software Architect crafting
-              high-performance distributed solutions.
-            </p>
+            {recruiterMode ? (
+              <p className="text-sm sm:text-base md:text-lg text-foreground/85 leading-relaxed font-sans max-w-3xl">
+                Full-stack developer specializing in Next.js, Node.js, PostgreSQL, and AI integration. Experienced in architecting end-to-end SaaS platforms, visual workflow automation (NodeWeave), and low-latency system utilities. Strong focus on backend efficiency, database schema design, secure user authentication, and crafting clean, responsive user interfaces.
+              </p>
+            ) : (
+              <>
+                <m.div
+                  className="hidden sm:block h-px bg-ctp-mauve/30"
+                  initial={{ width: 0 }}
+                  animate={{ width: "3rem" }}
+                  transition={{ delay: 1, duration: 0.6 }}
+                />
+                <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
+                  I&apos;m{" "}
+                  <span className="text-foreground font-black uppercase tracking-tight">
+                    Bharat Dangi
+                  </span>
+                  .
+                  {
+                    " Full Stack Developer & Software Architect crafting high-performance distributed solutions."
+                  }
+                </p>
+              </>
+            )}
           </m.div>
 
           {/* CTAs */}
@@ -263,45 +323,72 @@ export function Hero() {
             variants={itemVariants}
             className="flex flex-wrap items-center gap-3"
           >
-            <m.a
-              ref={magnetRef}
-              href="#projects"
-              data-cursor="focus"
-              style={{ x: springX, y: springY, willChange: "transform" }}
-              onMouseMove={onMove}
-              onMouseLeave={onLeave}
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                scrollTo("#projects");
-              }}
-              whileTap={{ scale: 0.98 }}
-              className="group inline-flex items-center gap-2.5 px-5 py-2.5 md:px-8 md:py-3.5 bg-ctp-mauve text-ctp-base rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-ctp-mauve/15 cursor-pointer relative overflow-hidden"
-            >
-              <m.span
-                className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full"
-                whileHover={{ translateX: "200%" }}
-                transition={{ duration: 0.6 }}
-              />
-              <span className="relative">Explore Archive</span>
-              <PixelArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform relative" />
-            </m.a>
+            {recruiterMode ? (
+              <>
+                <m.button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollTo("#contact");
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group inline-flex items-center gap-2.5 px-5 py-2.5 md:px-8 md:py-3.5 bg-primary text-primary-foreground rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/15 cursor-pointer relative overflow-hidden"
+                >
+                  <span className="relative">Get in Touch</span>
+                  <PixelArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform relative" />
+                </m.button>
+                <m.a
+                  href="/Bharat_Dangi_Resume.pdf"
+                  download
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 md:px-8 md:py-3.5 border border-border text-foreground rounded-xl font-black uppercase tracking-widest text-[10px] cursor-pointer backdrop-blur-sm transition-colors hover:bg-secondary"
+                >
+                  <Briefcase className="w-4 h-4" />
+                  <span>Download Resume</span>
+                </m.a>
+              </>
+            ) : (
+              <>
+                <m.a
+                  ref={magnetRef}
+                  href="#projects"
+                  data-cursor="focus"
+                  style={{ x: springX, y: springY, willChange: "transform" }}
+                  onMouseMove={onMove}
+                  onMouseLeave={onLeave}
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    scrollTo("#projects");
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group inline-flex items-center gap-2.5 px-5 py-2.5 md:px-8 md:py-3.5 bg-ctp-mauve text-ctp-base rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-ctp-mauve/15 cursor-pointer relative overflow-hidden"
+                >
+                  <m.span
+                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full"
+                    whileHover={{ translateX: "200%" }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <span className="relative">Explore Archive</span>
+                  <PixelArrowRight className="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform relative" />
+                </m.a>
 
-            <m.a
-              href="#contact"
-              data-cursor="focus"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                scrollTo("#contact");
-              }}
-              whileHover={{
-                borderColor: "rgba(203,166,247,0.4)",
-                backgroundColor: "rgba(49,50,68,0.4)",
-              }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center px-5 py-2.5 md:px-8 md:py-3.5 border border-border/40 text-foreground rounded-xl font-black uppercase tracking-widest text-[10px] cursor-pointer backdrop-blur-sm transition-colors"
-            >
-              Initialize Connection
-            </m.a>
+                <m.a
+                  href="#contact"
+                  data-cursor="focus"
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    e.preventDefault();
+                    scrollTo("#contact");
+                  }}
+                  whileHover={{
+                    borderColor: "rgba(203,166,247,0.4)",
+                    backgroundColor: "rgba(49,50,68,0.4)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center px-5 py-2.5 md:px-8 md:py-3.5 border border-border/40 text-foreground rounded-xl font-black uppercase tracking-widest text-[10px] cursor-pointer backdrop-blur-sm transition-colors"
+                >
+                  Initialize Connection
+                </m.a>
+              </>
+            )}
           </m.div>
 
           {/* Tech stack */}
@@ -315,7 +402,11 @@ export function Hero() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1.4 + i * 0.05 }}
-                className="px-2.5 py-1 rounded-md bg-ctp-surface0/30 border border-border/20 text-[10px] font-mono text-muted-foreground/50"
+                className={`px-2.5 py-1 rounded-md text-[10px] font-semibold border ${
+                  recruiterMode
+                    ? "bg-zinc-100 text-zinc-800 border-zinc-200 font-sans"
+                    : "bg-ctp-surface0/30 border-border/20 font-mono text-muted-foreground/50"
+                }`}
               >
                 {tech}
               </m.span>

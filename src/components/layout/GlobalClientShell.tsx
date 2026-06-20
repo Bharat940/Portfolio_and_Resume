@@ -1,6 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
+import { trackMetric } from "@/lib/actions/analytics";
 import { CursorProvider } from "@/context/CursorContext";
 import { TerminalProvider, useTerminal } from "@/context/TerminalContext";
 import { LazyMotion, domAnimation } from "motion/react";
@@ -13,6 +15,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { StaircaseTransition } from "@/components/ui/StaircaseTransition";
+
+import { useRouter, usePathname } from "next/navigation";
 
 const CustomCursor = dynamic(
   () => import("@/components/ui/CustomCursor").then((mod) => mod.CustomCursor),
@@ -28,6 +32,18 @@ const GlobalMatrixEffects = dynamic(
 );
 
 export function GlobalClientShell({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    try {
+      const hasVisited = sessionStorage.getItem("portfolio-session-visited");
+      if (!hasVisited) {
+        sessionStorage.setItem("portfolio-session-visited", "true");
+        trackMetric("page_views");
+      }
+    } catch (error) {
+      console.error("Failed to track session visitor:", error);
+    }
+  }, []);
+
   return (
     <LazyMotion features={domAnimation}>
       <WindowManagerProvider>
@@ -35,8 +51,7 @@ export function GlobalClientShell({ children }: { children: React.ReactNode }) {
           <ArcadeProvider>
             <CursorProvider>
               <TransitionProvider>
-                <GlobalMatrixEffects />
-                <CustomCursor />
+                <GlobalEffects />
                 <TooltipProvider>
                   <Navbar />
                   <StaircaseTransition />
@@ -54,8 +69,28 @@ export function GlobalClientShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function GlobalEffects() {
+  const { recruiterMode } = useTerminal();
+  if (recruiterMode) return null;
+  return (
+    <>
+      <GlobalMatrixEffects />
+      <CustomCursor />
+    </>
+  );
+}
+
 function ShellContent({ children }: { children: React.ReactNode }) {
-  const { matrixMode } = useTerminal();
+  const { matrixMode, recruiterMode } = useTerminal();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (recruiterMode && pathname !== "/") {
+      router.replace("/");
+    }
+  }, [recruiterMode, pathname, router]);
+
   return (
     <main
       className={`flex-1 flex flex-col transition-colors duration-500 ${

@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { experiences, education, clubs } from "@/data/portfolio";
 import { PixelCalendarIcon } from "@/components/icons/PixelCalendarIcon";
 import { Briefcase, GraduationCap, Users, ChevronRight } from "lucide-react";
+import { useTerminal } from "@/context/TerminalContext";
 
 type MilestoneType = "work" | "education" | "club";
 
@@ -65,8 +66,8 @@ function MissionIndex({ index, accent }: { index: number; accent: string }) {
     </span>
   );
 }
-
 function MissionCard({ milestone }: { milestone: Milestone }) {
+  const { recruiterMode } = useTerminal();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const cfg = TYPE_CONFIG[milestone.type];
@@ -85,37 +86,43 @@ function MissionCard({ milestone }: { milestone: Milestone }) {
       data-cursor="crosshair"
     >
       {/* Scanline glow on hover */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse at 20% 50%, ${cfg.glowColor} 0%, transparent 70%)`,
-        }}
-      />
+      {!recruiterMode && (
+        <div
+          className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: `radial-gradient(ellipse at 20% 50%, ${cfg.glowColor} 0%, transparent 70%)`,
+          }}
+        />
+      )}
 
-      <div className="relative border border-border/30 rounded-2xl overflow-hidden bg-ctp-mantle/40 backdrop-blur-sm hover:border-border/60 transition-colors duration-300">
+      <div
+        className={`relative border border-border/30 rounded-2xl overflow-hidden transition-colors duration-300 ${recruiterMode ? "bg-card shadow-sm" : "bg-ctp-mantle/40 backdrop-blur-sm hover:border-border/60"}`}
+      >
         {/* Top metadata bar — looks like a file header */}
-        <div className="flex items-center justify-between px-5 py-2.5 border-b border-border/20 bg-ctp-crust/30">
-          <div className="flex items-center gap-3">
-            <MissionIndex index={milestone.index} accent={cfg.accent} />
-            <span className="w-px h-3 bg-border/50" />
-            <div
-              className={`flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest ${cfg.accent}`}
-            >
-              {cfg.icon}
-              {cfg.label}
+        {!recruiterMode && (
+          <div className="flex items-center justify-between px-5 py-2.5 border-b border-border/20 bg-ctp-crust/30">
+            <div className="flex items-center gap-3">
+              <MissionIndex index={milestone.index} accent={cfg.accent} />
+              <span className="w-px h-3 bg-border/50" />
+              <div
+                className={`flex items-center gap-1.5 text-[10px] font-mono font-bold uppercase tracking-widest ${cfg.accent}`}
+              >
+                {cfg.icon}
+                {cfg.label}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Animated status dot */}
+              <span
+                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded border text-[9px] font-mono uppercase tracking-widest ${cfg.tag}`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                LOGGED
+              </span>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            {/* Animated status dot */}
-            <span
-              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded border text-[9px] font-mono uppercase tracking-widest ${cfg.tag}`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-              LOGGED
-            </span>
-          </div>
-        </div>
+        )}
 
         {/* Main content grid */}
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-0">
@@ -160,70 +167,91 @@ function MissionCard({ milestone }: { milestone: Milestone }) {
 
           {/* Right: vertical period strip */}
           <div
-            className={`hidden md:flex flex-col items-center justify-center px-6 border-l border-border/20 gap-1 bg-ctp-crust/20 min-w-27.5`}
+            className={`hidden md:flex flex-col items-center justify-center py-5 px-6 border-l border-border/20 gap-3 min-w-35 ${
+              recruiterMode ? "bg-zinc-50/50" : "bg-ctp-crust/20"
+            }`}
           >
             <PixelCalendarIcon
-              className={`w-4 h-4 ${cfg.accent} opacity-50 mb-2`}
+              className={`w-4 h-4 ${cfg.accent} ${recruiterMode ? "opacity-95" : "opacity-50"}`}
             />
-            {milestone.period.split(" - ").map((p, i) => (
+            <div className="flex flex-col items-center gap-0.5">
+              {milestone.period.split(" - ").map((p, i) => (
+                <span
+                  key={i}
+                  className={`text-[10px] uppercase tracking-widest text-center leading-tight w-full ${
+                    recruiterMode
+                      ? "text-foreground font-sans font-bold"
+                      : "font-mono text-muted-foreground"
+                  }`}
+                >
+                  {p}
+                </span>
+              ))}
+            </div>
+            {/* Vertical text label - hidden in recruiterMode */}
+            {!recruiterMode && (
               <span
-                key={i}
-                className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest text-center leading-tight"
+                className={`font-mono text-[8px] uppercase tracking-[0.3em] opacity-30 mt-2 ${cfg.accent}`}
+                style={{
+                  writingMode: "vertical-lr",
+                  transform: "rotate(180deg)",
+                }}
               >
-                {p}
+                {milestone.type}
               </span>
-            ))}
-            {/* Vertical text label */}
-            <span
-              className={`font-mono text-[8px] uppercase tracking-[0.3em] opacity-30 mt-3 ${cfg.accent}`}
-              style={{
-                writingMode: "vertical-lr",
-                transform: "rotate(180deg)",
-              }}
-            >
-              PERIOD
-            </span>
+            )}
           </div>
         </div>
 
         {/* Mobile period bar */}
         <div className="md:hidden flex items-center gap-2 px-5 pb-4">
           <PixelCalendarIcon
-            className={`w-3.5 h-3.5 ${cfg.accent} opacity-50`}
+            className={`w-3.5 h-3.5 ${cfg.accent} ${recruiterMode ? "opacity-95" : "opacity-50"}`}
           />
-          <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+          <span
+            className={`text-[10px] uppercase tracking-widest ${
+              recruiterMode
+                ? "text-foreground font-sans font-bold"
+                : "font-mono text-muted-foreground"
+            }`}
+          >
             {milestone.period}
           </span>
           {milestone.grade && (
             <>
               <span className="text-border/60">·</span>
-              <span className={`text-[10px] font-mono font-bold ${cfg.accent}`}>
-                {milestone.grade}
+              <span
+                className={`text-[10px] font-bold ${recruiterMode ? "text-foreground font-sans" : "font-mono " + cfg.accent}`}
+              >
+                GPA: {milestone.grade}
               </span>
             </>
           )}
         </div>
 
         {/* Bottom scan line — subtle decoration */}
-        <m.div
-          className={`h-px w-0 group-hover:w-full transition-none`}
-          initial={{ width: 0 }}
-          animate={inView ? { width: "100%" } : {}}
-          transition={{
-            duration: 0.8,
-            delay: milestone.index * 0.08 + 0.4,
-            ease: "easeOut",
-          }}
-          style={{
-            background: `linear-gradient(90deg, transparent, ${cfg.glowColor.replace("0.06", "0.5")}, transparent)`,
-          }}
-        />
+        {!recruiterMode && (
+          <m.div
+            className={`h-px w-0 group-hover:w-full transition-none`}
+            initial={{ width: 0 }}
+            animate={inView ? { width: "100%" } : {}}
+            transition={{
+              duration: 0.8,
+              delay: milestone.index * 0.08 + 0.4,
+              ease: "easeOut",
+            }}
+            style={{
+              background: `linear-gradient(90deg, transparent, ${cfg.glowColor.replace("0.06", "0.5")}, transparent)`,
+            }}
+          />
+        )}
       </div>
     </m.div>
   );
 }
 
 export function ExperienceTimeline() {
+  const { recruiterMode } = useTerminal();
   const allMilestones: Milestone[] = [
     ...experiences.map((e, i) => ({
       id: e.id,
@@ -268,42 +296,53 @@ export function ExperienceTimeline() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-start mb-16 space-y-4"
         >
-          {/* File classification tag */}
-          <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/50">
-            <span className="w-6 h-px bg-ctp-peach/40" />
-            Classified Archive
-            <span className="w-6 h-px bg-ctp-peach/40" />
-          </div>
+          {!recruiterMode && (
+            <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/50">
+              <span className="w-6 h-px bg-ctp-peach/40" />
+              Classified Archive
+              <span className="w-6 h-px bg-ctp-peach/40" />
+            </div>
+          )}
 
           <h2
             data-cursor="focus"
-            className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight leading-none"
+            className="text-4xl md:text-7xl font-black text-foreground font-heading tracking-tight leading-none uppercase"
           >
-            Career <span className="text-ctp-peach italic">Log</span>
+            {recruiterMode ? (
+              "Experience & Education"
+            ) : (
+              <>
+                Career <span className="text-ctp-peach italic">Log</span>
+              </>
+            )}
           </h2>
 
-          {/* Animated progress bar */}
-          <m.div
-            className="h-px bg-ctp-peach/20 w-full max-w-xs relative"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{ transformOrigin: "left" }}
-          >
-            <m.div
-              className="absolute left-0 top-0 h-full bg-ctp-peach/60"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
-              style={{ transformOrigin: "left", width: "40%" }}
-            />
-          </m.div>
+          {!recruiterMode && (
+            <>
+              {/* Animated progress bar */}
+              <m.div
+                className="h-px bg-ctp-peach/20 w-full max-w-xs relative"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                style={{ transformOrigin: "left" }}
+              >
+                <m.div
+                  className="absolute left-0 top-0 h-full bg-ctp-peach/60"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}
+                  style={{ transformOrigin: "left", width: "40%" }}
+                />
+              </m.div>
 
-          <p className="text-xs font-mono text-muted-foreground/40 uppercase tracking-[0.25em]">
-            {allMilestones.length} entries · Mission-critical Intel
-          </p>
+              <p className="text-xs font-mono text-muted-foreground/40 uppercase tracking-[0.25em]">
+                {allMilestones.length} entries · Mission-critical Intel
+              </p>
+            </>
+          )}
         </m.div>
 
         {/* Mission cards — stacked, full width, no zigzag */}

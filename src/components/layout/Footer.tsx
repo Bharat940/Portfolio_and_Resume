@@ -25,6 +25,7 @@ function MagneticSocial({
   hoverBorder: string;
   children: React.ReactNode;
 }) {
+  const { recruiterMode } = useTerminal();
   const ref = useRef<HTMLAnchorElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -55,7 +56,11 @@ function MagneticSocial({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       whileTap={{ scale: 0.92 }}
-      className={`group relative w-11 h-11 rounded-[14px] bg-ctp-surface0 border border-border/40 flex items-center justify-center transition-all duration-300 shadow-sm ${hoverBg} ${hoverBorder} hover:scale-110 hover:shadow-lg cursor-pointer`}
+      className={`group relative w-11 h-11 rounded-[14px] border flex items-center justify-center transition-all duration-300 shadow-sm hover:scale-110 hover:shadow-lg cursor-pointer ${
+        recruiterMode
+          ? "bg-zinc-50 border-zinc-200 text-foreground hover:border-primary/50"
+          : `bg-ctp-surface0 border-border/40 ${hoverBg} ${hoverBorder}`
+      }`}
     >
       {children}
     </m.a>
@@ -186,10 +191,21 @@ const NAV_LINKS = [
   { href: "/about", label: "About", accent: "bg-ctp-green" },
   { href: "/projects", label: "Projects", accent: "bg-ctp-peach" },
   { href: "/blog", label: "Blog", accent: "bg-ctp-pink" },
+  { href: "/stats", label: "System Stats", accent: "bg-ctp-mauve" },
 ];
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const { recruiterMode } = useTerminal();
+  const links = recruiterMode
+    ? [
+        { href: "/#home", label: "Summary", accent: "bg-ctp-blue" },
+        { href: "/#experience", label: "Experience", accent: "bg-ctp-green" },
+        { href: "/#projects", label: "Projects", accent: "bg-ctp-peach" },
+        { href: "/#skills", label: "Skills", accent: "bg-ctp-pink" },
+        { href: "/#contact", label: "Contact", accent: "bg-ctp-mauve" },
+      ]
+    : NAV_LINKS;
 
   return (
     <footer
@@ -202,7 +218,7 @@ export function Footer() {
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "radial-gradient(circle, #cba6f7 1px, transparent 1px)",
+              "radial-gradient(circle, #cba6f7 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -236,12 +252,12 @@ export function Footer() {
               </div>
             </div>
 
-            <p className="font-mono text-xs text-muted-foreground leading-relaxed max-w-xs">
+            <p className={`text-xs text-muted-foreground leading-relaxed max-w-xs ${recruiterMode ? 'font-sans' : 'font-mono'}`}>
               Engineering high-performance distributed systems and beautiful web
               experiences. B.Tech IT @ UIT RGPV.
             </p>
 
-            <TerminalCTA />
+            {!recruiterMode && <TerminalCTA />}
           </div>
 
           {/* Nav column */}
@@ -250,7 +266,7 @@ export function Footer() {
               Navigation
             </p>
             <nav className="flex flex-col gap-3">
-              {NAV_LINKS.map((link) => (
+              {links.map((link) => (
                 <FooterLink key={link.href} {...link} />
               ))}
             </nav>
@@ -269,7 +285,11 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-lavender/10"
                 hoverBorder="hover:border-ctp-lavender/40"
               >
-                <PixelGitHub className="w-5 h-5 text-muted-foreground group-hover:text-ctp-lavender transition-colors" />
+                <PixelGitHub className={`w-5 h-5 transition-colors ${
+                  recruiterMode
+                    ? "text-zinc-600 group-hover:text-primary"
+                    : "text-muted-foreground group-hover:text-ctp-lavender"
+                }`} />
               </MagneticSocial>
 
               <MagneticSocial
@@ -278,7 +298,11 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-sky/10"
                 hoverBorder="hover:border-ctp-sky/40"
               >
-                <PixelX className="w-4 h-4 text-muted-foreground group-hover:text-ctp-sky transition-colors" />
+                <PixelX className={`w-4 h-4 transition-colors ${
+                  recruiterMode
+                    ? "text-zinc-600 group-hover:text-primary"
+                    : "text-muted-foreground group-hover:text-ctp-sky"
+                }`} />
               </MagneticSocial>
 
               <MagneticSocial
@@ -287,7 +311,11 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-blue/10"
                 hoverBorder="hover:border-ctp-blue/40"
               >
-                <PixelLinkedIn className="w-5 h-5 text-muted-foreground group-hover:text-ctp-blue transition-colors" />
+                <PixelLinkedIn className={`w-5 h-5 transition-colors ${
+                  recruiterMode
+                    ? "text-zinc-600 group-hover:text-primary"
+                    : "text-muted-foreground group-hover:text-ctp-blue"
+                }`} />
               </MagneticSocial>
             </div>
 

@@ -5,6 +5,7 @@ import { useTerminal } from "@/context/TerminalContext";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useWindowManager } from "@/context/WindowManagerContext";
+import { trackMetric, getAnalytics } from "@/lib/actions/analytics";
 
 import { MatrixRain } from "./MatrixRain";
 import { TerminalFooter } from "./TerminalFooter";
@@ -84,6 +85,7 @@ export function TerminalOverlay() {
     },
   });
 
+  const [isExecuting, setIsExecuting] = useState(false);
   const isLoading = status === "submitted" || status === "streaming";
   const lastAiMessage = messages.filter((m) => m.role === "assistant").pop();
 
@@ -93,6 +95,13 @@ export function TerminalOverlay() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [history, lastAiMessage, isLoading]);
+
+  // Refocus input once loading/executing completes
+  useEffect(() => {
+    if (!isLoading && !isExecuting) {
+      setTimeout(() => inputRef.current?.focus(), 10);
+    }
+  }, [isLoading, isExecuting]);
 
   // Focus input on mount and whenever the window might have been clicked
   useEffect(() => {
@@ -136,8 +145,14 @@ export function TerminalOverlay() {
     ]);
     setInput("");
 
+    // Track command execution metric
+    trackMetric("terminal_commands");
+
     const parts = trimmedCmd.split(" ");
-    const command = parts[0].toLowerCase();
+    let command = parts[0].toLowerCase();
+    if (command.startsWith("/") && command.length > 1) {
+      command = command.slice(1);
+    }
     const args = parts.slice(1);
 
     interface FileSystemNode {
@@ -216,6 +231,40 @@ export function TerminalOverlay() {
                 <div>
                   <span className="text-ctp-blue font-bold">matrix</span> -
                   Toggle digital rain
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">stats</span> - Show
+                  real portfolio analytics
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">architecture</span>{" "}
+                  - View system architecture
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">joke</span> - Print
+                  a developer joke
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">easteregg</span> -
+                  List system easter eggs
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">
+                    recommend-project
+                  </span>{" "}
+                  - Suggest custom projects
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">
+                    explain-skill [name]
+                  </span>{" "}
+                  - Explain technical skills
+                </div>
+                <div>
+                  <span className="text-ctp-blue font-bold">
+                    show-experience
+                  </span>{" "}
+                  - Print career timeline
                 </div>
                 <div>
                   <span className="text-ctp-blue font-bold">clear</span> - Clear
@@ -542,6 +591,199 @@ export function TerminalOverlay() {
         }
         break;
 
+      case "joke":
+        const jokes = [
+          "Why do programmers wear glasses? Because they can't C#.",
+          "How many programmers does it take to change a light bulb? None, that's a hardware problem.",
+          "There are 10 types of people in the world: those who understand binary, and those who don't.",
+          "A SQL query goes into a bar, walks up to two tables and asks, 'Can I join you?'",
+          "['hip', 'hip'] (hip hip array!)",
+        ];
+        const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+        setHistory((prev) => [
+          ...prev,
+          { type: "output", content: randomJoke },
+        ]);
+        break;
+
+      case "easteregg":
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            content: `System Easter Eggs:\n------------------\n1. Run the "matrix" command to convert the portfolio theme into a glowing CRT monitor interface.\n2. Press Escape at any time to instantly exit the terminal shell.\n3. Try command "figlet [text]" to render large ASCII titles.\n4. Open the standalone retro arcade center under the /arcade path to play custom web games.`,
+          },
+        ]);
+        break;
+
+      case "stats":
+        setIsExecuting(true);
+        // Show temporary loading indicator in terminal output
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            content: "Retrieving real-time analytics from kernel database...",
+          },
+        ]);
+        try {
+          const stats = await getAnalytics();
+          const pageViews =
+            stats.find((d) => d.metricName === "page_views")?.value || 0;
+          const terminalCommandsCount =
+            stats.find((d) => d.metricName === "terminal_commands")?.value || 0;
+          const blogReads =
+            stats.find((d) => d.metricName === "blog_reads")?.value || 0;
+
+          // Remove the temporary loading message and add the result
+          setHistory((prev) => [
+            ...prev.filter(
+              (entry) =>
+                entry.content !==
+                "Retrieving real-time analytics from kernel database...",
+            ),
+            {
+              type: "output",
+              content: `System Analytics Report:\n-----------------------\nTotal Page Views: ${pageViews}\nCommands Run: ${terminalCommandsCount}\nArticles Read: ${blogReads}\nTo see the full stats dashboard, visit https://bharat-dangi.vercel.app/stats`,
+            },
+          ]);
+        } catch (error) {
+          console.error("Failed to fetch analytics inside terminal:", error);
+          setHistory((prev) => [
+            ...prev.filter(
+              (entry) =>
+                entry.content !==
+                "Retrieving real-time analytics from kernel database...",
+            ),
+            {
+              type: "error",
+              content: "Failed to retrieve real-time system stats.",
+            },
+          ]);
+        } finally {
+          setIsExecuting(false);
+        }
+        break;
+
+      case "recommend-project":
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            content: `I recommend checking out these key projects:\n\n1. NodeWeave: SaaS Automation Platform featuring a distributed job runner.\n   - Stack: Next.js, tRPC, PostgreSQL, Inngest\n   - GitHub: https://github.com/Bharat940/nodeweave\n\n2. Ray Tracer: CPU-based Monte Carlo path tracing engine in native C++.\n   - Stack: C++, OpenMP, CMake\n   - GitHub: https://github.com/Bharat940/Raytracing-Cpp\n\n3. URL Shortener: High-performance click tracker with Redis rate limiting.\n   - Stack: Node.js, Redis, JWT\n   - GitHub: https://github.com/Bharat940/url-shortener-analytics`,
+          },
+        ]);
+        break;
+
+      case "architecture":
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            content:
+              "Retrieving system design specs... Redirecting to /architecture",
+          },
+        ]);
+        setTimeout(() => {
+          window.location.href = "/architecture";
+        }, 1000);
+        break;
+
+      case "explain-skill":
+        const skillArg = args[0]?.toLowerCase();
+        if (!skillArg) {
+          setHistory((prev) => [
+            ...prev,
+            {
+              type: "error",
+              content:
+                "Usage: explain-skill [react|nextjs|typescript|postgresql|trpc|drizzle|cpp|docker]",
+            },
+          ]);
+        } else {
+          // To add custom CLI explanations for new skills added to your portfolio in the future,
+          // simply append the skill name (lowercase) and description to this dictionary:
+          const SKILL_EXPLANATIONS: Record<string, string> = {
+            nextjs:
+              "Next.js: React framework for production. Used for server side rendering, routing, static page generation, and optimized image rendering in this portfolio.",
+            "next.js":
+              "Next.js: React framework for production. Used for server side rendering, routing, static page generation, and optimized image rendering in this portfolio.",
+            react:
+              "React: Declarative component-based UI library. Leveraged to build highly interactive, concurrent client interfaces with optimized render lifecycles.",
+            typescript:
+              "TypeScript: Typed superset of JavaScript. Used project-wide to enforce structural typing, minimize runtime bugs, and provide strict editor autocomplete.",
+            ts: "TypeScript: Typed superset of JavaScript. Used project-wide to enforce structural typing, minimize runtime bugs, and provide strict editor autocomplete.",
+            javascript:
+              "JavaScript: Core runtime of the modern web. Used for client-side interactions, asynchronous state management, and Node.js backend pipelines.",
+            js: "JavaScript: Core runtime of the modern web. Used for client-side interactions, asynchronous state management, and Node.js backend pipelines.",
+            postgresql:
+              "PostgreSQL: Advanced open-source relational database. Used with Neon Serverless Postgres for data persistence, indexing, and vector similarity search.",
+            postgres:
+              "PostgreSQL: Advanced open-source relational database. Used with Neon Serverless Postgres for data persistence, indexing, and vector similarity search.",
+            tailwindcss:
+              "Tailwind CSS: Utility-first CSS framework. Used in combination with Shadcn UI to design modern, high-contrast, and responsive interfaces.",
+            tailwind:
+              "Tailwind CSS: Utility-first CSS framework. Used in combination with Shadcn UI to design modern, high-contrast, and responsive interfaces.",
+            trpc: "tRPC: End-to-end typesafe APIs. Ensures full type safety between backend router and frontend client without schemas or code generation.",
+            drizzle:
+              "Drizzle ORM: Next-generation TypeScript ORM. Used in this project with Neon Serverless Postgres for structured querying and schema management.",
+            "drizzle-orm":
+              "Drizzle ORM: Next-generation TypeScript ORM. Used in this project with Neon Serverless Postgres for structured querying and schema management.",
+            cpp: "C++: Used for low-level systems and graphics programming, including the CPU ray tracer (Monte Carlo path tracing) and math plotter (SDL2 rendering).",
+            "c++":
+              "C++: Used for low-level systems and graphics programming, including the CPU ray tracer (Monte Carlo path tracing) and math plotter (SDL2 rendering).",
+            docker:
+              "Docker: Containerization platform. Used to containerize Node.js and C++ projects, ensuring consistent runtimes across staging and production.",
+            nodejs:
+              "Node.js: JavaScript runtime built on Chrome's V8 engine. Used to power microservices, REST APIs, and backend automation runners.",
+            "node.js":
+              "Node.js: JavaScript runtime built on Chrome's V8 engine. Used to power microservices, REST APIs, and backend automation runners.",
+            node: "Node.js: JavaScript runtime built on Chrome's V8 engine. Used to power microservices, REST APIs, and backend automation runners.",
+            redis:
+              "Redis: In-memory data store. Used in URL shortener projects for high-frequency caching, session management, and rate limiting.",
+            prisma:
+              "Prisma: Modern database toolkit. Used to model schemas, write type-safe queries, and handle database migrations securely.",
+            inngest:
+              "Inngest: Event-driven execution platform. Used in NodeWeave to schedule cron jobs, handle retries, and coordinate complex backend workflows.",
+            betterauth:
+              "BetterAuth: Complete authentication library. Used for secure user registration, session tokens, and comments authentication in the blogging system.",
+            rag: "RAG (Retrieval-Augmented Generation): AI framework that combines search engines with LLMs. Used in this terminal shell's 'ask' command to inject relevant developer knowledge documents into Gemini's context window.",
+            mcp: "Model Context Protocol (MCP): Open standard for AI agents to access data sources. Used to connect LLMs with custom system tools and filesystem databases.",
+            dsa: "DSA (Data Structures & Algorithms): Core problem-solving patterns. Used to optimize computational bottlenecks, memory usage, and execution efficiency across all systems.",
+          };
+
+          const explanation = SKILL_EXPLANATIONS[skillArg];
+          if (explanation) {
+            setHistory((prev) => [
+              ...prev,
+              { type: "output", content: explanation },
+            ]);
+          } else {
+            // Dynamic fallback: Query the AI database directly!
+            setHistory((prev) => [
+              ...prev,
+              {
+                type: "output",
+                content: `[AI Query] Analyzing database for "${args[0]}"...`,
+              },
+            ]);
+            sendMessage({
+              text: `Explain my experience and projects using ${args[0]} in a brief, professional terminal output format.`,
+            });
+          }
+        }
+        break;
+
+      case "show-experience":
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: "output",
+            content: `Professional Experience:\n---------------------\n• Full Stack Intern @ SoundSpire (Aug 2025 - Nov 2025)\n  - Built features for the Artist Hub onboarding platform.\n  - Integrated third-party analytical APIs (Soundcharts).\n  - Leveraged Next.js Server Actions and Node.js backend pipelines.\n\n• Web Developer @ E-Cell RGPV (2024 - Present)\n  - Lead frontend developer for entrepreneurial events and registration systems.`,
+          },
+        ]);
+        break;
+
       default:
         setHistory((prev) => [
           ...prev,
@@ -571,13 +813,15 @@ export function TerminalOverlay() {
         onClick={() => inputRef.current?.focus()}
       >
         <TerminalOutput history={history} status={status} messages={messages} />
-        <TerminalInput
-          ref={inputRef}
-          value={input}
-          onChange={setInput}
-          onSubmit={handleCommand}
-          currentDir={currentDir}
-        />
+        {!(isExecuting || isLoading) && (
+          <TerminalInput
+            ref={inputRef}
+            value={input}
+            onChange={setInput}
+            onSubmit={handleCommand}
+            currentDir={currentDir}
+          />
+        )}
       </div>
 
       <TerminalFooter inputLength={input.length} />

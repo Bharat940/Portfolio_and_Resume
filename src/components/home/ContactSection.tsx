@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { PixelTerminal } from "@/components/icons/PixelTerminal";
 import { PixelFileText } from "@/components/icons/PixelFileText";
 import { PixelBird } from "@/components/icons/PixelBird";
+import { useTerminal } from "@/context/TerminalContext";
 
 const contactSchema = z.object({
   name: z
@@ -30,6 +31,7 @@ const contactSchema = z.object({
 });
 
 export function ContactSection() {
+  const { recruiterMode } = useTerminal();
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<
     "idle" | "submitting" | "succeeded" | "error"
@@ -151,8 +153,14 @@ export function ContactSection() {
             </p>
 
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-4 p-4 bg-card border border-border/50 rounded-2xl group transition-all hover:border-ctp-lavender/50 max-w-sm">
-                <div className="p-3 bg-ctp-surface0 rounded-xl text-ctp-lavender">
+              <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
+                recruiterMode
+                  ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
+                  : "bg-card border-border/50 hover:border-ctp-lavender/50"
+              }`}>
+                <div className={`p-3 rounded-xl ${
+                  recruiterMode ? "bg-primary/10 text-primary" : "bg-ctp-surface0 text-ctp-lavender"
+                }`}>
                   <Mail className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -163,7 +171,9 @@ export function ContactSection() {
                 </div>
                 <button
                   onClick={copyEmail}
-                  className="p-2 hover:bg-ctp-surface1 rounded-lg transition-colors text-muted-foreground hover:text-foreground cursor-pointer"
+                  className={`p-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground cursor-pointer ${
+                    recruiterMode ? "hover:bg-zinc-200" : "hover:bg-ctp-surface1"
+                  }`}
                 >
                   {copied ? (
                     <Check className="w-5 h-5 text-ctp-green" />
@@ -173,8 +183,14 @@ export function ContactSection() {
                 </button>
               </div>
 
-              <div className="flex items-center gap-4 p-4 bg-card border border-border/50 rounded-2xl group transition-all hover:border-ctp-sky/50 max-w-sm">
-                <div className="p-3 bg-ctp-surface0 rounded-xl text-ctp-sky">
+              <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
+                recruiterMode
+                  ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
+                  : "bg-card border-border/50 hover:border-ctp-sky/50"
+              }`}>
+                <div className={`p-3 rounded-xl ${
+                  recruiterMode ? "bg-sky-50 text-sky-600" : "bg-ctp-surface0 text-ctp-sky"
+                }`}>
                   <MessageSquare className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -218,7 +234,11 @@ export function ContactSection() {
                     name="name"
                     required
                     placeholder="Your Name"
-                    className={`w-full bg-ctp-surface0 border ${errors.name ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
+                    className={`w-full border ${errors.name ? "border-ctp-red" : "border-border/50"} outline-none p-4 rounded-xl text-sm transition-all ${
+                      recruiterMode
+                        ? "bg-card text-foreground focus:border-primary focus:ring-1 focus:ring-primary/30"
+                        : "bg-ctp-surface0 text-ctp-text focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30"
+                    }`}
                   />
                   {errors.name && (
                     <p className="text-[10px] text-ctp-red font-mono pl-1">
@@ -242,7 +262,11 @@ export function ContactSection() {
                     name="email"
                     required
                     placeholder="name@company.com"
-                    className={`w-full bg-ctp-surface0 border ${errors.email ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all`}
+                    className={`w-full border ${errors.email ? "border-ctp-red" : "border-border/50"} outline-none p-4 rounded-xl text-sm transition-all ${
+                      recruiterMode
+                        ? "bg-card text-foreground focus:border-primary focus:ring-1 focus:ring-primary/30"
+                        : "bg-ctp-surface0 text-ctp-text focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30"
+                    }`}
                   />
                   {errors.email && (
                     <p className="text-[10px] text-ctp-red font-mono pl-1">
@@ -268,7 +292,11 @@ export function ContactSection() {
                   name="message"
                   required
                   placeholder="Transmission details..."
-                  className={`w-full bg-ctp-surface0 border ${errors.message ? "border-ctp-red" : "border-border/50"} focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30 outline-none p-4 rounded-xl font-mono text-sm transition-all resize-none`}
+                  className={`w-full border ${errors.message ? "border-ctp-red" : "border-border/50"} outline-none p-4 rounded-xl text-sm transition-all resize-none ${
+                    recruiterMode
+                      ? "bg-card text-foreground focus:border-primary focus:ring-1 focus:ring-primary/30"
+                      : "bg-ctp-surface0 text-ctp-text focus:border-ctp-lavender focus:ring-1 focus:ring-ctp-lavender/30"
+                  }`}
                 />
                 {errors.message && (
                   <p className="text-[10px] text-ctp-red font-mono pl-1">
@@ -304,14 +332,22 @@ export function ContactSection() {
                   )}
                 </span>
                 {status !== "submitting" && (
-                  <div className="absolute inset-0 bg-linear-to-r from-ctp-lavender to-ctp-sky opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${
+                    recruiterMode
+                      ? "bg-primary/10"
+                      : "bg-linear-to-r from-ctp-lavender to-ctp-sky"
+                  }`} />
                 )}
               </Button>
             </form>
 
-            {/* Decorative Corner */}
-            <div className="absolute -top-3 -right-3 w-12 h-12 border-t-4 border-r-4 border-ctp-lavender rounded-tr-2xl" />
-            <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-4 border-l-4 border-ctp-lavender rounded-bl-2xl" />
+            {/* Decorative Corner - hidden in recruiterMode */}
+            {!recruiterMode && (
+              <>
+                <div className="absolute -top-3 -right-3 w-12 h-12 border-t-4 border-r-4 border-ctp-lavender rounded-tr-2xl" />
+                <div className="absolute -bottom-3 -left-3 w-12 h-12 border-b-4 border-l-4 border-ctp-lavender rounded-bl-2xl" />
+              </>
+            )}
           </m.div>
         </div>
       </div>

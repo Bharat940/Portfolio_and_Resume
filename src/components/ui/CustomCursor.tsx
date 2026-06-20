@@ -718,9 +718,11 @@ export function CustomCursor() {
     const t = setTimeout(attachHover, 400);
 
     return () => {
-      window.removeEventListener("mousemove", move);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", move);
       document.removeEventListener("mouseleave", hide);
       document.removeEventListener("mouseenter", show);
+      document.documentElement.style.removeProperty("cursor");
       clearTimeout(t);
     };
   }, [mouseX, mouseY, setIsHovering, setTemporaryType]);

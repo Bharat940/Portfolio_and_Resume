@@ -233,6 +233,114 @@ export function ProjectPreviewModal({
                     <ProjectReadme url={project.readmeUrl} />
                   </div>
                 )}
+
+                {/* Case Study Section */}
+                {project.caseStudy && (
+                  <div className="pt-8 md:pt-12 border-t border-border/30 space-y-8 font-mono">
+                    <div className="flex items-center gap-3">
+                      <h3 className="font-heading font-black text-xl md:text-2xl text-ctp-mauve uppercase italic">
+                        Engineering Case Study
+                      </h3>
+                      <span className="text-[9px] uppercase tracking-widest bg-ctp-mauve/10 text-ctp-mauve border border-ctp-mauve/30 px-2 py-0.5 rounded">
+                        Deep Dive
+                      </span>
+                    </div>
+
+                    {/* Challenge and Approach */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-5 border border-ctp-surface0 rounded-2xl bg-ctp-base/40 space-y-2">
+                        <span className="text-xs font-bold text-ctp-sky uppercase tracking-wider block">
+                          [X] The Challenge
+                        </span>
+                        <p className="text-xs md:text-sm text-foreground/80 leading-relaxed">
+                          {project.caseStudy.challenge}
+                        </p>
+                      </div>
+                      <div className="p-5 border border-ctp-surface0 rounded-2xl bg-ctp-base/40 space-y-2">
+                        <span className="text-xs font-bold text-ctp-pink uppercase tracking-wider block">
+                          [!] The Approach
+                        </span>
+                        <p className="text-xs md:text-sm text-foreground/80 leading-relaxed">
+                          {project.caseStudy.approach}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Incident Report / Debugging post-mortem */}
+                    <div className="p-6 border border-ctp-red/30 rounded-2xl bg-ctp-red/5 space-y-4">
+                      <div className="flex items-center gap-2 text-ctp-red border-b border-ctp-red/20 pb-2">
+                        <span className="animate-pulse">⚠️</span>
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          Diagnostic Post-Mortem
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs md:text-sm">
+                        <div className="space-y-1">
+                          <span className="font-bold text-ctp-yellow uppercase text-[10px] tracking-wider block">
+                            What Broke
+                          </span>
+                          <p className="text-foreground/85 leading-relaxed">
+                            {project.caseStudy.whatBroke}
+                          </p>
+                        </div>
+                        <div className="space-y-1 border-t md:border-t-0 md:border-l border-ctp-red/10 pt-3 md:pt-0 md:pl-6">
+                          <span className="font-bold text-ctp-green uppercase text-[10px] tracking-wider block">
+                            How Fixed
+                          </span>
+                          <p className="text-foreground/85 leading-relaxed">
+                            {project.caseStudy.howFixed}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Outcome */}
+                    <div className="p-5 border border-ctp-teal/20 rounded-2xl bg-ctp-base/40 space-y-2">
+                      <span className="text-xs font-bold text-ctp-teal uppercase tracking-wider block">
+                        [*] Engineering Outcome
+                      </span>
+                      <p className="text-xs md:text-sm text-foreground/85 leading-relaxed">
+                        {project.caseStudy.outcome}
+                      </p>
+                    </div>
+
+                    {/* Tech Decisions Table */}
+                    <div className="space-y-3">
+                      <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest block pl-2 border-l-2 border-ctp-mauve">
+                        Architectural Choices
+                      </span>
+                      <div className="overflow-x-auto border border-ctp-surface0 rounded-2xl bg-ctp-base/60">
+                        <table className="w-full text-left text-xs border-collapse">
+                          <thead>
+                            <tr className="bg-ctp-mantle/70 text-ctp-mauve border-b border-ctp-surface0">
+                              <th className="p-3 font-bold uppercase tracking-wider w-1/3">
+                                Decision
+                              </th>
+                              <th className="p-3 font-bold uppercase tracking-wider">
+                                Rationale
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-ctp-surface0/60 text-ctp-subtext0">
+                            {project.caseStudy.techDecisions.map(
+                              (decision, idx) => (
+                                <tr
+                                  key={idx}
+                                  className="hover:bg-ctp-surface0/20 transition-colors"
+                                >
+                                  <td className="p-3 font-bold text-ctp-text">
+                                    {decision.decision}
+                                  </td>
+                                  <td className="p-3">{decision.why}</td>
+                                </tr>
+                              ),
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-6">

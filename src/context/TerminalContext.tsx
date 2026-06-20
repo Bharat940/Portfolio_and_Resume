@@ -1,6 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { useWindowManager } from "./WindowManagerContext";
 
 interface TerminalContextType {
   isOpen: boolean;
@@ -9,6 +17,8 @@ interface TerminalContextType {
   toggleTerminal: () => void;
   matrixMode: boolean;
   toggleMatrixMode: () => void;
+  recruiterMode: boolean;
+  toggleRecruiterMode: () => void;
 }
 
 const TerminalContext = createContext<TerminalContextType | undefined>(
@@ -16,37 +26,100 @@ const TerminalContext = createContext<TerminalContextType | undefined>(
 );
 
 export function TerminalProvider({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const { windows, openWindow, closeWindow } = useWindowManager();
   const [matrixMode, setMatrixMode] = useState(false);
+  const [recruiterMode, setRecruiterMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Derive isOpen from window manager windows list
+  const isOpen = useMemo(() => {
+    return windows.some((w) => w.type === "terminal");
+  }, [windows]);
 
   // Handle mount-only initialization
   useEffect(() => {
-    const saved = localStorage.getItem("matrix-mode-active") === "true";
-    if (saved) {
-      React.startTransition(() => {
-        setMatrixMode(true);
-      });
+    const savedMatrix = localStorage.getItem("matrix-mode-active") === "true";
+    if (savedMatrix) {
+      setTimeout(() => setMatrixMode(true), 0);
     }
+
+    const savedRecruiter =
+      localStorage.getItem("recruiter-mode-active") === "true";
+    if (savedRecruiter) {
+      setTimeout(() => setRecruiterMode(true), 0);
+    }
+    setTimeout(() => setMounted(true), 0);
   }, []);
 
   // Save to localStorage and handle class toggle
   useEffect(() => {
+    if (!mounted) return;
     localStorage.setItem("matrix-mode-active", String(matrixMode));
     if (matrixMode) {
       document.documentElement.classList.add("matrix-mode");
     } else {
       document.documentElement.classList.remove("matrix-mode");
     }
-  }, [matrixMode]);
+  }, [matrixMode, mounted]);
 
-  const openTerminal = () => setIsOpen(true);
-  const closeTerminal = () => setIsOpen(false);
-  const toggleTerminal = () => setIsOpen((prev) => !prev);
-  const toggleMatrixMode = () => setMatrixMode((prev) => !prev);
+  useEffect(() => {
+    if (!mounted) return;
+    localStorage.setItem("recruiter-mode-active", String(recruiterMode));
+    if (recruiterMode) {
+      document.documentElement.classList.add("recruiter-mode");
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.remove("recruiter-mode");
+      document.documentElement.classList.add("dark");
+    }
+  }, [recruiterMode, mounted]);
+
+  const openTerminal = useCallback(() => {
+    if (!recruiterMode) {
+      openWindow("terminal", "Terminal (WSL: Ubuntu)");
+    }
+  }, [recruiterMode, openWindow]);
+
+  const closeTerminal = useCallback(() => {
+    const terminalWindow = windows.find((w) => w.type === "terminal");
+    if (terminalWindow) {
+      closeWindow(terminalWindow.id);
+    }
+  }, [windows, closeWindow]);
+
+  const toggleTerminal = useCallback(() => {
+    if (recruiterMode) return;
+    const terminalWindow = windows.find((w) => w.type === "terminal");
+    if (terminalWindow) {
+      closeWindow(terminalWindow.id);
+    } else {
+      openWindow("terminal", "Terminal (WSL: Ubuntu)");
+    }
+  }, [recruiterMode, windows, openWindow, closeWindow]);
+
+  const toggleMatrixMode = useCallback(
+    () => setMatrixMode((prev) => !prev),
+    [],
+  );
+
+  const toggleRecruiterMode = useCallback(() => {
+    setRecruiterMode((prev) => !prev);
+  }, []);
+
+  // Sync recruiter mode with terminal closure to ensure no terminal remains open
+  useEffect(() => {
+    if (recruiterMode) {
+      const terminalWindow = windows.find((w) => w.type === "terminal");
+      if (terminalWindow) {
+        closeWindow(terminalWindow.id);
+      }
+    }
+  }, [recruiterMode, windows, closeWindow]);
 
   // Keyboard shortcut: Cmd+K or Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (recruiterMode) return;
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         toggleTerminal();
@@ -58,7 +131,7 @@ export function TerminalProvider({ children }: { children: React.ReactNode }) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
+  }, [isOpen, recruiterMode, toggleTerminal, closeTerminal]);
 
   return (
     <TerminalContext.Provider
@@ -69,6 +142,8 @@ export function TerminalProvider({ children }: { children: React.ReactNode }) {
         toggleTerminal,
         matrixMode,
         toggleMatrixMode,
+        recruiterMode,
+        toggleRecruiterMode,
       }}
     >
       {children}

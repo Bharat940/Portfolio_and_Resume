@@ -38,8 +38,10 @@ export const MOCK_FILESYSTEM: Record<string, string | Record<string, string>> =
         `# ${p.title}\n${p.description}\n\nStack: ${p.tags.join(", ")}\nGitHub: ${p.github || "N/A"}\nLink: ${p.link || "N/A"}`,
       ]),
     ),
+    architecture:
+      "System Architecture documentation: view details at /architecture.\nTo open the system design specs directly, run: architecture",
     "readme.md":
-      'Welcome to my interactive CLI! Try commands like "neofetch" or "cat experience".\nYou can also talk to my AI assistant using "ask [question]".',
+      'Welcome to my interactive CLI! Try commands like "neofetch", "stats", "recommend-project", "explain-skill nextjs", "show-experience", "architecture", "joke", or "easteregg".\nYou can also talk to my AI assistant using "ask [question]".',
   };
 
 export const ARCADE_GAMES = [

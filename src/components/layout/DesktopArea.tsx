@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { m, AnimatePresence } from "motion/react";
 import { useWindowManager } from "@/context/WindowManagerContext";
-import { useTerminal } from "@/context/TerminalContext";
 import { RetroWindow } from "@/components/ui/RetroWindow";
 import dynamic from "next/dynamic";
 
@@ -44,15 +42,7 @@ const MemoryMatch = dynamic(
 );
 
 export function DesktopArea() {
-  const { windows, openWindow, focusWindow } = useWindowManager();
-  const { isOpen } = useTerminal();
-
-  // Sync TerminalContext with WindowManager
-  useEffect(() => {
-    if (isOpen) {
-      openWindow("terminal", "Terminal (WSL: Ubuntu)");
-    }
-  }, [isOpen, openWindow]);
+  const { windows, focusWindow } = useWindowManager();
 
   const anyMaximized = windows.some((win) => win.isMaximized);
 

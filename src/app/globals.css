@@ -4,6 +4,28 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Smooth theme transitions */
+html,
+body,
+main,
+section,
+header,
+nav,
+footer,
+.bg-card,
+.border,
+p,
+h1,
+h2,
+h3,
+span,
+a,
+button {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -164,6 +186,62 @@
   --section-6: #181a25;
 }
 
+/* Recruiter Mode Light Notion-Style Theme */
+html.recruiter-mode {
+  --background: #fcfcfc;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #4b5563;
+  --accent: #6d28d9;
+  --accent-foreground: #ffffff;
+  --border: #d1d5db;
+  --input: #d1d5db;
+  --ring: #6d28d9;
+
+  --font-heading: var(--font-sans);
+  --font-mono: var(--font-sans);
+
+  --section-1: #fcfcfc;
+  --section-2: #ffffff;
+  --section-3: #fcfcfc;
+  --section-4: #ffffff;
+  --section-5: #fcfcfc;
+  --section-6: #ffffff;
+
+  /* Catppuccin color overrides for light mode theme mapping */
+  --color-ctp-base: #fcfcfc;
+  --color-ctp-mantle: #ffffff;
+  --color-ctp-crust: #e5e7eb;
+  --color-ctp-surface0: #e5e7eb;
+  --color-ctp-surface1: #d1d5db;
+  --color-ctp-surface2: #9ca3af;
+  --color-ctp-text: #111827;
+  --color-ctp-subtext1: #1f2937;
+  --color-ctp-subtext0: #4b5563;
+
+  /* High contrast accents for light background */
+  --color-ctp-mauve: #6d28d9;
+  --color-ctp-blue: #1d4ed8;
+  --color-ctp-peach: #b45309;
+  --color-ctp-sky: #0369a1;
+  --color-ctp-green: #15803d;
+  --color-ctp-pink: #be185d;
+  --color-ctp-lavender: #4338ca;
+}
+
+html.recruiter-mode,
+html.recruiter-mode * {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
 /* Matrix Mode Overrides */
 :root.matrix-mode,
 html.matrix-mode,
@@ -318,10 +396,10 @@ html.matrix-mode,
    Outside any layer to override browser UA styles on buttons/links
  */
 @media (pointer: fine) {
-  html,
-  html *,
-  html *::before,
-  html *::after {
+  html:not(.recruiter-mode),
+  html:not(.recruiter-mode) *,
+  html:not(.recruiter-mode) *::before,
+  html:not(.recruiter-mode) *::after {
     cursor: none !important;
   }
 }
@@ -417,6 +495,14 @@ html.matrix-mode,
     @apply bg-transparent border-none p-0 text-ctp-text;
   }
 
+  & .code-block code {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    color: inherit !important;
+  }
+
   & blockquote {
     @apply pl-6 border-l-4 border-ctp-mauve/30 italic text-muted-foreground bg-ctp-mauve/5 py-4 pr-6 rounded-r-2xl my-8;
   }
@@ -441,18 +527,7 @@ html.matrix-mode,
     @apply bg-ctp-mauve/5 text-foreground transition-colors;
   }
 
-  & ul {
-    @apply list-none space-y-2 my-6;
-  }
 
-  & li {
-    @apply relative pl-6 text-muted-foreground;
-  }
-
-  & li::before {
-    content: "→";
-    @apply absolute left-0 text-ctp-mauve font-mono opacity-50;
-  }
 
   /* GFM Task Lists */
   & li.task-list-item {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ProjectCard } from "@/components/home/ProjectCard";
 import { ProjectPreviewModal } from "@/components/home/ProjectPreviewModal";
 import { projects, Project } from "@/data/portfolio";
+import { trackMetric } from "@/lib/actions/analytics";
 import { m } from "motion/react";
 import {
   QuickNav,
@@ -166,7 +167,10 @@ export function ProjectsContent() {
               >
                 <ProjectCard
                   project={project}
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => {
+                    setSelectedProject(project);
+                    trackMetric(`project_click_${project.id}`);
+                  }}
                 />
               </m.div>
             ))}
@@ -204,7 +208,10 @@ export function ProjectsContent() {
               >
                 <ProjectCard
                   project={project}
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => {
+                    setSelectedProject(project);
+                    trackMetric(`project_click_${project.id}`);
+                  }}
                 />
               </m.div>
             ))}

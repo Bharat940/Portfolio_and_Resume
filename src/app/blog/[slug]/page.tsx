@@ -1,9 +1,17 @@
-import React from "react";
+import React, { ReactElement } from "react";
+import { CodeBlock } from "@/components/ui/CodeBlock";
+import { cn } from "@/lib/utils";
+
+interface CodeElementProps {
+  className?: string;
+  children?: React.ReactNode;
+}
 import { Metadata } from "next";
 import { db } from "@/lib/db";
 import { blogs, comments } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { trackMetric } from "@/lib/actions/analytics";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { QuickNav, MobileBottomNav } from "@/components/layout/QuickNav";
@@ -58,9 +66,12 @@ export async function generateMetadata({
   if (!post) return { title: "Post Not Found" };
 
   return {
-    title: `${post.title} | Bharat Dangi`,
+    title: post.title,
     description:
       post.excerpt || `Read ${post.title} on Bharat Dangi's technical journal.`,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 
@@ -79,6 +90,8 @@ export default async function BlogPostPage({
       where: eq(comments.postSlug, slug),
       orderBy: [asc(comments.createdAt)],
     }),
+    trackMetric("blog_reads"),
+    trackMetric(`blog_read_${slug}`),
   ]);
 
   if (!post || !post.published) {
@@ -127,8 +140,41 @@ export default async function BlogPostPage({
     },
   ];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description:
+      post.excerpt || `Read ${post.title} on Bharat Dangi's technical journal.`,
+    image: post.coverImage || "https://bharat-dangi.vercel.app/logo.png",
+    datePublished: post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    author: {
+      "@type": "Person",
+      name: "Bharat Dangi",
+      url: "https://bharat-dangi.vercel.app",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Bharat Dangi Portfolio",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://bharat-dangi.vercel.app/logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://bharat-dangi.vercel.app/blog/${slug}`,
+    },
+  };
+
   return (
     <main className="min-h-screen bg-background">
+      <script
+        id="blog-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <QuickNav items={navItems} />
       <MobileBottomNav items={navItems} />
 
@@ -204,6 +250,35 @@ export default async function BlogPostPage({
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
+              pre: ({ children }) => {
+                const codeEl = (children as ReactElement<CodeElementProps>)
+                  ?.props;
+                const className = codeEl?.className || "";
+                const match = /language-(\w+)/.exec(className);
+                const language = match ? match[1] : undefined;
+                const codeContent = String(codeEl?.children ?? "").replace(
+                  /\n$/,
+                  "",
+                );
+
+                return (
+                  <CodeBlock
+                    language={language || "text"}
+                    value={codeContent}
+                  />
+                );
+              },
+              code: ({ className, children, ...props }) => (
+                <code
+                  className={cn(
+                    "bg-ctp-surface0 px-1.5 py-0.5 rounded text-ctp-mauve border border-border/20 font-mono text-xs",
+                    className,
+                  )}
+                  {...props}
+                >
+                  {children}
+                </code>
+              ),
               h2: ({ children }) => {
                 const flatten = (children: React.ReactNode): string => {
                   if (Array.isArray(children)) {

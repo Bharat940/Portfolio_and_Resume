@@ -1,6 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { ReactElement } from "react";
+import { CodeBlock } from "@/components/ui/CodeBlock";
+import { cn } from "@/lib/utils";
+
+interface CodeElementProps {
+  className?: string;
+  children?: React.ReactNode;
+}
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -370,6 +377,35 @@ export function BlogEditor({ initialData }: BlogEditorProps) {
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
+              pre: ({ children }) => {
+                const codeEl = (children as ReactElement<CodeElementProps>)
+                  ?.props;
+                const className = codeEl?.className || "";
+                const match = /language-(\w+)/.exec(className);
+                const language = match ? match[1] : undefined;
+                const codeContent = String(codeEl?.children ?? "").replace(
+                  /\n$/,
+                  "",
+                );
+
+                return (
+                  <CodeBlock
+                    language={language || "text"}
+                    value={codeContent}
+                  />
+                );
+              },
+              code: ({ className, children, ...props }) => (
+                <code
+                  className={cn(
+                    "bg-ctp-surface0 px-1.5 py-0.5 rounded text-ctp-mauve border border-border/20 font-mono text-xs",
+                    className,
+                  )}
+                  {...props}
+                >
+                  {children}
+                </code>
+              ),
               h2: ({ children }) => {
                 const flatten = (children: React.ReactNode): string => {
                   if (Array.isArray(children)) {
