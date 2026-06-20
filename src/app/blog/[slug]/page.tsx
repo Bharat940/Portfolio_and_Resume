@@ -36,6 +36,9 @@ import {
   Database,
 } from "lucide-react";
 
+import { PixelX } from "@/components/icons/PixelX";
+import { PixelLinkedIn } from "@/components/icons/PixelLinkedIn";
+
 import { IconMap } from "@/types/blog";
 
 const iconMap: IconMap = {
@@ -348,6 +351,33 @@ export default async function BlogPostPage({
             {post.content}
           </ReactMarkdown>
         </article>
+
+        {/* Share Toolbar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-16 p-6 rounded-2xl bg-ctp-mantle border border-border/40 font-mono text-xs text-muted-foreground">
+          <span className="text-center sm:text-left">
+            Enjoyed this deep dive? Share it on your networks:
+          </span>
+          <div className="flex items-center gap-3">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://bharat-dangi.vercel.app/blog/${post.slug}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ctp-surface0 hover:bg-ctp-surface1 border border-border/20 text-foreground transition-all hover:scale-105 cursor-pointer"
+            >
+              <PixelX className="w-3.5 h-3.5 text-ctp-sky" />
+              <span>Twitter / X</span>
+            </a>
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://bharat-dangi.vercel.app/blog/${post.slug}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-ctp-surface0 hover:bg-ctp-surface1 border border-border/20 text-foreground transition-all hover:scale-105 cursor-pointer"
+            >
+              <PixelLinkedIn className="w-4 h-4 text-ctp-blue" />
+              <span>LinkedIn</span>
+            </a>
+          </div>
+        </div>
 
         {/* Comment Section */}
         <div id="comments" className="mt-32 pt-16 border-t border-border/50">

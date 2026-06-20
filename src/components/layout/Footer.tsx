@@ -184,28 +184,40 @@ function TerminalCTA() {
   );
 }
 
-// ── Main Footer ───────────────────────────────────────────────────────────────
+import { ObfuscatedEmail } from "@/components/ui/ObfuscatedEmail";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home", accent: "bg-ctp-blue" },
-  { href: "/about", label: "About", accent: "bg-ctp-green" },
-  { href: "/projects", label: "Projects", accent: "bg-ctp-peach" },
-  { href: "/blog", label: "Blog", accent: "bg-ctp-pink" },
-  { href: "/stats", label: "System Stats", accent: "bg-ctp-mauve" },
-];
+// ── Main Footer ───────────────────────────────────────────────────────────────
 
 export function Footer() {
   const year = new Date().getFullYear();
   const { recruiterMode } = useTerminal();
-  const links = recruiterMode
+
+  const coreLinks = recruiterMode
     ? [
         { href: "/#home", label: "Summary", accent: "bg-ctp-blue" },
         { href: "/#experience", label: "Experience", accent: "bg-ctp-green" },
         { href: "/#projects", label: "Projects", accent: "bg-ctp-peach" },
         { href: "/#skills", label: "Skills", accent: "bg-ctp-pink" },
-        { href: "/#contact", label: "Contact", accent: "bg-ctp-mauve" },
       ]
-    : NAV_LINKS;
+    : [
+        { href: "/", label: "Home", accent: "bg-ctp-blue" },
+        { href: "/about", label: "About", accent: "bg-ctp-green" },
+        { href: "/projects", label: "Projects", accent: "bg-ctp-peach" },
+        { href: "/blog", label: "Blog", accent: "bg-ctp-pink" },
+      ];
+
+  const diagLinks = recruiterMode
+    ? [
+        { href: "/#contact", label: "Contact", accent: "bg-ctp-mauve" },
+        { href: "/stats", label: "System Stats", accent: "bg-ctp-yellow" },
+        { href: "/architecture", label: "Architecture Specs", accent: "bg-ctp-sky" },
+      ]
+    : [
+        { href: "/stats", label: "System Stats", accent: "bg-ctp-mauve" },
+        { href: "/architecture", label: "Architecture Specs", accent: "bg-ctp-yellow" },
+        { href: "/arcade", label: "Retro Arcade", accent: "bg-ctp-sky" },
+        { href: "/blog?tag=build-log", label: "Engineering Logs", accent: "bg-ctp-lavender" },
+      ];
 
   return (
     <footer
@@ -228,7 +240,7 @@ export function Footer() {
 
       <div className="relative max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         {/* ── Main Row ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-14 md:py-16 border-b border-border/20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-14 md:py-16 border-b border-border/20">
           {/* Brand column */}
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-3">
@@ -266,7 +278,19 @@ export function Footer() {
               Navigation
             </p>
             <nav className="flex flex-col gap-3">
-              {links.map((link) => (
+              {coreLinks.map((link) => (
+                <FooterLink key={link.href} {...link} />
+              ))}
+            </nav>
+          </div>
+
+          {/* Diagnostics column */}
+          <div className="flex flex-col gap-5">
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-ctp-mauve font-bold">
+              System Specs
+            </p>
+            <nav className="flex flex-col gap-3">
+              {diagLinks.map((link) => (
                 <FooterLink key={link.href} {...link} />
               ))}
             </nav>
@@ -323,15 +347,12 @@ export function Footer() {
               <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">
                 Direct Channel
               </p>
-              <a
-                href="mailto:bdangi450@gmail.com"
-                className="font-mono text-xs text-muted-foreground hover:text-ctp-mauve transition-colors group flex items-center gap-1.5"
-              >
-                bdangi450@gmail.com
+              <div className="font-mono text-xs text-muted-foreground hover:text-ctp-mauve transition-colors group flex items-center gap-1.5">
+                <ObfuscatedEmail className="hover:text-ctp-mauve text-muted-foreground transition-colors" />
                 <span className="opacity-0 group-hover:opacity-100 text-ctp-mauve transition-opacity">
                   →
                 </span>
-              </a>
+              </div>
             </div>
           </div>
         </div>
