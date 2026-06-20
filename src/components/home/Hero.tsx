@@ -134,9 +134,6 @@ export function Hero() {
             paddingBottom: "clamp(80px, 10vw, 96px)",
           }}
         >
-          <h1 className="sr-only">
-            Bharat Dangi | Full Stack Software Engineer & Systems Architect
-          </h1>
           {/* Status badge */}
           <m.div
             initial={{ opacity: 0, x: -16 }}
@@ -170,9 +167,9 @@ export function Hero() {
           {/* Title */}
           {recruiterMode ? (
             <div className="flex flex-col gap-2">
-              <div className="font-black tracking-tighter font-sans leading-none text-foreground text-5xl md:text-7xl uppercase">
+              <h1 className="font-black tracking-tighter font-sans leading-none text-foreground text-5xl md:text-7xl uppercase">
                 Bharat Dangi
-              </div>
+              </h1>
               <p className="text-lg md:text-xl font-bold text-primary tracking-wide">
                 Full Stack Developer & Systems Engineer
               </p>
@@ -201,7 +198,7 @@ export function Hero() {
           ) : (
             <div className="flex flex-col gap-0 md:gap-1">
               <div className="overflow-hidden">
-                <m.div
+                <m.h1
                   data-cursor="focus"
                   className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
                   style={{
@@ -217,7 +214,7 @@ export function Hero() {
                   }}
                 >
                   ENGINEERING
-                </m.div>
+                </m.h1>
               </div>
 
               <div className="overflow-hidden">
