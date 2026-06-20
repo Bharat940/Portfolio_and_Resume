@@ -5,6 +5,7 @@ import { m, Variants, useMotionValue, useSpring } from "motion/react";
 import { PixelArrowRight } from "@/components/icons/PixelArrowRight";
 import { useTerminal } from "@/context/TerminalContext";
 import { Briefcase } from "lucide-react";
+import { ObfuscatedEmail } from "@/components/ui/ObfuscatedEmail";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -133,6 +134,9 @@ export function Hero() {
             paddingBottom: "clamp(80px, 10vw, 96px)",
           }}
         >
+          <h1 className="sr-only">
+            Bharat Dangi | Full Stack Software Engineer & Systems Architect
+          </h1>
           {/* Status badge */}
           <m.div
             initial={{ opacity: 0, x: -16 }}
@@ -166,21 +170,16 @@ export function Hero() {
           {/* Title */}
           {recruiterMode ? (
             <div className="flex flex-col gap-2">
-              <h1 className="font-black tracking-tighter font-sans leading-none text-foreground text-5xl md:text-7xl uppercase">
+              <div className="font-black tracking-tighter font-sans leading-none text-foreground text-5xl md:text-7xl uppercase">
                 Bharat Dangi
-              </h1>
+              </div>
               <p className="text-lg md:text-xl font-bold text-primary tracking-wide">
                 Full Stack Developer & Systems Engineer
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1 text-xs md:text-sm text-muted-foreground font-mono">
                 <span>Bhopal, India</span>
                 <span>•</span>
-                <a
-                  href="mailto:bdangi450@gmail.com"
-                  className="hover:text-primary transition-colors"
-                >
-                  bdangi450@gmail.com
-                </a>
+                <ObfuscatedEmail className="hover:text-primary transition-colors" />
                 <span>•</span>
                 <a
                   href="https://linkedin.com/in/bharat-dangi-b186b3248"
@@ -202,7 +201,7 @@ export function Hero() {
           ) : (
             <div className="flex flex-col gap-0 md:gap-1">
               <div className="overflow-hidden">
-                <m.h1
+                <m.div
                   data-cursor="focus"
                   className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
                   style={{
@@ -218,11 +217,11 @@ export function Hero() {
                   }}
                 >
                   ENGINEERING
-                </m.h1>
+                </m.div>
               </div>
 
               <div className="overflow-hidden">
-                <m.h1
+                <m.div
                   data-cursor="focus"
                   className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
                   style={{
@@ -238,11 +237,11 @@ export function Hero() {
                   }}
                 >
                   DIGITAL
-                </m.h1>
+                </m.div>
               </div>
 
               <div className="overflow-hidden">
-                <m.h1
+                <m.div
                   data-cursor="focus"
                   className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
                   style={{
@@ -282,7 +281,7 @@ export function Hero() {
                   >
                     _
                   </m.span>
-                </m.h1>
+                </m.div>
               </div>
             </div>
           )}
@@ -294,7 +293,12 @@ export function Hero() {
           >
             {recruiterMode ? (
               <p className="text-sm sm:text-base md:text-lg text-foreground/85 leading-relaxed font-sans max-w-3xl">
-                Full-stack developer specializing in Next.js, Node.js, PostgreSQL, and AI integration. Experienced in architecting end-to-end SaaS platforms, visual workflow automation (NodeWeave), and low-latency system utilities. Strong focus on backend efficiency, database schema design, secure user authentication, and crafting clean, responsive user interfaces.
+                Full-stack developer specializing in Next.js, Node.js,
+                PostgreSQL, and AI integration. Experienced in architecting
+                end-to-end SaaS platforms, visual workflow automation
+                (NodeWeave), and low-latency system utilities. Strong focus on
+                backend efficiency, database schema design, secure user
+                authentication, and crafting clean, responsive user interfaces.
               </p>
             ) : (
               <>

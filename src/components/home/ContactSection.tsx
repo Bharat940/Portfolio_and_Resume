@@ -10,7 +10,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { PixelTerminal } from "@/components/icons/PixelTerminal";
@@ -39,7 +39,13 @@ export function ContactSection() {
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const email = "bdangi450@gmail.com";
+  const [email, setEmail] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEmail("bdangi" + "450" + "@" + "gmail" + ".com");
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const copyEmail = () => {
     navigator.clipboard.writeText(email);
@@ -153,26 +159,47 @@ export function ContactSection() {
             </p>
 
             <div className="flex flex-col gap-4">
-              <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
-                recruiterMode
-                  ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
-                  : "bg-card border-border/50 hover:border-ctp-lavender/50"
-              }`}>
-                <div className={`p-3 rounded-xl ${
-                  recruiterMode ? "bg-primary/10 text-primary" : "bg-ctp-surface0 text-ctp-lavender"
-                }`}>
+              <div
+                className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
+                  recruiterMode
+                    ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
+                    : "bg-card border-border/50 hover:border-ctp-lavender/50"
+                }`}
+              >
+                <div
+                  className={`p-3 rounded-xl ${
+                    recruiterMode
+                      ? "bg-primary/10 text-primary"
+                      : "bg-ctp-surface0 text-ctp-lavender"
+                  }`}
+                >
                   <Mail className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
                     Email Frequency
                   </p>
-                  <p className="text-sm font-bold truncate">{email}</p>
+                  <p className="text-sm font-bold truncate">
+                    {email ? (
+                      <a
+                        href={`mailto:${email}`}
+                        className="hover:text-primary transition-colors"
+                      >
+                        {email}
+                      </a>
+                    ) : (
+                      <span className="text-muted-foreground">
+                        bdangi450 [at] gmail [dot] com
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <button
                   onClick={copyEmail}
                   className={`p-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground cursor-pointer ${
-                    recruiterMode ? "hover:bg-zinc-200" : "hover:bg-ctp-surface1"
+                    recruiterMode
+                      ? "hover:bg-zinc-200"
+                      : "hover:bg-ctp-surface1"
                   }`}
                 >
                   {copied ? (
@@ -183,14 +210,20 @@ export function ContactSection() {
                 </button>
               </div>
 
-              <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
-                recruiterMode
-                  ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
-                  : "bg-card border-border/50 hover:border-ctp-sky/50"
-              }`}>
-                <div className={`p-3 rounded-xl ${
-                  recruiterMode ? "bg-sky-50 text-sky-600" : "bg-ctp-surface0 text-ctp-sky"
-                }`}>
+              <div
+                className={`flex items-center gap-4 p-4 rounded-2xl border transition-all max-w-sm ${
+                  recruiterMode
+                    ? "bg-zinc-50 border-zinc-200 hover:border-primary/50 shadow-xs"
+                    : "bg-card border-border/50 hover:border-ctp-sky/50"
+                }`}
+              >
+                <div
+                  className={`p-3 rounded-xl ${
+                    recruiterMode
+                      ? "bg-sky-50 text-sky-600"
+                      : "bg-ctp-surface0 text-ctp-sky"
+                  }`}
+                >
                   <MessageSquare className="w-6 h-6" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -332,11 +365,13 @@ export function ContactSection() {
                   )}
                 </span>
                 {status !== "submitting" && (
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${
-                    recruiterMode
-                      ? "bg-primary/10"
-                      : "bg-linear-to-r from-ctp-lavender to-ctp-sky"
-                  }`} />
+                  <div
+                    className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${
+                      recruiterMode
+                        ? "bg-primary/10"
+                        : "bg-linear-to-r from-ctp-lavender to-ctp-sky"
+                    }`}
+                  />
                 )}
               </Button>
             </form>

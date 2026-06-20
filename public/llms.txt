@@ -1,0 +1,20 @@
+# Bharat Dangi - Portfolio Platform
+> An interactive full-stack portfolio platform combining AI search, dynamic blogging, project archives, and real-time developer metrics.
+
+## Key Links
+- [Website](https://bharat-dangi.vercel.app/): Main interactive dual-mode landing page and console shell.
+- [GitHub](https://github.com/Bharat940): Source code repositories and developer profile.
+- [LinkedIn](https://linkedin.com/in/bharat-dangi-b186b3248): Professional experience and network.
+
+## Navigation & Pages
+- [System Architecture](https://bharat-dangi.vercel.app/architecture): Live rendering of system diagrams (Mermaid.js), tech choice tables, caching structures, and database schemas.
+- [Engineering Journal](https://bharat-dangi.vercel.app/blog): Technical articles detailing post-mortems on systems development and distributed systems.
+- [Live Metrics](https://bharat-dangi.vercel.app/stats): Database-tracked visitor views, terminal execution counts, and project interest statistics.
+- [Retro Arcade](https://bharat-dangi.vercel.app/arcade): Hub for retro mini-games including CyberSlither, TerminalInvaders, and MemoryMatch.
+
+## Technology Stack
+- **Framework**: Next.js App Router (React 19).
+- **Database**: Neon Serverless PostgreSQL with `pgvector` index.
+- **ORM**: Drizzle ORM.
+- **Authentication**: Better Auth with email OTP and social provider links.
+- **AI RAG Pipeline**: Google Gemini API text-embeddings and Pro model integrated through Vercel AI SDK.
