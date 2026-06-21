@@ -125,13 +125,20 @@ export function TerminalProvider({ children }: { children: React.ReactNode }) {
         toggleTerminal();
       }
       if (e.key === "Escape" && isOpen) {
-        closeTerminal();
+        const terminalWindow = windows.find((w) => w.type === "terminal");
+        if (terminalWindow) {
+          const maxZ = windows.length > 0 ? Math.max(...windows.map((w) => w.zIndex)) : 0;
+          const isFocused = terminalWindow.zIndex === maxZ;
+          if (isFocused || windows.length === 1) {
+            closeTerminal();
+          }
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, recruiterMode, toggleTerminal, closeTerminal]);
+  }, [isOpen, recruiterMode, toggleTerminal, closeTerminal, windows]);
 
   return (
     <TerminalContext.Provider

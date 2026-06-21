@@ -16,6 +16,7 @@ import { PixelSSD } from "@/components/icons/PixelSSD";
 import { PixelBUS } from "@/components/icons/PixelBUS";
 import { PixelOS } from "@/components/icons/PixelOS";
 import { PixelEXE } from "@/components/icons/PixelEXE";
+import { sfx } from "@/utils/audio";
 
 const CARDS = ["CPU", "GPU", "RAM", "HDD", "SSD", "BUS", "OS", "EXE"];
 
@@ -102,6 +103,7 @@ export function MemoryMatch() {
       setCards((prevCards) =>
         prevCards.map((c) => (c.id === id ? { ...c, flipped: true } : c)),
       );
+      sfx.playFlip();
 
       if (nextFlipped.length === 2) {
         lockedRef.current = true;
@@ -109,6 +111,7 @@ export function MemoryMatch() {
         const [first, second] = nextFlipped;
 
         if (cards[first].val === cards[second].val) {
+          sfx.playMatch();
           setTimeout(() => {
             setCards((prev) => {
               const next = prev.map((c) =>
@@ -116,6 +119,7 @@ export function MemoryMatch() {
               );
               if (next.every((c) => c.matched)) {
                 setGameOver(true);
+                sfx.playVictory();
                 setBestMoves((oldBest) => {
                   const currentMoves = moves + 1;
                   const newBest =
@@ -154,6 +158,7 @@ export function MemoryMatch() {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (isPlaying) {
+          e.stopPropagation();
           setIsPlaying(false);
           setGameOver(false);
         }
@@ -182,7 +187,7 @@ export function MemoryMatch() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full bg-ctp-crust relative overflow-hidden flex flex-col items-center justify-center font-heading select-none p-2 md:p-8 touch-none"
+      className="w-full h-full bg-ctp-crust relative overflow-hidden flex flex-col items-center justify-start font-heading select-none p-3 md:p-4 touch-none"
     >
       <div className="arcade-scanlines" />
 
@@ -207,28 +212,38 @@ export function MemoryMatch() {
         ))}
       </div>
 
-      {/* HUD */}
-      <div className="absolute top-2 right-2 md:top-4 md:right-4 z-30 text-right pointer-events-none flex flex-col gap-1">
-        <div>
-          <div className="text-ctp-subtext0 uppercase tracking-[2px] md:tracking-[3px] text-[6px] md:text-[7px]">
-            BEST EFFICIENCY
-          </div>
-          <div className="text-ctp-mauve font-bold text-[10px] md:text-[14px] tracking-[1px] md:tracking-[2px]">
-            {bestMoves === 0 ? "---" : `${bestMoves} OPS`}
-          </div>
+      {/* Top Header Bar */}
+      <div className="w-full max-w-[min(340px,50dvh)] md:max-w-[min(480px,50dvh)] flex items-center justify-between mb-4 z-20 font-mono select-none px-1">
+        <div className="flex items-center gap-2 min-w-0 pr-2">
+          <PixelCPU color="var(--color-ctp-mauve)" size={20} />
+          <span className="text-ctp-mauve font-bold tracking-[1.5px] md:tracking-[2px] text-[9px] md:text-xs uppercase truncate">
+            Memory Match
+          </span>
         </div>
-        <div>
-          <div className="text-ctp-subtext0 uppercase tracking-[2px] md:tracking-[3px] text-[6px] md:text-[7px]">
-            CURRENT CYCLE
+        <div className="flex items-center gap-4 md:gap-6 text-right shrink-0">
+          <div>
+            <span className="text-muted-foreground text-[6px] md:text-[8px] uppercase tracking-wider block">
+              RECORD
+            </span>
+            <span className="text-ctp-mauve font-bold text-[10px] md:text-xs tracking-wider block">
+              {bestMoves === 0 || bestMoves === Infinity
+                ? "---"
+                : `${bestMoves} OPS`}
+            </span>
           </div>
-          <div className="text-ctp-text font-bold text-[16px] md:text-[22px] tracking-[1px] md:tracking-[2px]">
-            {moves} OPS
+          <div>
+            <span className="text-muted-foreground text-[6px] md:text-[8px] uppercase tracking-wider block">
+              CYCLE
+            </span>
+            <span className="text-ctp-text font-bold text-[10px] md:text-xs tracking-wider block">
+              {moves} OPS
+            </span>
           </div>
         </div>
       </div>
 
       {/* Card Grid - Responsive sizing */}
-      <div className="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-85 md:max-w-2xl max-h-full aspect-square z-10">
+      <div className="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-[min(340px,50dvh)] md:max-w-[min(480px,50dvh)] max-h-full aspect-square z-10 my-auto">
         {cards.map((card) => (
           <div
             key={card.id}

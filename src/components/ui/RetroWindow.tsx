@@ -34,10 +34,14 @@ export function RetroWindow({
   children,
   zIndex,
   isMaximized,
+  type,
 }: RetroWindowProps) {
   const { closeWindow, focusWindow, maximizeWindow } = useWindowManager();
   const { setTemporaryType } = useCursor();
   const { matrixMode } = useTerminal();
+
+  const minW = type === "arcade" ? 400 : 320;
+  const minH = type === "arcade" ? 420 : 300;
 
   const [geometry, setGeometry] = useState({
     width: 800,
@@ -61,14 +65,16 @@ export function RetroWindow({
   useEffect(() => {
     if (typeof window === "undefined") return;
     const timeoutId = setTimeout(() => {
-      const w = Math.min(1000, window.innerWidth * 0.8);
-      const h = Math.min(700, window.innerHeight * 0.7);
+      const initMinW = type === "arcade" ? 480 : 320;
+      const initMinH = type === "arcade" ? 480 : 300;
+      const w = Math.max(initMinW, Math.min(1000, window.innerWidth * 0.8));
+      const h = Math.max(initMinH, Math.min(700, window.innerHeight * 0.7));
       const x = (window.innerWidth - w) / 2;
       const y = (window.innerHeight - h) / 2;
       setGeometry({ width: w, height: h, x, y, isInitialized: true });
     }, 0);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [type]);
 
   // Sync custom cursor with interaction state
   useEffect(() => {
@@ -119,7 +125,7 @@ export function RetroWindow({
 
         if (interaction.includes("e"))
           newWidth = Math.max(
-            320,
+            minW,
             Math.min(
               window.innerWidth - dragStart.winX,
               dragStart.winW + deltaX,
@@ -127,14 +133,14 @@ export function RetroWindow({
           );
         if (interaction.includes("w")) {
           const possibleWidth = dragStart.winW - deltaX;
-          if (possibleWidth >= 320) {
+          if (possibleWidth >= minW) {
             newWidth = possibleWidth;
             newX = Math.max(0, dragStart.winX + deltaX);
           }
         }
         if (interaction.includes("s"))
           newHeight = Math.max(
-            300,
+            minH,
             Math.min(
               window.innerHeight - dragStart.winY,
               dragStart.winH + deltaY,
@@ -142,7 +148,7 @@ export function RetroWindow({
           );
         if (interaction.includes("n")) {
           const possibleHeight = dragStart.winH - deltaY;
-          if (possibleHeight >= 300) {
+          if (possibleHeight >= minH) {
             newHeight = possibleHeight;
             newY = Math.max(0, dragStart.winY + deltaY);
           }
@@ -169,7 +175,7 @@ export function RetroWindow({
       window.removeEventListener("pointermove", handleGlobalMove);
       window.removeEventListener("pointerup", handleGlobalUp);
     };
-  }, [interaction, dragStart]);
+  }, [interaction, dragStart, minW, minH]);
 
   const startInteraction = (mode: InteractionMode, e: React.PointerEvent) => {
     if (isMaximized && mode !== "none") return;

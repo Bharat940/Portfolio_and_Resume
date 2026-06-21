@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { m, AnimatePresence } from "motion/react";
 import { useTerminal } from "@/context/TerminalContext";
+import { PixelTerminal } from "@/components/icons/PixelTerminal";
+import { sfx } from "@/utils/audio";
 
 // ── Grid & sizing ────────────────────────────────────────────────
 const COLS = 9;
@@ -307,6 +309,7 @@ export function TerminalInvaders() {
           y: canvasH - 44,
         });
         lastShotRef.current = f;
+        sfx.playLaser();
       }
 
       // ── Move player bullets ──────────────────────────────────
@@ -323,6 +326,7 @@ export function TerminalInvaders() {
         victorRef.current = true;
         setVictory(true);
         setIsPlaying(false);
+        sfx.playVictory();
         return;
       }
 
@@ -412,6 +416,9 @@ export function TerminalInvaders() {
             });
             setGameOver(true);
             setIsPlaying(false);
+            sfx.playGameOver();
+          } else {
+            sfx.playExplosion();
           }
         }
         return !hit;
@@ -448,6 +455,7 @@ export function TerminalInvaders() {
             });
             const [fill] = SPRITE_COLORS[inv.row];
             spawnExplosion(ix, iy, fill);
+            sfx.playExplosion();
             // Speed up remaining invaders as fewer remain
             const remaining =
               invadersRef.current.filter((i) => i.alive).length - 1;
@@ -599,6 +607,7 @@ export function TerminalInvaders() {
         startGame();
       }
       if (e.key === "Escape" && isPlaying) {
+        e.stopPropagation();
         setIsPlaying(false);
         setGameOver(true);
       }
@@ -634,7 +643,7 @@ export function TerminalInvaders() {
   return (
     <div
       ref={containerRef}
-      className="w-full h-full bg-ctp-crust relative overflow-hidden flex flex-col items-center justify-center font-heading select-none touch-none"
+      className="w-full h-full bg-ctp-crust relative overflow-hidden flex flex-col items-center justify-start font-heading select-none touch-none p-3 md:p-6"
     >
       <div className="arcade-scanlines" />
 
@@ -659,28 +668,36 @@ export function TerminalInvaders() {
         ))}
       </div>
 
-      {/* HUD row */}
-      <div className="absolute top-2 right-2 md:top-4 md:right-4 z-30 text-right pointer-events-none flex flex-row md:flex-col gap-3 md:gap-1">
-        <div className="flex flex-col md:block">
-          <div className="text-ctp-subtext0 uppercase tracking-[2px] md:tracking-[3px] text-[5px] md:text-[7px]">
-            RECORD
-          </div>
-          <div className="text-ctp-green font-bold text-[8px] md:text-[14px] tracking-[1px] md:tracking-[2px]">
-            {String(highScore).padStart(6, "0")}
-          </div>
+      {/* Top Header Bar */}
+      <div className="w-full max-w-[min(420px,50dvh)] md:max-w-[min(600px,50dvh)] flex items-center justify-between mb-4 z-20 font-mono select-none px-1">
+        <div className="flex items-center gap-2 min-w-0 pr-2">
+          <PixelTerminal className="w-5 h-5 text-ctp-green shrink-0" />
+          <span className="text-ctp-green font-bold tracking-[1.5px] md:tracking-[2px] text-[9px] md:text-xs uppercase truncate">
+            Terminal Invaders
+          </span>
         </div>
-        <div className="flex flex-col md:block">
-          <div className="text-ctp-subtext0 uppercase tracking-[2px] md:tracking-[3px] text-[5px] md:text-[7px]">
-            SCORE
+        <div className="flex items-center gap-4 md:gap-6 text-right shrink-0">
+          <div>
+            <span className="text-muted-foreground text-[6px] md:text-[8px] uppercase tracking-wider block">
+              RECORD
+            </span>
+            <span className="text-ctp-green font-bold text-[10px] md:text-xs tracking-wider block">
+              {String(highScore).padStart(6, "0")}
+            </span>
           </div>
-          <div className="text-ctp-text font-bold text-[10px] md:text-[22px] tracking-[1px] md:tracking-[2px]">
-            {String(score).padStart(6, "0")}
+          <div>
+            <span className="text-muted-foreground text-[6px] md:text-[8px] uppercase tracking-wider block">
+              SCORE
+            </span>
+            <span className="text-ctp-text font-bold text-[10px] md:text-xs tracking-wider block">
+              {String(score).padStart(6, "0")}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Canvas - Responsive scaling */}
-      <div className="pixel-card p-0.5 md:p-0.75 z-10 w-full max-w-4xl max-h-full aspect-540/480">
+      <div className="pixel-card p-0.5 md:p-0.75 z-10 w-full max-w-[min(420px,50dvh)] md:max-w-[min(600px,50dvh)] max-h-full aspect-540/480 my-auto">
         <canvas
           ref={canvasRef}
           width={canvasW}

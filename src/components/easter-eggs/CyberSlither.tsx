@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { useTerminal } from "@/context/TerminalContext";
+import { sfx } from "@/utils/audio";
 
 const GRID_SIZE = 20;
 const CELL = 20; // pixels per cell on the 400×400 canvas
@@ -108,6 +109,7 @@ export function CyberSlither() {
     setGameOver(false);
     setIsPaused(false);
     setStarted(true);
+    sfx.playStart();
   }, []);
 
   // Game tick
@@ -132,6 +134,7 @@ export function CyberSlither() {
     ) {
       setGameOver(true);
       setStarted(false);
+      sfx.playGameOver();
       const s = scoreRef.current;
       setHighScore((h) => {
         const next = Math.max(h, s);
@@ -145,6 +148,7 @@ export function CyberSlither() {
     if (snake.some((s) => s.x === head.x && s.y === head.y)) {
       setGameOver(true);
       setStarted(false);
+      sfx.playGameOver();
       const s = scoreRef.current;
       setHighScore((h) => {
         const next = Math.max(h, s);
@@ -166,6 +170,7 @@ export function CyberSlither() {
         return next;
       });
       spawnFood(newSnake);
+      sfx.playEat();
 
       // Burst particles on eat
       for (let i = 0; i < 16; i++) {
@@ -228,6 +233,7 @@ export function CyberSlither() {
           break;
         case "Escape":
           if (started) {
+            e.stopPropagation();
             setStarted(false);
             setGameOver(false);
           }

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, m } from "motion/react";
+import { sfx } from "@/utils/audio";
 
 const GRAVITY = 0.55;
 const JUMP_FORCE = -13;
@@ -121,12 +122,14 @@ export function BinaryBound() {
     setScore(0);
     setGameOver(false);
     setIsPlaying(true);
+    sfx.playStart();
   }, [getGroundY]);
 
   const jump = useCallback(() => {
     if (playerYRef.current >= groundYRef.current - 2) {
       velocityRef.current = JUMP_FORCE;
       isAirborneRef.current = true;
+      sfx.playJump();
     }
   }, []);
 
@@ -201,6 +204,7 @@ export function BinaryBound() {
           ) {
             setGameOver(true);
             setIsPlaying(false);
+            sfx.playGameOver();
             return;
           }
         } else if (o.type === "double") {
@@ -237,12 +241,14 @@ export function BinaryBound() {
           ) {
             setGameOver(true);
             setIsPlaying(false);
+            sfx.playGameOver();
             return;
           }
         } else {
           if (pBottom > oTop) {
             setGameOver(true);
             setIsPlaying(false);
+            sfx.playGameOver();
             return;
           }
         }
@@ -285,6 +291,7 @@ export function BinaryBound() {
         else jump();
       } else if (e.key === "Escape") {
         if (isPlaying) {
+          e.stopPropagation();
           setIsPlaying(false);
           setGameOver(false);
         }
@@ -347,7 +354,10 @@ export function BinaryBound() {
       </div>
 
       {/* Grid Floor */}
-      <div className="absolute left-0 right-0 bottom-0" style={{ top: groundTop }}>
+      <div
+        className="absolute left-0 right-0 bottom-0"
+        style={{ top: groundTop }}
+      >
         <div className="w-full bg-ctp-surface2 h-1 md:h-1.5" />
         <div className="w-full h-full bg-ctp-surface0/50" />
       </div>

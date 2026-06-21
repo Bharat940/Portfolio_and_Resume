@@ -6,6 +6,7 @@ import React, {
   useState,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 
 export type WindowType = "terminal" | "arcade" | "browser" | "about";
@@ -113,6 +114,25 @@ export function WindowManagerProvider({
         w.id === id ? { ...w, isMaximized: !w.isMaximized } : w,
       ),
     );
+  }, []);
+
+  // Global key listener to close the active non-terminal window when pressing Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setWindows((prev) => {
+          if (prev.length === 0) return prev;
+          const active = [...prev].sort((a, b) => b.zIndex - a.zIndex)[0];
+          if (active && active.type !== "terminal") {
+            // Close the active non-terminal window
+            return prev.filter((w) => w.id !== active.id);
+          }
+          return prev;
+        });
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const value = useMemo(
