@@ -857,3 +857,17 @@ html.matrix-mode,
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: 0.16s;
 }
+
+@keyframes cursorBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-cursor-blink {
+  animation: cursorBlink 1s step-end infinite;
+}

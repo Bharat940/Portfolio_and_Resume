@@ -233,7 +233,8 @@ export function Hero() {
                     willChange: "transform",
                   }}
                 >
-                  SYSTEMS_
+                  SYSTEMS
+                  <span className="text-ctp-mauve animate-cursor-blink">_</span>
                 </div>
               </div>
             </div>
