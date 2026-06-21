@@ -841,21 +841,23 @@ html.matrix-mode,
   }
 }
 
-.animate-slide-up-1 {
-  transform: translateY(110%);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
+@media (min-width: 768px) {
+  .animate-slide-up-1 {
+    transform: translateY(110%);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 
-.animate-slide-up-2 {
-  transform: translateY(110%);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.08s;
-}
+  .animate-slide-up-2 {
+    transform: translateY(110%);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.08s;
+  }
 
-.animate-slide-up-3 {
-  transform: translateY(110%);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.16s;
+  .animate-slide-up-3 {
+    transform: translateY(110%);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.16s;
+  }
 }
 
 @keyframes cursorBlink {
