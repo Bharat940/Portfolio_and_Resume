@@ -137,6 +137,7 @@ export function Navbar() {
           <div className="pointer-events-auto">
             <TransitionLink
               href="/"
+              aria-label="Bharat Dangi Portfolio Home"
               className="flex items-center h-16 bg-card rounded-[20px] shadow-lg border border-border/50 transition-all duration-500 group cursor-pointer overflow-hidden max-w-16 hover:max-w-70 px-4"
             >
               <Image
@@ -222,6 +223,7 @@ export function Navbar() {
                     <div className="absolute top-6 right-6 z-10 md:hidden">
                       <button
                         onClick={() => setIsOpen(false)}
+                        aria-label="Close Menu"
                         className="flex items-center justify-center w-10 h-10 bg-background hover:bg-primary/20 rounded-[16px] transition-colors cursor-pointer border border-border/50 group"
                       >
                         <PixelClose className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
@@ -281,6 +283,7 @@ export function Navbar() {
                               download
                               className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-mauve hover:text-background hover:border-ctp-mauve transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer text-ctp-mauve"
                               title="Download Resume PDF"
+                              aria-label="Download Resume PDF"
                             >
                               <Briefcase className="w-5 h-5" />
                             </a>
@@ -292,6 +295,7 @@ export function Navbar() {
                               }}
                               className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer relative group/term"
                               title="Terminal (⌘K)"
+                              aria-label="Terminal (⌘K)"
                             >
                               <PixelTerminal className="w-6 h-6 text-ctp-blue group-hover/term:text-background transition-colors" />
                               <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-ctp-crust text-ctp-subtext0 text-[10px] px-1.5 py-0.5 rounded border border-border/50 opacity-0 group-hover/term:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
@@ -304,6 +308,7 @@ export function Navbar() {
                             target="_blank"
                             className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-lavender hover:text-background hover:border-ctp-lavender transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
                             title="GitHub"
+                            aria-label="GitHub"
                           >
                             <PixelGitHub className="w-6 h-6 grayscale group-hover:grayscale-0 transition-all" />
                           </Link>
@@ -312,6 +317,7 @@ export function Navbar() {
                             target="_blank"
                             className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-sky hover:text-background hover:border-ctp-sky transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
                             title="Twitter"
+                            aria-label="Twitter"
                           >
                             <AtSign className="w-4 h-4" />
                           </Link>
@@ -320,6 +326,7 @@ export function Navbar() {
                             target="_blank"
                             className="w-10 h-10 rounded-[12px] bg-background flex items-center justify-center hover:bg-ctp-blue hover:text-background hover:border-ctp-blue transition-all duration-300 border border-border/50 shadow-sm hover:scale-105 cursor-pointer"
                             title="LinkedIn"
+                            aria-label="LinkedIn"
                           >
                             <PixelLinkedIn className="w-6 h-6" />
                           </Link>

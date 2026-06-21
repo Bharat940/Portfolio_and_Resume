@@ -105,7 +105,8 @@ export function Hero() {
         style={{ zIndex: 0 }}
       >
         <span
-          className="font-mono font-black uppercase text-foreground/5"
+          className="font-mono font-black uppercase text-ctp-subtext1"
+          aria-hidden="true"
           style={{
             writingMode: "vertical-lr",
             textOrientation: "mixed",
@@ -198,87 +199,42 @@ export function Hero() {
           ) : (
             <div className="flex flex-col gap-0 md:gap-1">
               <div className="overflow-hidden">
-                <m.h1
+                <h1
                   data-cursor="focus"
-                  className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block"
+                  className="font-black tracking-tighter font-heading leading-[0.86] text-foreground block animate-slide-up-1"
                   style={{
                     fontSize: "clamp(2.4rem, 9vw, 8rem)",
                     willChange: "transform",
-                  }}
-                  initial={{ y: "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0,
-                    ease: [0.16, 1, 0.3, 1],
                   }}
                 >
                   ENGINEERING
-                </m.h1>
+                </h1>
               </div>
 
               <div className="overflow-hidden">
-                <m.div
+                <div
                   data-cursor="focus"
-                  className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block"
+                  className="font-black tracking-tighter font-heading leading-[0.86] text-ctp-mauve italic block animate-slide-up-2"
                   style={{
                     fontSize: "clamp(2.4rem, 9vw, 8rem)",
                     willChange: "transform",
                   }}
-                  initial={{ y: "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.08,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
                 >
                   DIGITAL
-                </m.div>
+                </div>
               </div>
 
               <div className="overflow-hidden">
-                <m.div
+                <div
                   data-cursor="focus"
-                  className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block"
+                  className="font-black tracking-tight font-mono leading-[0.86] text-ctp-blue block animate-slide-up-3"
                   style={{
                     fontSize: "clamp(2.4rem, 9.5vw, 8rem)",
                     willChange: "transform",
                   }}
-                  initial={{ y: "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.16,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
                 >
-                  {"SYSTEMS".split("").map((char, i) => (
-                    <m.span
-                      key={i}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.3 + i * 0.03, duration: 0.2 }}
-                      className="inline-block"
-                    >
-                      {char}
-                    </m.span>
-                  ))}
-                  <m.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 1] }}
-                    transition={{
-                      delay: 1.2,
-                      duration: 0.5,
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      ease: "linear",
-                    }}
-                    className="inline-block text-ctp-mauve"
-                  >
-                    _
-                  </m.span>
-                </m.div>
+                  SYSTEMS_
+                </div>
               </div>
             </div>
           )}
@@ -406,7 +362,7 @@ export function Hero() {
                 className={`px-2.5 py-1 rounded-md text-[10px] font-semibold border ${
                   recruiterMode
                     ? "bg-zinc-100 text-zinc-800 border-zinc-200 font-sans"
-                    : "bg-ctp-surface0/30 border-border/20 font-mono text-muted-foreground/50"
+                    : "bg-ctp-surface0/30 border-border/20 font-mono text-ctp-subtext0"
                 }`}
               >
                 {tech}
@@ -423,7 +379,7 @@ export function Hero() {
         transition={{ delay: 2.2, duration: 0.8 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none"
       >
-        <span className="text-[8px] font-mono text-muted-foreground/20 uppercase tracking-widest">
+        <span className="text-[8px] font-mono text-ctp-subtext0 uppercase tracking-widest">
           scroll
         </span>
         <m.div

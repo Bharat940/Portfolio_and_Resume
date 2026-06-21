@@ -99,6 +99,7 @@ export function ProjectPreviewModal({
               <div className="flex items-center bg-ctp-surface0/50 p-1 rounded-xl border border-border/20 gap-1 mx-2">
                 <button
                   onClick={() => setViewMode("interactive")}
+                  aria-label="Interactive view"
                   className={cn(
                     "flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all",
                     viewMode === "interactive"
@@ -111,6 +112,7 @@ export function ProjectPreviewModal({
                 </button>
                 <button
                   onClick={() => setViewMode("snapshot")}
+                  aria-label="Snapshot view"
                   className={cn(
                     "flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all",
                     viewMode === "snapshot"
@@ -174,12 +176,14 @@ export function ProjectPreviewModal({
                     <>
                       <button
                         onClick={prevImg}
+                        aria-label="Previous image"
                         className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-ctp-base/80 border border-border/30 rounded-full text-foreground hover:bg-ctp-mauve hover:text-background transition-all opacity-0 group-hover/carousel:opacity-100 z-20 cursor-pointer"
                       >
                         <ChevronLeft className="w-6 h-6" />
                       </button>
                       <button
                         onClick={nextImg}
+                        aria-label="Next image"
                         className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-ctp-base/80 border border-border/30 rounded-full text-foreground hover:bg-ctp-mauve hover:text-background transition-all opacity-0 group-hover/carousel:opacity-100 z-20 cursor-pointer"
                       >
                         <ChevronRight className="w-6 h-6" />

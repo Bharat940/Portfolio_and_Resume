@@ -191,6 +191,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
                 exit={{ x: 20, opacity: 0 }}
                 onClick={() => setIsOpen(true)}
                 data-testid="quicknav-toggle"
+                aria-label="Open quick navigation"
                 className="bg-card border-l border-y border-border/50 p-3 pr-2 rounded-l-2xl shadow-lg hover:bg-muted/50 transition-colors group cursor-pointer"
               >
                 <PixelArrowLeft className="w-5 h-5 text-primary group-hover:-translate-x-1 transition-transform" />
@@ -206,6 +207,7 @@ export function QuickNav({ items = defaultItems }: QuickNavProps) {
               >
                 <button
                   onClick={() => setIsOpen(false)}
+                  aria-label="Close quick navigation"
                   className="absolute left-0 -translate-x-full bg-card border-l border-y border-border/50 p-3 pr-2 rounded-l-2xl shadow-xl hover:bg-muted/50 transition-colors group z-20 cursor-pointer"
                 >
                   <PixelArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
@@ -678,6 +680,7 @@ export function MobileBottomNav({ items = defaultItems }: QuickNavProps) {
             setIsOpen((p) => !p);
           }}
           style={{ width: TRIGGER_SIZE, height: TRIGGER_SIZE }}
+          aria-label="Toggle mobile bottom navigation"
           className="absolute top-0 left-0 rounded-full bg-ctp-mauve text-ctp-base flex items-center justify-center shadow-lg shadow-ctp-mauve/25 active:scale-95 transition-[transform] cursor-pointer z-10"
           data-testid="mobile-nav-trigger"
         >

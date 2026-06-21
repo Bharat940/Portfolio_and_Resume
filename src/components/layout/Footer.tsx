@@ -52,6 +52,7 @@ function MagneticSocial({
       target="_blank"
       rel="noopener noreferrer"
       title={title}
+      aria-label={title}
       style={{ x: sx, y: sy }}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
@@ -210,13 +211,25 @@ export function Footer() {
     ? [
         { href: "/#contact", label: "Contact", accent: "bg-ctp-mauve" },
         { href: "/stats", label: "System Stats", accent: "bg-ctp-yellow" },
-        { href: "/architecture", label: "Architecture Specs", accent: "bg-ctp-sky" },
+        {
+          href: "/architecture",
+          label: "Architecture Specs",
+          accent: "bg-ctp-sky",
+        },
       ]
     : [
         { href: "/stats", label: "System Stats", accent: "bg-ctp-mauve" },
-        { href: "/architecture", label: "Architecture Specs", accent: "bg-ctp-yellow" },
+        {
+          href: "/architecture",
+          label: "Architecture Specs",
+          accent: "bg-ctp-yellow",
+        },
         { href: "/arcade", label: "Retro Arcade", accent: "bg-ctp-sky" },
-        { href: "/blog?tag=build-log", label: "Engineering Logs", accent: "bg-ctp-lavender" },
+        {
+          href: "/blog?tag=build-log",
+          label: "Engineering Logs",
+          accent: "bg-ctp-lavender",
+        },
       ];
 
   return (
@@ -230,7 +243,7 @@ export function Footer() {
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-              "radial-gradient(circle, #cba6f7 1px, transparent 1px)",
+            "radial-gradient(circle, #cba6f7 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -264,7 +277,9 @@ export function Footer() {
               </div>
             </div>
 
-            <p className={`text-xs text-muted-foreground leading-relaxed max-w-xs ${recruiterMode ? 'font-sans' : 'font-mono'}`}>
+            <p
+              className={`text-xs text-muted-foreground leading-relaxed max-w-xs ${recruiterMode ? "font-sans" : "font-mono"}`}
+            >
               Engineering high-performance distributed systems and beautiful web
               experiences. B.Tech IT @ UIT RGPV.
             </p>
@@ -309,11 +324,13 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-lavender/10"
                 hoverBorder="hover:border-ctp-lavender/40"
               >
-                <PixelGitHub className={`w-5 h-5 transition-colors ${
-                  recruiterMode
-                    ? "text-zinc-600 group-hover:text-primary"
-                    : "text-muted-foreground group-hover:text-ctp-lavender"
-                }`} />
+                <PixelGitHub
+                  className={`w-5 h-5 transition-colors ${
+                    recruiterMode
+                      ? "text-zinc-600 group-hover:text-primary"
+                      : "text-muted-foreground group-hover:text-ctp-lavender"
+                  }`}
+                />
               </MagneticSocial>
 
               <MagneticSocial
@@ -322,11 +339,13 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-sky/10"
                 hoverBorder="hover:border-ctp-sky/40"
               >
-                <PixelX className={`w-4 h-4 transition-colors ${
-                  recruiterMode
-                    ? "text-zinc-600 group-hover:text-primary"
-                    : "text-muted-foreground group-hover:text-ctp-sky"
-                }`} />
+                <PixelX
+                  className={`w-4 h-4 transition-colors ${
+                    recruiterMode
+                      ? "text-zinc-600 group-hover:text-primary"
+                      : "text-muted-foreground group-hover:text-ctp-sky"
+                  }`}
+                />
               </MagneticSocial>
 
               <MagneticSocial
@@ -335,11 +354,13 @@ export function Footer() {
                 hoverBg="hover:bg-ctp-blue/10"
                 hoverBorder="hover:border-ctp-blue/40"
               >
-                <PixelLinkedIn className={`w-5 h-5 transition-colors ${
-                  recruiterMode
-                    ? "text-zinc-600 group-hover:text-primary"
-                    : "text-muted-foreground group-hover:text-ctp-blue"
-                }`} />
+                <PixelLinkedIn
+                  className={`w-5 h-5 transition-colors ${
+                    recruiterMode
+                      ? "text-zinc-600 group-hover:text-primary"
+                      : "text-muted-foreground group-hover:text-ctp-blue"
+                  }`}
+                />
               </MagneticSocial>
             </div>
 

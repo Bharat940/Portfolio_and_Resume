@@ -196,6 +196,7 @@ export function ContactSection() {
                 </div>
                 <button
                   onClick={copyEmail}
+                  aria-label="Copy email address to clipboard"
                   className={`p-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground cursor-pointer ${
                     recruiterMode
                       ? "hover:bg-zinc-200"
